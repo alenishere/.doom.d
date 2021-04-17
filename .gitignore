@@ -7,3 +7,11 @@ custom.el
 extras/personal/personal.org
 extras/languagetool/
 personal.el
+extras/personal/personal_dict.txt
+extras/Emacs-ZMQ/
+extras/ditaa/
+extras/eg-dir-local/
+extras/fd/
+extras/graphviz/
+extras/plantuml/
+extras/ripgrep/
