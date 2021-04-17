@@ -1,0 +1,8 @@
+.DS_Store
+.idea
+*.log
+tmp/
+extras/mingw64/
+custom.el
+extras/personal/personal.org
+extras/languagetool/
