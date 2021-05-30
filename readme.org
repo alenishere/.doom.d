@@ -53,7 +53,7 @@ This project is my personal config for DOOM emacs. The config centers around fol
   Edit the config to point to conda install and environment folder.
   Location Marked in "config.el" file.
 - Edit the .reg file bundled in the project folder using text editor (.doom.d/extras/misc-tools/Org-protocol-emaxs.reg) to ensure the path of Emacs is specified correctly.
-- Double click the file after Org-protocol-emaxs.reg and import registry values after you have made necessary edits.
+- Double click the file after Org-protocol-emaxs.reg and import registry values after you have made necessary edits. (Need administrative access on the system)
 -
 ** Mac
 - Install Emacs
@@ -69,8 +69,15 @@ This project is my personal config for DOOM emacs. The config centers around fol
   2. Configure org capture in Safari using instructions in
       https://www.huxiaoxing.com/two_ways_to_capture_links_into_org_files
 - Setup Emacs to launch on login.
+** Linux
   I don't Like use of Emacs daemon. I rather launch Emacs GUI application at login in mac and assign it to an alternative desktop.
-** TODO Linux
+- Install latex
+- Install git
+- Install SQLite3
+- Install ripgrep
+- Install silver searcher
+- Follow instructions in ./extras/misc-tools/org-capture.org to setup org capture.
+- Additional script available to compile Emacs in location ./extras/misc-tools/emacs-build.sh
 * Features
 # An in-depth list of features, how to use them, and their dependencies.
 
