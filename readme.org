@@ -1,0 +1,53 @@
+#+TITLE:   Readme
+#+DATE:    January 17, 2021
+#+SINCE:   2020
+#+STARTUP: inlineimages nofold
+
+* Table of Contents :TOC_3:noexport:
+- [[#description][Description]]
+  - [[#maintainers][Maintainers]]
+  - [[#plugins][Plugins]]
+  - [[#hacks][Hacks]]
+- [[#prerequisites][Prerequisites]]
+- [[#features][Features]]
+- [[#configuration][Configuration]]
+- [[#troubleshooting][Troubleshooting]]
+
+* Description
+# A summary of what this module does.
+This project is my personal config for DOOM emacs. It includes following settings.
++ Work seamessly with windows
++ Enable necessary modules for python and some other programming languages
++ Enable access to Msys modules to Make emacs Usage easy on windows
+
+** Maintainers
++ @alenalexninan (Author)
+
+** Plugins
+# A list of linked plugins
+
+** Hacks
+# A list of internal modifications to included packages; omit if unneeded
+
+* Prerequisites
+- Install Msys2 with following packages.
+  +
+- Install git
+
+* Features
+# An in-depth list of features, how to use them, and their dependencies.
+
+* Configuration
+# How to configure this module, including common problems and how to address them.
+1. Install Msys2.
+2. Install necessary modules for Msys2.
+3. Install git.
+4. Clone project to .doom.el.
+5. Configure path in config.el.
+6. Configure org working directory and agenda files.
+7. Edit snippets to fit requirement.
+8. Install conda
+9. Edit details of conda environment in emacs config.el.
+
+* Troubleshooting
+# Common issues and their solution, or places to look for help.

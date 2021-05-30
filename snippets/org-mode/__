@@ -1,0 +1,35 @@
+# -*- mode: snippet -*-
+# name: Org template
+# key: __
+ condition: t
+# --
+#+TITLE: ${1:`
+(string-join
+ (mapcar #'capitalize
+         ;; Replace -,_... with space
+         (split-string
+          (let (case-fold-search)
+            ;; Seperating lower from upper: hello|World
+            (replace-regexp-in-string
+             "\\([[:lower:]]\\)\\([[:upper:]]\\)" "\\1 \\2"
+             ;; Separating upper from (upper and lower): HTTP|Server
+             (replace-regexp-in-string "\\([[:upper:]]\\)\\([[:upper:]][0-9[:lower:]]\\)"
+                                       "\\1 \\2" (file-name-base buffer-file-name))))
+          "[^[:word:]0-9]+"
+          )) " " )
+`}
+#+AUTHOR: Alen Alex Ninan
+#+EMAIL: ${alenishere@gmail.com}
+#+PROPERTY: ANKI_DECK ${Default}
+Time-stamp: " "
+#+STARTUP: content
+#+STARTUP: indent
+#+STARTUP: align
+#+STARTUP: inlineimages
+#+ARCHIVE: %s_done::
+#+OPTIONS: num:0 toc:nil
+#+STARTUP: hidebloacks
+#+STARTUP: hidestars
+#+STARTUP: latexpreview
+#+EXPORT_FILE_NAME: ${Notes}
+$0
