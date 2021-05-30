@@ -54,8 +54,8 @@ This project is my personal config for DOOM emacs. The config centers around fol
   Location Marked in "config.el" file.
 - Edit the .reg file bundled in the project folder using text editor (.doom.d/extras/misc-tools/Org-protocol-emaxs.reg) to ensure the path of Emacs is specified correctly.
 - Double click the file after Org-protocol-emaxs.reg and import registry values after you have made necessary edits. (Need administrative access on the system)
--
 ** Mac
+- Download and install cascadia code font.
 - Install Emacs
   [[https://github.com/d12frosted/homebrew-emacs-plus][GitHub - d12frosted/homebrew-emacs-plus: Emacs Plus formulae for the Homebrew...]]
 - Install git
@@ -68,8 +68,9 @@ This project is my personal config for DOOM emacs. The config centers around fol
      Configure the location of emacs as instructed in the github folder.
   2. Configure org capture in Safari using instructions in
       https://www.huxiaoxing.com/two_ways_to_capture_links_into_org_files
-- Setup Emacs to launch on login.
+- Setup Emacs to launch on login. I like running GUI Emacs at start and assigning it to a desktop than running daemon.
 ** Linux
+- Download and install cascadia code font.
 - Install latex
 - Install git
 - Install SQLite3
