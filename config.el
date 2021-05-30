@@ -197,15 +197,15 @@ Is relative to `org-directory', unless it is absolute")
   (setq +org-capture-review-file
         (expand-file-name +org-capture-review-file org-directory))
   (add-to-list 'org-capture-templates
-               '("r" "Review"))
+               '("v" "Review"))
   (add-to-list 'org-capture-templates
-               '("rw" "Weekly review" entry
+               '("vw" "Weekly review" entry
                  (file+headline +org-capture-review-file "Weekly")
                  (file "~/.doom.d/org_capture_templates/weekly_review.txt")
                  )
                )
   (add-to-list 'org-capture-templates
-               '("rm" "Monthly review" entry
+               '("vm" "Monthly review" entry
                  (file+headline +org-capture-review-file "Monthly")
                  (file "~/.doom.d/org_capture_templates/monthly_review.txt")
                  )
