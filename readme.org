@@ -40,7 +40,7 @@ This project is my personal config for DOOM emacs. The config centers around fol
 # A list of internal modifications to included packages; omit if unneeded
 
 * Prerequisites
-** TODO Windows (Some minor details to be added in to the )
+** Windows (Some minor details to be added in to the )
 - Install Msys2 with following packages. [[https://www.msys2.org/][Link]]
   + Install graphviz. (pacman -S mingw-w64-x86_64-graphviz)
   + Install git. (pacman -S git)
@@ -70,7 +70,6 @@ This project is my personal config for DOOM emacs. The config centers around fol
       https://www.huxiaoxing.com/two_ways_to_capture_links_into_org_files
 - Setup Emacs to launch on login.
 ** Linux
-  I don't Like use of Emacs daemon. I rather launch Emacs GUI application at login in mac and assign it to an alternative desktop.
 - Install latex
 - Install git
 - Install SQLite3
