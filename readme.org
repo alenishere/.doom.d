@@ -9,17 +9,27 @@
   - [[#plugins][Plugins]]
   - [[#hacks][Hacks]]
 - [[#prerequisites][Prerequisites]]
+  - [[#windows][Windows]]
+  - [[#mac][Mac]]
+  - [[#linux][Linux]]
 - [[#features][Features]]
 - [[#configuration][Configuration]]
 - [[#troubleshooting][Troubleshooting]]
 
 * Description
 # A summary of what this module does.
-This project is my personal config for DOOM emacs. It includes following settings.
-+ Work seamessly with windows
-+ Enable necessary modules for python and some other programming languages
-+ Enable access to Msys modules to Make emacs Usage easy on windows
-
+This project is my personal config for DOOM emacs. The config centers around following
++ Work seamlessly with windows, mac and linux
++ In Windows:
+  - Enable necessary modules for python and some other programming languages
+  - Enable access to Msys modules to make emacs usage easy on windows
+  - Provide necessary configs sand tools for easy windows setup.
++ In Mac:
+  - Enable org-protocol and browser capture.
+  - Provide necessary config for easy emacs setup
++ In Linux:
+  - Enable org-protocol and browser capture.
+  - Provide necessary config for easy emacs setup
 ** Maintainers
 + @alenalexninan (Author)
 
@@ -30,10 +40,13 @@ This project is my personal config for DOOM emacs. It includes following setting
 # A list of internal modifications to included packages; omit if unneeded
 
 * Prerequisites
-- Install Msys2 with following packages.
-  +
+** Windows
 - Install git
-
+- Install Msys2 with following packages.
+- Install graphwiz
+- Install latex
+** Mac
+** Linux
 * Features
 # An in-depth list of features, how to use them, and their dependencies.
 
