@@ -9,7 +9,7 @@
   - [[#plugins][Plugins]]
   - [[#hacks][Hacks]]
 - [[#prerequisites][Prerequisites]]
-  - [[#windows][Windows]]
+  - [[#windows-some-minor-details-to-be-added-in-to-the-][Windows (Some minor details to be added in to the )]]
   - [[#mac][Mac]]
   - [[#linux][Linux]]
 - [[#features][Features]]
@@ -40,11 +40,21 @@ This project is my personal config for DOOM emacs. The config centers around fol
 # A list of internal modifications to included packages; omit if unneeded
 
 * Prerequisites
-** TODO Windows
-- Install git
-- Install Msys2 with following packages.
-- Install graphviz
-- Install latex
+** TODO Windows (Some minor details to be added in to the )
+- Install Msys2 with following packages. [[https://www.msys2.org/][Link]]
+  + Install graphviz. (pacman -S mingw-w64-x86_64-graphviz)
+  + Install git. (pacman -S git)
+  + SQLite3. (pacman -S mingw-w64-x86_64-sqlite3)
+  + ripgrep. (pacman -S mingw-w64-x86_64-ripgrep)
+  + silver searcher. (pacman -S mingw-w64-x86_64-ag)
+- Install latex. (https://www.tug.org/protext/)
+- Edit the path in the config file. I don't like editing the system/user environment variables to get emacs working. Lot of My oher applications can have issues if I edit the system wide settings.
+- Install conda (I like conda in windows). ([[https://www.anaconda.com/products/individual][Link]])
+  Edit the config to point to conda install and environment folder.
+  Location Marked in "config.el" file.
+- Edit the .reg file bundled in the project folder using text editor (.doom.d/extras/misc-tools/Org-protocol-emaxs.reg) to ensure the path of Emacs is specified correctly.
+- Double click the file after Org-protocol-emaxs.reg and import registry values after you have made necessary edits.
+-
 ** Mac
 - Install Emacs
   [[https://github.com/d12frosted/homebrew-emacs-plus][GitHub - d12frosted/homebrew-emacs-plus: Emacs Plus formulae for the Homebrew...]]
