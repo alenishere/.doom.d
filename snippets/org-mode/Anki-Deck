@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: Anki Deck
-# key: ankideck
-# condition: t
-# --
-:ANKI_DECK: ${Default}
