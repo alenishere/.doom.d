@@ -40,13 +40,27 @@ This project is my personal config for DOOM emacs. The config centers around fol
 # A list of internal modifications to included packages; omit if unneeded
 
 * Prerequisites
-** Windows
+** TODO Windows
 - Install git
 - Install Msys2 with following packages.
-- Install graphwiz
+- Install graphviz
 - Install latex
 ** Mac
-** Linux
+- Install Emacs
+  [[https://github.com/d12frosted/homebrew-emacs-plus][GitHub - d12frosted/homebrew-emacs-plus: Emacs Plus formulae for the Homebrew...]]
+- Install git
+- Install graphviz
+- Install latex
+- Configure Emacs capture:
+  1. Download Org capture mac app from following Project:
+     [[https://github.com/aaronbieber/org-protocol-handler][GitHub - aaronbieber/org-protocol-handler: An OS X application that handles o...]]
+     Install it as instructed by moving the org-protocol application to the application folder in Mac.
+     Configure the location of emacs as instructed in the github folder.
+  2. Configure org capture in Safari using instructions in
+      https://www.huxiaoxing.com/two_ways_to_capture_links_into_org_files
+- Setup Emacs to launch on login.
+  I don't Like use of Emacs daemon. I rather launch Emacs GUI application at login in mac and assign it to an alternative desktop.
+** TODO Linux
 * Features
 # An in-depth list of features, how to use them, and their dependencies.
 
@@ -60,7 +74,7 @@ This project is my personal config for DOOM emacs. The config centers around fol
 6. Configure org working directory and agenda files.
 7. Edit snippets to fit requirement.
 8. Install conda
-9. Edit details of conda environment in emacs config.el.
+9. Edit details of conda environment in Emacs config.el.
 
 * Troubleshooting
 # Common issues and their solution, or places to look for help.
