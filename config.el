@@ -185,12 +185,14 @@
 
   ;; Custom org capture
   (require 'org-protocol)
-  ;; (add-to-list 'org-capture-templates
-  ;;              '("l" "A link, for reading later." entry
-  ;;                (file+headline "notes.org" "Reading List")
-  ;;                "* %:description\n%u\n\n%c\n\n%i"
-  ;;                :empty-lines 1)
-  ;;              )
+  (add-to-list 'org-capture-templates
+               '("c" "Org-protocol"))
+  (add-to-list 'org-capture-templates
+               '("cp" "Protocol" entry (file "notes.org")
+                 "* TODO %?[[%:link][%:description]] %U\n%i\n" :prepend t))
+  (add-to-list 'org-capture-templates
+               '("cl" "Protocol Link" entry (file "notes.org")
+                 "* TODO %?[[%:link][%:description]] %U\n" :prepend t))
   (defvar +org-capture-review-file "review/review.org"
     "Default target for storing review files.
 Is relative to `org-directory', unless it is absolute")
@@ -210,8 +212,8 @@ Is relative to `org-directory', unless it is absolute")
                  (file "~/.doom.d/org_capture_templates/monthly_review.txt")
                  )
                )
-  (add-to-list 'org-capture-templates
-               '("c" "Checklists"))
+  ;; (add-to-list 'org-capture-templates
+  ;;              '("c" "Checklists"))
 
   ;; Setting default capture template
   ;; (setq org-protocol-default-template-key "l")
