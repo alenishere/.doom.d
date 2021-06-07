@@ -431,7 +431,11 @@ Is relative to `org-directory', unless it is absolute")
 ;;; Ispell personal dictionary
 ;;; -----------------------------------------------------------------------------
 (setq ispell-personal-dictionary "~/.doom.d/extras/personal/personal_dict.txt")
-
+(after! spell-fu
+  (setq spell-fu-idle-delay 0.5 ; default is 0.25
+        ispell-dictionary "en_GB" ; needed for MacOS in particular
+        )
+)
 
 ;; Doom emacs start maximized
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
