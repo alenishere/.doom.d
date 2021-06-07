@@ -179,9 +179,6 @@
   ;; Including diary entries in agenda
 
   (setq org-agenda-include-diary t)
-  ;; '("l" "Link" entry
-  ;;   (file+headline +org-capture-todo-file "Website")
-  ;;   "* %a\n %?\n %T\n %i")
 
   ;; Custom org capture
   (require 'org-protocol)
@@ -220,7 +217,6 @@ Is relative to `org-directory', unless it is absolute")
   ;; :file ./fig_1?
 
    ;; Additional Org modules
-  ;; (require 'org-habit)
   (add-to-list 'org-modules 'org-checklist)
   (add-to-list 'org-modules 'org-habit)
 
@@ -286,6 +282,7 @@ Is relative to `org-directory', unless it is absolute")
       :desc "Org write all org" "w" 'org-save-all-org-buffers
       :desc "Org revert all buffers" "i" 'org-revert-all-org-buffers
       )
+
 ;;; Org archiving and custom view
 ;;; -----------------------------------------------------------------------------
 ;; Custom agenda skip function to skip entries with activity in the
@@ -410,6 +407,8 @@ Is relative to `org-directory', unless it is absolute")
       "l" #'org-roam-store-link
       "n" #'org-roam-jump-to-index
       "z" #'org-roam-random-note
+      "a" #'org-roam-alias-add
+      "A" #'org-roam-alias-delete
       )
 
 
