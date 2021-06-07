@@ -38,9 +38,9 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/Org")
-(setq org-agenda-files (quote ("~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/Org/todo.org" "~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/Org/projects.org" "~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/Org/trickler.org" "~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/Org/dates.org")))
-
+(setq org-directory "~/pCloud Drive/Org")
+;; (setq org-agenda-files (quote ("~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/Org/todo.org" "~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/Org/projects.org" "~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/Org/trickler.org" "~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/Org/dates.org")))
+(setq org-agenda-files (quote ("~/pCloud Drive/Org/todo.org" "~/pCloud Drive/Org/projects.org" "~/pCloud Drive/Org/trickler.org" "~/pCloud Drive/Org/dates.org")))
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type 'relative)
@@ -212,14 +212,6 @@ Is relative to `org-directory', unless it is absolute")
                  (file "~/.doom.d/org_capture_templates/monthly_review.txt")
                  )
                )
-  ;; (add-to-list 'org-capture-templates
-  ;;              '("c" "Checklists"))
-
-  ;; Setting default capture template
-  ;; (setq org-protocol-default-template-key "l")
-
-  ;; Popup window size
-  (set-popup-rule! "^CAPTURE-.*\\.org$" :size 0.5 :quit nil :select t :autosave t)
 
   ;; Additiona babel languages
   (add-to-list 'org-structure-template-alist '("p" . "src jupyter-python :session python_default :kernal python3 :async yes\n"))
@@ -356,21 +348,17 @@ Is relative to `org-directory', unless it is absolute")
 ;;; Org roam server settings
 (after! org-roam
 ;; Set default org-roam directory
-  (setq org-roam-directory "~/pCloud Drive/Org-Roam")
+  (setq org-roam-directory "~/pCloud Drive/My Documents/Org-Roam")
 
   (setq org-roam-dailies-capture-templates '(("d" "daily" plain (function org-roam-capture--get-point) ""
                                               :immediate-finish t
                                               :file-name "Dailies/%<%Y-%m-%d>"
                                               :head "#+TITLE: %<%Y-%m-%d>")))
-  (setq org-roam-ref-capture-templates
-        '(("r" "ref" plain (function org-roam-capture--get-point)
-           "%?"
-           :file-name "websites/${slug}"
-           :head "#+TITLE: ${title}
-    #+ROAM_KEY: ${ref}
-    - source :: ${ref}"
-           :unnarrowed t)))
-
+  (setq  org-roam-capture-ref-templates '(("w" "Web site" plain (function org-roam-capture--get-point)
+                                           "%?"
+                                           :file-name "Websites/%<%Y%m%d>-${slug}"
+                                           :head "#+TITLE: ${title}\n#+CREATED: %U\n#+ROAM_KEY: ${ref}\n\n"
+                                           :unnarrowed t)))
   (use-package! org-roam-server
     :config
     (setq org-roam-server-host "127.0.0.1"
@@ -399,15 +387,6 @@ Is relative to `org-directory', unless it is absolute")
             (let ((org-roam-graph-viewer "firefox.exe"))
               (org-roam-graph--open (concat "file:///" file))))))
   (setq org-roam-graph-exclude-matcher '("private" "dailies" "archives"))
-
-;; https://github.com/org-roam/org-roam/issues/1221
-;; (defun org-roam-db-query (sql &rest args)
-;;   "Run SQL query on Org-roam database with ARGS.
-;;  SQL can be either the emacsql vector representation, or a string."
-;;   (sleep-for 0 1)
-;;   (if  (stringp sql)
-;;       (emacsql (org-roam-db) (apply #'format sql args))
-;;     (apply #'emacsql (org-roam-db) sql args))
   )
 (map! :after org
       :map org-mode-map
@@ -416,6 +395,8 @@ Is relative to `org-directory', unless it is absolute")
       "l" #'org-roam-store-link
       "n" #'org-roam-jump-to-index
       "z" #'org-roam-random-note
+      "a" #'org-roam-alias-add
+      "A" #'org-roam-alias-delete
       )
 (map! :after org
       :map org-mode-map
@@ -442,9 +423,6 @@ Is relative to `org-directory', unless it is absolute")
 (after! company-box
   (setq company-show-numbers t)
   )
-
-;; Org server
-;; (server-start)
 
 ;; Time-stamp hook
 ;; ------------------------------------------------------------------------------
