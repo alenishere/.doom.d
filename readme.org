@@ -9,18 +9,20 @@
   - [[#plugins][Plugins]]
   - [[#hacks][Hacks]]
 - [[#prerequisites][Prerequisites]]
-  - [[#windows-some-minor-details-to-be-added-in-to-the-][Windows (Some minor details to be added in to the )]]
-  - [[#mac][Mac]]
-  - [[#linux][Linux]]
+  - [[#install-doom-emacs-following-instruction-in-doom-emacs-github-page][Install Doom emacs following instruction in Doom emacs github page.]]
+  - [[#for-windows-some-minor-details-to-be-added-in-to-the-][For Windows (Some minor details to be added in to the )]]
+  - [[#for-mac][For Mac]]
+  - [[#for-linux][For Linux]]
 - [[#features][Features]]
 - [[#configuration][Configuration]]
 - [[#troubleshooting][Troubleshooting]]
 
 * Description
 # A summary of what this module does.
-This project is my personal config for DOOM emacs. The config centers around following
+This project is my personal config for DOOM emacs. The config centre's around following
 + Work seamlessly with windows, mac and linux
 + In Windows:
+  - Install emacs from [[https://github.com/m-parashar/emax64][GitHub - m-parashar/emax64: 64-bit Emacs for Windows with ImageMagick 7]]
   - Enable necessary modules for python and some other programming languages
   - Enable access to Msys modules to make emacs usage easy on windows
   - Provide necessary configs sand tools for easy windows setup.
@@ -40,7 +42,8 @@ This project is my personal config for DOOM emacs. The config centers around fol
 # A list of internal modifications to included packages; omit if unneeded
 
 * Prerequisites
-** Windows (Some minor details to be added in to the )
+** Install Doom emacs following instruction in Doom emacs github page.
+** For Windows (Some minor details to be added in to the )
 - Install Msys2 with following packages. [[https://www.msys2.org/][Link]]
   + Install graphviz. (pacman -S mingw-w64-x86_64-graphviz)
   + Install git. (pacman -S git)
@@ -54,7 +57,7 @@ This project is my personal config for DOOM emacs. The config centers around fol
   Location Marked in "config.el" file.
 - Edit the .reg file bundled in the project folder using text editor (.doom.d/extras/misc-tools/Org-protocol-emaxs.reg) to ensure the path of Emacs is specified correctly.
 - Double click the file after Org-protocol-emaxs.reg and import registry values after you have made necessary edits. (Need administrative access on the system)
-** Mac
+** For Mac
 - Download and install cascadia code font.
 - Install Emacs
   [[https://github.com/d12frosted/homebrew-emacs-plus][GitHub - d12frosted/homebrew-emacs-plus: Emacs Plus formulae for the Homebrew...]]
@@ -68,7 +71,7 @@ This project is my personal config for DOOM emacs. The config centers around fol
   2. Configure org capture in Safari using instructions in
       https://www.huxiaoxing.com/two_ways_to_capture_links_into_org_files
 - Setup Emacs to launch on login. I like running GUI Emacs at start and assigning it to a desktop than running daemon.
-** Linux
+** For Linux
 - Download and install cascadia code font.
 - Install latex
 - Install git
@@ -94,3 +97,4 @@ This project is my personal config for DOOM emacs. The config centers around fol
 
 * Troubleshooting
 # Common issues and their solution, or places to look for help.
+Caveat: I am not a programmer. The help I can provide is going to be very limited. Will try my best but don't expect much.
