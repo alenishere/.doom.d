@@ -52,6 +52,9 @@
 ;; Orgmode
 (package! org-ref)
 (package! org-roam-server)
+(package! helm-bibtex)
+(package! org-roam-bibtex)
+(package! zotxt)
 
 ;; Learning
 (package! anki-editor)
@@ -62,4 +65,4 @@
 (package! helm-ag)
 
 ;; Company
-(package! company-posframe)
+;; (package! company-posframe)

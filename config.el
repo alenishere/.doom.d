@@ -38,14 +38,13 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/pCloud Drive/Org")
+(setq org-directory "~/pCloud Drive/My Documents/Org")
 ;; (setq org-agenda-files (quote ("~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/Org/todo.org" "~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/Org/projects.org" "~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/Org/trickler.org" "~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/Org/dates.org")))
-(setq org-agenda-files (quote ("~/pCloud Drive/Org/todo.org" "~/pCloud Drive/Org/projects.org" "~/pCloud Drive/Org/trickler.org" "~/pCloud Drive/Org/dates.org")))
+(setq org-agenda-files (quote ("~/pCloud Drive/My Documents/Org/todo.org" "~/pCloud Drive/My Documents/Org/projects.org" "~/pCloud Drive/My Documents/Org/trickler.org" "~/pCloud Drive/My Documents/Org/dates.org")))
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type 'relative)
 (map! :leader
-      :desc "Comment or uncomment lines" "TAB TAB" #'comment-line
       (:prefix ("t" . "toggle")
        :desc "Toggle line highlight in frame" "h" #'hl-line-mode
        :desc "Toggle line highlight globally" "H" #'global-hl-line-mode
@@ -182,14 +181,38 @@
 
   ;; Custom org capture
   (require 'org-protocol)
+  ;; Fix some link issues
+  (defun transform-square-brackets-to-round-ones(string-to-transform)
+    "Transforms [ into ( and ] into ), other chars left unchanged."
+    (concat
+     (mapcar #'(lambda (c) (if (equal c ?\[) ?\( (if (equal c ?\]) ?\) c))) string-to-transform))
+    )
   (add-to-list 'org-capture-templates
                '("c" "Org-protocol"))
+  ;; Firefox
   (add-to-list 'org-capture-templates
-               '("cp" "Protocol" entry (file "notes.org")
-                 "* TODO %?[[%:link][%:description]] %U\n%i\n" :prepend t))
+               '("cp" "Protocol" entry
+                 (file+headline +org-capture-notes-file "Inbox")
+                 "* %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?"
+                 :prepend t
+                 :kill-buffer t))
   (add-to-list 'org-capture-templates
-               '("cl" "Protocol Link" entry (file "notes.org")
-                 "* TODO %?[[%:link][%:description]] %U\n" :prepend t))
+               '("cl" "Protocol Link" entry
+                 (file+headline +org-capture-notes-file "Inbox")
+                 "* %? [[%:link][%(transform-square-brackets-to-round-ones \"%:description\")]]\n"
+                 :prepend t
+                 :kill-buffer t))
+  (add-to-list 'org-capture-templates
+               '("ca"               ; key
+                 "Article"         ; name
+                 entry             ; type
+                 (file+headline +org-capture-notes-file "Article")  ; target
+                 "* %^{Title} %(org-set-tags)  :article: \n:PROPERTIES:\n:Created: %U\n:Linked: %a\n:END:\n%i\nBrief description:\n%?"  ; template
+                 :prepend t        ; properties
+                 :empty-lines 1    ; properties
+                 :created t        ; properties
+                 ))
+
   (defvar +org-capture-review-file "review/review.org"
     "Default target for storing review files.
 Is relative to `org-directory', unless it is absolute")
@@ -210,10 +233,10 @@ Is relative to `org-directory', unless it is absolute")
                  )
                )
 
-  ;; Additiona babel languages
-  (add-to-list 'org-structure-template-alist '("p" . "src jupyter-python :session python_default :kernal python3 :async yes\n"))
-  ;; (add-to-list 'org-structure-template-alist '("i" . "src ipython :results raw drawer :session"))
-  (add-to-list 'org-structure-template-alist '("d" . "src dot :file %?.png :async yes :cmdline -Kdot -Tpng"))
+  ;; Additional babel languages
+  (add-to-list 'org-structure-template-alist '("p" . "src jupyter-python :session python_default :kernal python3 :async no\n"))
+  (add-to-list 'org-structure-template-alist '("i" . "src emacs-lisp"))
+  (add-to-list 'org-structure-template-alist '("d" . "src dot :file %?.png :async no :cmdline -Kdot -Tpng"))
   ;; :file ./fig_1?
 
    ;; Additional Org modules
@@ -248,8 +271,19 @@ Is relative to `org-directory', unless it is absolute")
         :desc "Put rep count" "p" '+my/put-count
         )
 
-  ;; Complete org config completed
+;;; Org codeblock Result toggled shut
+;;; ---------------------------------
+  (defun hide-results (&optional &rest args)
+    (let ((results (cdr (assoc :results (third (org-babel-get-src-block-info 'light))))))
+      (when (string-match "hide" results)
+        (org-babel-hide-result-toggle t))))
+
+  (add-hook 'org-babel-after-execute-hook 'hide-results)
+
+  (advice-add 'org-babel-execute-src-block :before (lambda (&rest args) (org-babel-remove-result)))
+  ;; Org config completed
   )
+
 
 ;; Ox clip for formatted copy
 (after! ox-clip
@@ -273,9 +307,9 @@ Is relative to `org-directory', unless it is absolute")
          )
         )
 
-(map! :prefix "SPC"
-      :nv "a" #'org-agenda
-      )
+;; (map! :prefix "SPC"
+;;       :nv "a" #'org-agenda
+;;       )
 (map! :localleader
       :map org-mode-map
       :prefix ("w" ."Org-buffers")
@@ -345,7 +379,7 @@ Is relative to `org-directory', unless it is absolute")
 ;;; Org roam server settings
 (after! org-roam
 ;; Set default org-roam directory
-  (setq org-roam-directory "~/pCloud Drive/My Documents/Org-Roam")
+  (setq org-roam-directory "~/pCloud Drive/My Documents/Org/Org-Roam")
 
   (setq org-roam-dailies-capture-templates '(("d" "daily" plain (function org-roam-capture--get-point) ""
                                               :immediate-finish t
@@ -354,7 +388,7 @@ Is relative to `org-directory', unless it is absolute")
   (setq  org-roam-capture-ref-templates '(("w" "Web site" plain (function org-roam-capture--get-point)
                                            "%?"
                                            :file-name "Websites/%<%Y%m%d>-${slug}"
-                                           :head "#+TITLE: ${title}\n#+CREATED: %U\n#+ROAM_KEY: ${ref}\n\n"
+                                           :head "#+TITLE: ${title}\n#+CREATED: %U\n#+ROAM_KEY: ${ref}\n#+roam_tags: website literature\n\n"
                                            :unnarrowed t)))
   (use-package! org-roam-server
     :config
@@ -385,16 +419,7 @@ Is relative to `org-directory', unless it is absolute")
               (org-roam-graph--open (concat "file:///" file))))))
   (setq org-roam-graph-exclude-matcher '("private" "dailies" "archives"))
   )
-(map! :after org
-      :map org-mode-map
-      :localleader
-      :prefix ("m")
-      "l" #'org-roam-store-link
-      "n" #'org-roam-jump-to-index
-      "z" #'org-roam-random-note
-      "a" #'org-roam-alias-add
-      "A" #'org-roam-alias-delete
-      )
+
 (map! :after org
       :map org-mode-map
       :localleader
@@ -407,18 +432,53 @@ Is relative to `org-directory', unless it is absolute")
       "l" #'org-roam-store-link
       "n" #'org-roam-jump-to-index
       "z" #'org-roam-random-note
+      )
+(map! :after org-roam
+      :map org-mode-map
+      :localleader
+      :prefix ("ma" . "alias")
       "a" #'org-roam-alias-add
-      "A" #'org-roam-alias-delete
+      "d" #'org-roam-alias-delete
       )
 
+;; Org noter
+(after! pdf-view
+  ;; open pdfs scaled to fit page
+  (setq-default pdf-view-display-size 'fit-width)
+  ;; automatically annotate highlights
+  (setq pdf-annot-activate-created-annotations t
+        pdf-view-resize-factor 1.1)
+   ;; faster motion
+ (map!
+   :map pdf-view-mode-map
+   :n "g g"          #'pdf-view-first-page
+   :n "G"            #'pdf-view-last-page
+   :n "N"            #'pdf-view-next-page-command
+   :n "E"            #'pdf-view-previous-page-command
+   :n "e"            #'evil-collection-pdf-view-previous-line-or-previous-page
+   :n "n"            #'evil-collection-pdf-view-next-line-or-next-page
+   :localleader
+   (:desc "Insert note" "i" #'org-noter-insert-note
+    :desc "Insert precise note" "p" #'org-noter-insert-precise-note
+    :desc "Toggle note" "t" #'org-noter-insert-note-toggle-no-questions
+     )
+ ))
 
-;; Company
-(use-package! company-posframe
-  :after company
-  :init
-  (company-posframe-mode 1)
-  (setq company-show-numbers t)
+(use-package! org-noter
+  :after (:any org pdf-view)
+  :config
+  (setq
+   ;; The WM can handle splits
+   org-noter-notes-window-location 'other-frame
+   ;; Please stop opening frames
+   org-noter-always-create-frame nil
+   ;; I want to see the whole file
+   org-noter-hide-other nil
+   ;; Everything is relative to the rclone mega
+   ;; org-noter-notes-search-path (list org_notes)
+   )
   )
+
 (after! company-box
   (setq company-show-numbers t)
   )
@@ -432,9 +492,112 @@ Is relative to `org-directory', unless it is absolute")
 (setq ispell-personal-dictionary "~/.doom.d/extras/personal/personal_dict.txt")
 (after! spell-fu
   (setq spell-fu-idle-delay 0.5 ; default is 0.25
-        ispell-dictionary "en_GB" ; needed for MacOS in particular
+        ispell-dictionary "en_GB" ; needed for Macs in particular
         )
 )
 
-;; Doom emacs start maximized
+;;; Markdown
+;;; -----------------------------------------------------------------------------
+(map! :localleader
+      :map markdown-mode-map
+      :prefix ("i" . "Insert")
+      :desc "Blockquote"    "q" 'markdown-insert-blockquote
+      :desc "Bold"          "b" 'markdown-insert-bold
+      :desc "Code"          "c" 'markdown-insert-code
+      :desc "Emphasis"      "e" 'markdown-insert-italic
+      :desc "Footnote"      "f" 'markdown-insert-footnote
+      :desc "Code Block"    "s" 'markdown-insert-gfm-code-block
+      :desc "Image"         "i" 'markdown-insert-image
+      :desc "Link"          "l" 'markdown-insert-link
+      :desc "List Item"     "n" 'markdown-insert-list-item
+      :desc "Pre"           "p" 'markdown-insert-pre
+      (:prefix ("h" . "Headings")
+        :desc "One"   "1" 'markdown-insert-atx-1
+        :desc "Two"   "2" 'markdown-insert-atx-2
+        :desc "Three" "3" 'markdown-insert-atx-3
+        :desc "Four"  "4" 'markdown-insert-atx-4
+        :desc "Five"  "5" 'markdown-insert-atx-5
+        :desc "Six"   "6" 'markdown-insert-atx-6))
+
+;; Anki editor
+;; ------------------------------------------------------------------------------
+(use-package! anki-editor
+  :config
+  (setq anki-editor-create-decks 't)
+  (map! :localleader
+        :map org-mode-map
+        (:prefix ("z" . "Anki")
+         :desc "Push" "p" 'anki-editor-push-notes
+         :desc "Retry" "r" 'anki-editor-retry-failure-notes
+         :desc "Insert" "n" 'anki-editor-insert-note
+         (:prefix ("c" . "Cloze")
+          :desc "Dwim" "d" 'anki-editor-cloze-dwim
+          :desc "Region" "r" 'anki-editor-cloze-region
+          )
+         )
+        )
+  )
+
+
+;;; Org-ref
+;;; -----------------------------------------------------------------------------
+(use-package! org-ref
+    :config
+    (setq
+         org-ref-completion-library 'org-ref-ivy-cite
+         org-ref-get-pdf-filename-function 'org-ref-get-pdf-filename-helm-bibtex
+         org-ref-default-bibliography (list "~/pCloud Drive/My Documents/Org/Org-Roam/Papers/zotLib.bib")
+         org-ref-bibliography-notes "~/pCloud Drive/My Documents/Org/Org-Roam/Papers/Notes.org"
+         org-ref-note-title-format "* TODO %y - %t\n :PROPERTIES:\n  :Custom_ID: %k\n  :NOTER_DOCUMENT: %F\n :ROAM_KEY: cite:%k\n  :AUTHOR: %9a\n  :JOURNAL: %j\n  :YEAR: %y\n  :VOLUME: %v\n  :PAGES: %p\n  :DOI: %D\n  :URL: %U\n :END:\n\n"
+         org-ref-notes-directory "~/pCloud Drive/My Documents/Org/Org-Roam/Papers/"
+         org-ref-notes-function 'orb-edit-notes
+    ))
+
+(after! org-ref
+  (setq
+   bibtex-completion-notes-path "~/pCloud Drive/My Documents/Org/Org-Roam/Papers/"
+   bibtex-completion-bibliography "~/pCloud Drive/My Documents/Org/Org-Roam/Papers/zotLib.bib"
+   bibtex-completion-pdf-field "file"
+   bibtex-completion-notes-template-multiple-files
+   (concat
+    "#+TITLE: ${title}\n"
+    "#+ROAM_KEY: cite:${=key=}\n"
+    "#+ROAM_TAGS: ${keywords}\n"
+    "* TODO Notes\n"
+    ":PROPERTIES:\n"
+    ":Custom_ID: ${=key=}\n"
+    ":NOTER_DOCUMENT: %(orb-process-file-field \"${=key=}\")\n"
+    ":AUTHOR: ${author-abbrev}\n"
+    ":JOURNAL: ${journaltitle}\n"
+    ":DATE: ${date}\n"
+    ":YEAR: ${year}\n"
+    ":DOI: ${doi}\n"
+    ":URL: ${url}\n"
+    ":END:\n\n"
+    )
+   )
+)
+
+ (use-package! org-roam-bibtex
+  :after (org-roam)
+  :hook (org-roam-mode . org-roam-bibtex-mode)
+  :config
+  (setq org-roam-bibtex-preformat-keywords
+   '("=key=" "title" "url" "file" "author-or-editor" "keywords"))
+  (setq orb-templates
+        '(("r" "ref" plain (function org-roam-capture--get-point)
+           ""
+           :file-name "${slug}"
+           :head "#+TITLE: ${=key=}: ${title}\n#+ROAM_KEY: ${ref}\n#+ROAM_TAGS:
+
+- keywords :: ${keywords}
+
+\n* ${title}\n  :PROPERTIES:\n  :Custom_ID: ${=key=}\n  :URL: ${url}\n  :AUTHOR: ${author-or-editor}\n  :NOTER_DOCUMENT: %(orb-process-file-field \"${=key=}\")\n  :NOTER_PAGE: \n  :END:\n\n"
+
+           :unnarrowed t))))
+
+(package! org-re-reveal-ref)
+
+;;; Doom emacs start maximised
+;;; -----------------------------------------------------------------------------
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
