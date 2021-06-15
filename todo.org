@@ -1,0 +1,19 @@
+* Inbox
+* Windows OS
+** TODO Windows OS path config
+
+[[file:~/.doom.d/config.el][file:~/.doom.d/config.el]]
+* Linux OS
+* Mac OS
+* Feature Addition
+** TODO Org-Ref config
+
+[[file:~/.doom.d/config.el:::config]]
+** TODO Latex export config
+
+[[file:~/.doom.d/config.el:::config]]
+
+** DONE Deft config
+CLOSED: [2021-06-15 Tue 07:34]
+
+[[file:~/.doom.d/config.el][file:~/.doom.d/config.el]]

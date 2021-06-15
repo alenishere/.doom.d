@@ -39,7 +39,6 @@
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/pCloud Drive/My Documents/Org")
-;; (setq org-agenda-files (quote ("~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/Org/todo.org" "~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/Org/projects.org" "~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/Org/trickler.org" "~/Library/Mobile Documents/iCloud~com~appsonthemove~beorg/Documents/Org/dates.org")))
 (setq org-agenda-files (quote ("~/pCloud Drive/My Documents/Org/todo.org" "~/pCloud Drive/My Documents/Org/projects.org" "~/pCloud Drive/My Documents/Org/trickler.org" "~/pCloud Drive/My Documents/Org/dates.org")))
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -105,7 +104,7 @@
   (setq org-link-file-path-type 'relative)
 
   ;; Personal config
-  (setq org-passwords-file "~/.doom.d/extras/personal/passwords.org")
+  ;; (setq org-passwords-file "~/.doom.d/extras/personal/passwords.org")
 
   ;; Tags for org mode
   (setq org-tag-alist '((:startgrouptag)
@@ -474,8 +473,7 @@ Is relative to `org-directory', unless it is absolute")
    org-noter-always-create-frame nil
    ;; I want to see the whole file
    org-noter-hide-other nil
-   ;; Everything is relative to the rclone mega
-   org-noter-notes-search-path (concat org-directory "/Papers")
+   org-noter-notes-search-path (concat org-directory "/Notes")
    )
   )
 
@@ -613,3 +611,9 @@ Is relative to `org-directory', unless it is absolute")
 ;;; Doom emacs start maximised
 ;;; -----------------------------------------------------------------------------
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
+
+
+;;; Deft config
+;;; -----------------------------------------------------------------------------
+(setq deft-directory org-directory)
+(setq deft-recursive t)

@@ -25,7 +25,7 @@ SCHEDULED: %t
 + [ ] Birthday
 + [ ] Anniversary
 + [ ] Calls
-*** [ ] Organize files [0/7]
+*** [ ] Organise files [0/7]
 + [ ] Desktop
 + [ ] Download
 + [ ] Documents
