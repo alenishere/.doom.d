@@ -696,3 +696,19 @@ Is relative to `org-directory', unless it is absolute")
     )
   )
 
+;;; Hydras
+;;; -----------------------------------------------------------------------------
+;; I copied this from blings emacss config
+(defhydra /hydras/paste (:hint nil)
+  "
+   paste:  _C-j_ → cycle next          _p_ → paste before       pos: %(length kill-ring-yank-pointer)
+           _C-k_ → cycle previous      _P_ → paste after        len: %(length kill-ring)
+"
+  ("C-j" evil-paste-pop-next)
+  ("C-k" evil-paste-pop)
+  ("p" evil-paste-after)
+  ("P" evil-paste-before))
+  (map!
+   :n "p" #'/hydras/paste/evil-paste-after
+   :n "P" #'/hydras/paste/evil-paste-before
+   )
