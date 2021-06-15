@@ -475,7 +475,7 @@ Is relative to `org-directory', unless it is absolute")
    ;; I want to see the whole file
    org-noter-hide-other nil
    ;; Everything is relative to the rclone mega
-   ;; org-noter-notes-search-path (list org_notes)
+   org-noter-notes-search-path (concat org-directory "/Papers")
    )
   )
 
@@ -546,17 +546,17 @@ Is relative to `org-directory', unless it is absolute")
     (setq
          org-ref-completion-library 'org-ref-ivy-cite
          org-ref-get-pdf-filename-function 'org-ref-get-pdf-filename-helm-bibtex
-         org-ref-default-bibliography (list "~/pCloud Drive/My Documents/Org/Org-Roam/Papers/zotLib.bib")
-         org-ref-bibliography-notes "~/pCloud Drive/My Documents/Org/Org-Roam/Papers/Notes.org"
+         org-ref-default-bibliography (list "~/pCloud Drive/My Documents/Org/Papers/zotLib.bib")
+         org-ref-bibliography-notes "~/pCloud Drive/My Documents/Org/Papers/Notes.org"
          org-ref-note-title-format "* TODO %y - %t\n :PROPERTIES:\n  :Custom_ID: %k\n  :NOTER_DOCUMENT: %F\n :ROAM_KEY: cite:%k\n  :AUTHOR: %9a\n  :JOURNAL: %j\n  :YEAR: %y\n  :VOLUME: %v\n  :PAGES: %p\n  :DOI: %D\n  :URL: %U\n :END:\n\n"
-         org-ref-notes-directory "~/pCloud Drive/My Documents/Org/Org-Roam/Papers/"
+         org-ref-notes-directory "~/pCloud Drive/My Documents/Org/Papers/"
          org-ref-notes-function 'orb-edit-notes
     ))
 
 (after! org-ref
   (setq
-   bibtex-completion-notes-path "~/pCloud Drive/My Documents/Org/Org-Roam/Papers/"
-   bibtex-completion-bibliography "~/pCloud Drive/My Documents/Org/Org-Roam/Papers/zotLib.bib"
+   bibtex-completion-notes-path "~/pCloud Drive/My Documents/Org/Papers/"
+   bibtex-completion-bibliography "~/pCloud Drive/My Documents/Org/Papers/zotLib.bib"
    bibtex-completion-pdf-field "file"
    bibtex-completion-notes-template-multiple-files
    (concat
@@ -577,6 +577,18 @@ Is relative to `org-directory', unless it is absolute")
     )
    )
 )
+(after! org-ref
+  (defun my/org-ref-open-pdf-at-point ()
+    "Open the pdf for bibtex key under point if it exists."
+    (interactive)
+    (let* ((results (org-ref-get-bibtex-key-and-file))
+           (key (car results))
+           (pdf-file (car (bibtex-completion-find-pdf key))))
+      (if (file-exists-p pdf-file)
+          (funcall bibtex-completion-pdf-open-function pdf-file)
+        (message "No PDF found for %s" key))))
+  (setq org-ref-open-pdf-function 'my/org-ref-open-pdf-at-point)
+  )
 
  (use-package! org-roam-bibtex
   :after (org-roam)
