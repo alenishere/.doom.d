@@ -533,7 +533,7 @@ Is relative to `org-directory', unless it is absolute")
    org-noter-always-create-frame nil
    ;; I want to see the whole file
    org-noter-hide-other nil
-   org-noter-notes-search-path (concat org-directory "/Notes")
+   org-noter-notes-search-path (list (concat org-roam-directory "/Notes"))
    )
   )
 
@@ -604,17 +604,17 @@ Is relative to `org-directory', unless it is absolute")
     (setq
          org-ref-completion-library 'org-ref-ivy-cite
          org-ref-get-pdf-filename-function 'org-ref-get-pdf-filename-helm-bibtex
-         org-ref-default-bibliography (list "~/pCloud Drive/My Documents/Org/Papers/zotLib.bib")
-         org-ref-bibliography-notes "~/pCloud Drive/My Documents/Org/Papers/Notes.org"
+         org-ref-default-bibliography (list (concat org-roam-directory "/Notes/zotLib.bib"))
+         org-ref-bibliography-notes (concat org-roam-directory "/Notes/Notes.org")
          org-ref-note-title-format "* TODO %y - %t\n :PROPERTIES:\n  :Custom_ID: %k\n  :NOTER_DOCUMENT: %F\n :ROAM_KEY: cite:%k\n  :AUTHOR: %9a\n  :JOURNAL: %j\n  :YEAR: %y\n  :VOLUME: %v\n  :PAGES: %p\n  :DOI: %D\n  :URL: %U\n :END:\n\n"
-         org-ref-notes-directory "~/pCloud Drive/My Documents/Org/Papers/"
+         org-ref-notes-directory (concat org-roam-directory "/Notes/")
          org-ref-notes-function 'orb-edit-notes
     ))
 
 (after! org-ref
   (setq
-   bibtex-completion-notes-path "~/pCloud Drive/My Documents/Org/Papers/"
-   bibtex-completion-bibliography "~/pCloud Drive/My Documents/Org/Papers/zotLib.bib"
+   bibtex-completion-notes-path (concat org-roam-directory "/Notes/")
+   bibtex-completion-bibliography (concat org-roam-directory "/Notes/zotLib.bib")
    bibtex-completion-pdf-field "file"
    bibtex-completion-notes-template-multiple-files
    (concat
