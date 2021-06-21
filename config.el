@@ -39,7 +39,7 @@
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/pCloud Drive/My Documents/Org")
-(setq org-agenda-files (quote ("~/pCloud Drive/My Documents/Org/todo.org" "~/pCloud Drive/My Documents/Org/projects.org" "~/pCloud Drive/My Documents/Org/trickler.org" "~/pCloud Drive/My Documents/Org/dates.org")))
+(setq org-agenda-files (quote ("~/pCloud Drive/My Documents/Org/todo.org" "~/pCloud Drive/My Documents/Org/projects.org" "~/pCloud Drive/My Documents/Org/trickler.org" "~/pCloud Drive/My Documents/Org/dates.org" "~/pCloud Drive/My Documents/Org/notes.org")))
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type 'relative)
@@ -265,15 +265,11 @@
                  :prepend t
                  :kill-buffer t))
   (add-to-list 'org-capture-templates
-               '("ca"               ; key
-                 "Article"         ; name
-                 entry             ; type
-                 (file+headline +org-capture-notes-file "Article")  ; target
-                 "* %^{Title} %(org-set-tags)  :article: \n:PROPERTIES:\n:Created: %U\n:Linked: %a\n:END:\n%i\nBrief description:\n%?"  ; template
-                 :prepend t        ; properties
-                 :empty-lines 1    ; properties
-                 :created t        ; properties
-                 ))
+               '("cw" "Article"
+                 entry (file+headline +org-capture-notes-file "Web page")
+                 "* [ ] %a\nSCHEDULED: %t\n%U\n%:initial\n\n"
+                 :immediate-finish t)
+               )
 
   (defvar +org-capture-review-file "review/review.org"
     "Default target for storing review files.
@@ -294,6 +290,8 @@ Is relative to `org-directory', unless it is absolute")
                  (file "~/.doom.d/org_capture_templates/monthly_review.txt")
                  )
                )
+  ;; Setting default capture template
+  (setq org-protocol-default-template-key "cw")
 
   ;; Additional babel languages
   (add-to-list 'org-structure-template-alist '("p" . "src jupyter-python :session python_default :kernal python3 :async no"))
@@ -301,10 +299,9 @@ Is relative to `org-directory', unless it is absolute")
   (add-to-list 'org-structure-template-alist '("d" . "src dot :file %?.png :async no :cmdline -Kdot -Tpng"))
   ;; :file ./fig_1?
 
-   ;; Additional Org modules
-  (add-to-list 'org-modules 'org-checklist)
-  (add-to-list 'org-modules 'org-habit)
-
+  ;; Additional Org modules
+  (add-to-list 'org-modules 'org-checklist 'org-habit)
+  ;; (require 'org-habit)
   ;; Enabling image scaling
   (setq org-image-actual-width nil)
 
@@ -345,7 +342,6 @@ Is relative to `org-directory', unless it is absolute")
         :desc "HTML copy image"    "i" 'ox-clip-image-to-clipboard
         )
   )
-
 ;;; Agenda view custom commands
 (map! :after org-agenda
         :map org-agenda-mode-map
@@ -357,10 +353,9 @@ Is relative to `org-directory', unless it is absolute")
          "d" #'org-agenda-day-view
          )
         )
-
-;; (map! :prefix "SPC"
-;;       :nv "a" #'org-agenda
-;;       )
+(map! :prefix "SPC"
+      :nv "a" #'org-agenda
+      )
 (map! :localleader
       :map org-mode-map
       :prefix ("w" ."Org-buffers")
@@ -724,3 +719,10 @@ Is relative to `org-directory', unless it is absolute")
    :n "p" #'/hydras/paste/evil-paste-after
    :n "P" #'/hydras/paste/evil-paste-before
    )
+
+;;; Flyspell
+;;; ------------------------------------------------------------------------------
+(after! flyspell
+  (setq flyspell-lazy-idle-seconds 60)
+  (setq ispell-dictionary "british")
+  )
