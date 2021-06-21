@@ -266,7 +266,7 @@
                  :kill-buffer t))
   (add-to-list 'org-capture-templates
                '("cw" "Article"
-                 entry (file+headline +org-capture-notes-file "Web page")
+                 entry (file+headline +org-capture-notes-file "Inbox")
                  "* [ ] %a\nSCHEDULED: %t\n%U\n%:initial\n\n"
                  :immediate-finish t)
                )
