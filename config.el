@@ -140,16 +140,19 @@
      ((t (:inherit ace-jump-face-foreground :height 5.0)))))
   )
 
+;; Truncate line
+(setq truncate-string-ellipsis "…")
 ;; Org mode
 ;; Org ellipsis
 (setq org-ellipsis " ▼")
+;; Org superstar symbols
 (setq org-superstar-headline-bullets-list '("●" "○" "▷" "▸" "◆" "◇" "◉" "◎"))
 ;; Enabling inline images by default
 (setq org-display-inline-images t)
 (setq org-redisplay-inline-images t)
 (setq org-startup-with-inline-images "inlineimages")
 (setq org-hide-emphasis-markers t)
-
+(setq org-indent-indentation-per-level 2)
 
 (after! org
   ;; Drawer use
@@ -293,7 +296,7 @@ Is relative to `org-directory', unless it is absolute")
                )
 
   ;; Additional babel languages
-  (add-to-list 'org-structure-template-alist '("p" . "src jupyter-python :session python_default :kernal python3 :async no\n"))
+  (add-to-list 'org-structure-template-alist '("p" . "src jupyter-python :session python_default :kernal python3 :async no"))
   (add-to-list 'org-structure-template-alist '("i" . "src emacs-lisp"))
   (add-to-list 'org-structure-template-alist '("d" . "src dot :file %?.png :async no :cmdline -Kdot -Tpng"))
   ;; :file ./fig_1?
@@ -329,17 +332,6 @@ Is relative to `org-directory', unless it is absolute")
         :prefix ("d")
         :desc "Put rep count" "p" '+my/put-count
         )
-
-;;; Org codeblock Result toggled shut
-;;; ---------------------------------
-  (defun hide-results (&optional &rest args)
-    (let ((results (cdr (assoc :results (third (org-babel-get-src-block-info 'light))))))
-      (when (string-match "hide" results)
-        (org-babel-hide-result-toggle t))))
-
-  (add-hook 'org-babel-after-execute-hook 'hide-results)
-
-  (advice-add 'org-babel-execute-src-block :before (lambda (&rest args) (org-babel-remove-result)))
   ;; Org config completed
   )
 
@@ -447,8 +439,11 @@ Is relative to `org-directory', unless it is absolute")
   (setq  org-roam-capture-ref-templates '(("w" "Web site" plain (function org-roam-capture--get-point)
                                            "%?"
                                            :file-name "Websites/%<%Y%m%d>-${slug}"
-                                           :head "#+TITLE: ${title}\n#+CREATED: %U\n#+ROAM_KEY: ${ref}\n#+roam_tags: website literature\n\n"
+                                           :head "#+TITLE: ${title}\n#+CREATED: %U\n#+ROAM_KEY: ${ref}\n#+roam_tags: website fleeting\n\n"
                                            :unnarrowed t)))
+  ;; Remove org-roam back link buffer from operning by default
+  (remove-hook! 'find-file-hook #'+org-roam-open-buffer-maybe-h)
+  ;; Org-roam server configuration
   (use-package! org-roam-server
     :config
     (setq org-roam-server-host "127.0.0.1"
@@ -537,6 +532,23 @@ Is relative to `org-directory', unless it is absolute")
    )
   )
 
+;; Org-projectile
+;; ------------------------------------------------------------------------------
+;; (use-package! org-projectile
+;;   :config
+;;     ;; (map! :leader
+;;     ;;   (:prefix "n"
+;;     ;;     :desc "projectile-project-complete-read" "p" #'org-projectile-project-todo-completing-read))
+;;     ;; (defun org-projectile-get-project-todo-file (project-path)
+;;     ;;   (message "Called")
+;;     ;;   (message project-path)
+;;     ;;   (concat org-directory "/projects/" (file-name-nondirectory (directory-file-name project-path)) ".org"))
+;;   (setq org-projectile-per-project-filepath "todo.org")
+;;   (setq org-agenda-files (append org-agenda-files (org-projectile-todo-files)))
+;;     )
+;; (push (org-projectile-project-todo-entry) org-capture-templates)
+
+;; Company completion
 (after! company-box
   (setq company-show-numbers t)
   )

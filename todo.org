@@ -19,3 +19,16 @@ CLOSED: [2021-06-15 Tue 07:50]
 CLOSED: [2021-06-15 Tue 07:34]
 
 [[file:~/.doom.d/config.el][file:~/.doom.d/config.el]]
+** TODO Org-roam-server config
+
+[[file:~/.doom.d/config.el::(after! org-roam]]
+*** DONE File preview in Mac
+CLOSED: [2021-06-15 Tue 22:40]
+*** TODO File preview in Linux
+Working in linux without the file preview in linux.
+*** TODO File preview in Windows
+Working in windows without the file preview in graph mode.
+
+** TODO Org-roam-bibtex
+
+** TODO Add local project todo.org file to agenda

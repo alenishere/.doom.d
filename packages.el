@@ -54,6 +54,7 @@
 (package! org-roam-server)
 (package! helm-bibtex)
 (package! org-roam-bibtex)
+(package! org-projectile)
 (package! zotxt)
 
 ;; Learning
