@@ -68,9 +68,11 @@ This project is my personal config for DOOM emacs. The config centre's around fo
   1. Download Org capture mac app from following Project:
      https://github.com/mgmart/capture
      Install it as instructed by moving the org-protocol application to the application folder in Mac.
-  2. Configure org capture in Safari using instructions in
-      https://www.huxiaoxing.com/two_ways_to_capture_links_into_org_files
-- Setup Emacs to launch on login. I like running GUI Emacs at start and assigning it to a desktop than running daemon.
+  2. Configure org capture in Safari using instructions below:
+     1) Resource for configuration available in Link: https://www.huxiaoxing.com/two_ways_to_capture_links_into_org_files
+     2) Already configured services for emacs capture from "Safari" available in "./extras/misc-tools/Mac/" folder. Copy the services to "~/Library/Services/" folder.
+     3) Configure keyboard shortcuts in ~System Preferences>>Keyboard>>Keyboard Shortcuts>>Services~ for easy capture in Safari.
+- Setup Emacs to launch on login (optional). I like running GUI Emacs at start and assigning it to a desktop than running daemon.
 ** For Linux
 - Download and install cascadia code font.
 - Install latex

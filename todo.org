@@ -1,24 +1,30 @@
+#+TITLE: TODO
+#+AUTHOR: Alen Alex Ninan
+#+EMAIL: alenishere@gmail.com
+#+PROPERTY: ANKI_DECK Default
+Time-stamp: "2021-06-22 00:31:30 alenalexninan"
+#+STARTUP: content
+#+STARTUP: indent
+#+STARTUP: align
+#+STARTUP: inlineimages
+#+ARCHIVE: %s_done::
+#+OPTIONS: num:0 toc:nil
+#+STARTUP: hidebloacks
+#+STARTUP: hidestars
+#+STARTUP: latexpreview
+#+EXPORT_FILE_NAME: Notes
+
 * Inbox
 * Windows OS
-** DONE Windows OS path config
-CLOSED: [2021-06-15 Tue 07:49]
-
-[[file:~/.doom.d/config.el][file:~/.doom.d/config.el]]
+** TODO Conda cnfig for Windows
 * Linux OS
+** Pyenv config in linux
 * Mac OS
 * Feature Addition
-** DONE Org-Ref config
-CLOSED: [2021-06-15 Tue 07:50]
-
-[[file:~/.doom.d/config.el:::config]]
 ** TODO Latex export config
 
 [[file:~/.doom.d/config.el:::config]]
 
-** DONE Deft config
-CLOSED: [2021-06-15 Tue 07:34]
-
-[[file:~/.doom.d/config.el][file:~/.doom.d/config.el]]
 ** TODO Org-roam-server config
 
 [[file:~/.doom.d/config.el::(after! org-roam]]
@@ -30,5 +36,5 @@ Working in linux without the file preview in linux.
 Working in windows without the file preview in graph mode.
 
 ** TODO Org-roam-bibtex
-
-** TODO Add local project todo.org file to agenda
+* Troubleshooting
+** TODO org-habit not working

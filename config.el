@@ -300,7 +300,8 @@ Is relative to `org-directory', unless it is absolute")
   ;; :file ./fig_1?
 
   ;; Additional Org modules
-  (add-to-list 'org-modules 'org-checklist 'org-habit)
+  (add-to-list 'org-modules 'org-checklist)
+  (add-to-list 'org-modules 'org-habit)
   ;; (require 'org-habit)
   ;; Enabling image scaling
   (setq org-image-actual-width nil)
