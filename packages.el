@@ -56,6 +56,8 @@
 (package! org-roam-bibtex)
 (package! org-projectile)
 (package! zotxt)
+(package! org-re-reveal-ref)
+(package! org-super-agenda)
 
 ;; Learning
 (package! anki-editor)
