@@ -38,8 +38,8 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/pCloud Drive/My Documents/Org")
-(setq org-agenda-files (quote ("~/pCloud Drive/My Documents/Org/todo.org" "~/pCloud Drive/My Documents/Org/projects.org" "~/pCloud Drive/My Documents/Org/trickler.org" "~/pCloud Drive/My Documents/Org/dates.org" "~/pCloud Drive/My Documents/Org/notes.org")))
+(setq org-directory "~/Dropbox/Org")
+;; (setq org-agenda-files (quote ("~/pCloud Drive/My Documents/Org/todo.org" "~/pCloud Drive/My Documents/Org/projects.org" "~/pCloud Drive/My Documents/Org/trickler.org" "~/pCloud Drive/My Documents/Org/dates.org" "~/pCloud Drive/My Documents/Org/notes.org")))
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type 'relative)
