@@ -19,7 +19,6 @@
           )) " " )
 `}
 #+AUTHOR: Alen Alex Ninan
-#+EMAIL: ${alenishere@gmail.com}
 #+PROPERTY: ANKI_DECK ${Default}
 Time-stamp: " "
 #+STARTUP: content

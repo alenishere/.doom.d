@@ -39,7 +39,6 @@
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/Dropbox/Org")
-;; (setq org-agenda-files (quote ("~/pCloud Drive/My Documents/Org/todo.org" "~/pCloud Drive/My Documents/Org/projects.org" "~/pCloud Drive/My Documents/Org/trickler.org" "~/pCloud Drive/My Documents/Org/dates.org" "~/pCloud Drive/My Documents/Org/notes.org")))
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type 'relative)
@@ -354,9 +353,14 @@ Is relative to `org-directory', unless it is absolute")
          "d" #'org-agenda-day-view
          )
         )
-(map! :prefix "SPC"
-      :nv "a" #'org-agenda
+;; Can be used to add an org file to agenda. Saves in Custom.el. To reset org-agenda remove the custom.el code for agenda files
+(map! :localleader
+      :map org-mode-map
+      :prefix ("y" . "Edit agenda files")
+      :desc "Org agenda add file" "a" #'org-agenda-file-to-front
+      :desc "Org revert all buffers" "r" #'org-remove-file
       )
+;; Write all org buffers
 (map! :localleader
       :map org-mode-map
       :prefix ("w" ."Org-buffers")

@@ -2,7 +2,7 @@
 #+AUTHOR: Alen Alex Ninan
 #+EMAIL: alenishere@gmail.com
 #+PROPERTY: ANKI_DECK Default
-Time-stamp: "2021-06-22 00:31:30 alenalexninan"
+Time-stamp: "2021-06-22 07:16:05 alenalexninan"
 #+STARTUP: content
 #+STARTUP: indent
 #+STARTUP: align
@@ -16,9 +16,9 @@ Time-stamp: "2021-06-22 00:31:30 alenalexninan"
 
 * Inbox
 * Windows OS
-** TODO Conda cnfig for Windows
+** TODO Conda config for Windows
 * Linux OS
-** Pyenv config in linux
+** pyenv config in linux
 * Mac OS
 * Feature Addition
 ** TODO Latex export config
