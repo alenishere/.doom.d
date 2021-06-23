@@ -1,7 +1,7 @@
 #+TITLE: My emacs configuration
 #+AUTHOR: Alen Alex Ninan
 #+PROPERTY: ANKI_DECK Default
-Time-stamp: "2021-06-22 23:11:32 alenalexninan"
+Time-stamp: "2021-06-23 19:02:03 alenalexninan"
 #+PROPERTY: header-args:emacs-lisp :tangle yes :cache yes :results silent :padline no
 #+STARTUP: content
 #+STARTUP: indent
@@ -56,7 +56,7 @@ Time-stamp: "2021-06-22 23:11:32 alenalexninan"
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-tomorrow-night)
+(setq doom-theme 'modus-vivendi)
 #+end_src
 ** Fonts
 #+begin_src emacs-lisp
@@ -104,6 +104,18 @@ Time-stamp: "2021-06-22 23:11:32 alenalexninan"
 #+begin_src emacs-lisp
 ;; Better image for doom dashboard
 (setq fancy-splash-image "~/.doom.d/icon_128x128@2.png")
+#+end_src
+** Page break
+#+begin_src emacs-lisp
+(use-package! page-break-lines
+  :commands page-break-lines-mode
+  :init
+  (autoload 'turn-on-page-break-lines-mode "page-break-lines")
+  :config
+  (setq page-break-lines-max-width fill-column)
+  (map! :prefix "g"
+        :desc "Prev page break" :nv "[" #'backward-page
+        :desc "Next page break" :nv "]" #'forward-page))
 #+end_src
 * Windows path variables
 #+begin_src emacs-lisp
@@ -177,6 +189,19 @@ Need larger fonts for better visibility
      ((t (:inherit ace-jump-face-foreground :height 5.0)))))
   )
 #+end_src
+* Which key (Helps with keybinding)
+#+begin_src emacs-lisp
+(setq which-key-idle-delay 0.5)
+
+(setq which-key-allow-multiple-replacements t)
+(after! which-key
+  (pushnew!
+   which-key-replacement-alist
+   '(("" . "\\`+?evil[-:]?\\(?:a-\\)?\\(.*\\)") . (nil . "◂\\1"))
+   '(("\\`g s" . "\\`evilem--?motion-\\(.*\\)") . (nil . "◃\\1"))
+   ))
+#+end_src
+
 * Org mode configuration
 ** Org directory
 #+begin_src emacs-lisp
@@ -907,4 +932,48 @@ Hydra to navigate kill ring
 * Auto-revert buffer
 #+begin_src emacs-lisp
 
+#+end_src
+
+* Helm config
+#+begin_src emacs-lisp
+(after! helm
+  (define-key helm-map (kbd "<backtab") #'helm-previous-line)
+  )
+#+end_src
+* Search tools
+** Helm silver searcher
+#+begin_src emacs-lisp
+(use-package! helm-ag
+  :config
+  (map! :leader
+        :prefix ("sA" . "Silver searcher")
+        :desc "AG" "a" #'helm-ag
+        :desc "AG do" "d" #'helm-do-ag
+        :desc "AG current file" "f" #'helm-ag-this-file
+        :desc "AG project" "r" #'helm-ag-project-root
+        :desc "AG buffers" "b" #'helm-ag-buffers
+        )
+  (map! :leader
+        :prefix ("s")
+        :desc "Silver search directory" "a" #'helm-ag
+        )
+  :init
+  )
+#+end_src
+** Counsel silver searcher
+#+begin_src emacs-lisp
+(after! counsel
+  (map! :leader
+        :prefix ("s")
+        :desc "AG directory" "a" #'counsel-ag
+        )
+  )
+#+end_src
+* Latex configs
+Latex configurations for better export and latex edits.
+** Export settings
+#+begin_src emacs-lisp
+#+end_src
+** Org in-buffer settings
+#+begin_src emacs-lisp
 #+end_src

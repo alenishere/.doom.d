@@ -1,7 +1,16 @@
 #+TITLE:   Readme
 #+DATE:    January 17, 2021
+Time-stamp: "2021-06-23 19:04:25 alenalexninan"
 #+SINCE:   2020
 #+STARTUP: inlineimages nofold
+#+AUTHOR: Alen Alex Ninan
+#+PROPERTY: ANKI_DECK Default
+#+STARTUP: content
+#+STARTUP: indent
+#+STARTUP: align
+#+STARTUP: hidebloacks
+#+STARTUP: hidestars
+#+STARTUP: latexpreview
 
 * Table of Contents :TOC_3:noexport:
 - [[#description][Description]]
@@ -32,6 +41,7 @@ This project is my personal config for DOOM emacs. The config centre's around fo
 + In Linux:
   - Enable org-protocol and browser capture.
   - Provide necessary config for easy emacs setup
++ Use theme easily visible to me. (Have issues recognising colours)
 ** Maintainers
 + @alenalexninan (Author)
 
@@ -73,6 +83,7 @@ This project is my personal config for DOOM emacs. The config centre's around fo
      2) Already configured services for emacs capture from "Safari" available in "./extras/misc-tools/Mac/" folder. Copy the services to "~/Library/Services/" folder.
      3) Configure keyboard shortcuts in ~System Preferences>>Keyboard>>Keyboard Shortcuts>>Services~ for easy capture in Safari.
 - Setup Emacs to launch on login (optional). I like running GUI Emacs at start and assigning it to a desktop than running daemon.
+
 ** For Linux
 - Download and install cascadia code font.
 - Install latex

@@ -69,3 +69,12 @@
 
 ;; Company
 ;; (package! company-posframe)
+
+;; Page Break
+(package! page-break-lines :recipe (:host github :repo "purcell/page-break-lines"))
+
+;; Search tools
+(package! helm-ag)
+
+;; Some themes
+(package! modus-themes)

@@ -25,7 +25,7 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-tomorrow-night)
+(setq doom-theme 'modus-vivendi)
 ;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
 ;; are the three important ones:
 ;;
@@ -59,6 +59,15 @@
        :desc "Toggle truncate lines" "t" #'toggle-truncate-lines))
 ;; Better image for doom dashboard
 (setq fancy-splash-image "~/.doom.d/icon_128x128@2.png")
+(use-package! page-break-lines
+  :commands page-break-lines-mode
+  :init
+  (autoload 'turn-on-page-break-lines-mode "page-break-lines")
+  :config
+  (setq page-break-lines-max-width fill-column)
+  (map! :prefix "g"
+        :desc "Prev page break" :nv "[" #'backward-page
+        :desc "Next page break" :nv "]" #'forward-page))
 ;; Windows Path configuration
 ;; ------------------------------------------------------------------------------
 (when (string-equal system-type "windows-nt")
@@ -124,6 +133,15 @@
    '(aw-leading-char-face
      ((t (:inherit ace-jump-face-foreground :height 5.0)))))
   )
+(setq which-key-idle-delay 0.5)
+
+(setq which-key-allow-multiple-replacements t)
+(after! which-key
+  (pushnew!
+   which-key-replacement-alist
+   '(("" . "\\`+?evil[-:]?\\(?:a-\\)?\\(.*\\)") . (nil . "◂\\1"))
+   '(("\\`g s" . "\\`evilem--?motion-\\(.*\\)") . (nil . "◃\\1"))
+   ))
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/Dropbox/Org")
@@ -678,4 +696,31 @@ Is relative to `org-directory', unless it is absolute")
    :n "p" #'/hydras/paste/evil-paste-after
    :n "P" #'/hydras/paste/evil-paste-before
    )
+
+(after! helm
+  (define-key helm-map (kbd "<backtab") #'helm-previous-line)
+  )
+(use-package! helm-ag
+  :config
+  (map! :leader
+        :prefix ("sA" . "Silver searcher")
+        :desc "AG" "a" #'helm-ag
+        :desc "AG do" "d" #'helm-do-ag
+        :desc "AG current file" "f" #'helm-ag-this-file
+        :desc "AG project" "r" #'helm-ag-project-root
+        :desc "AG buffers" "b" #'helm-ag-buffers
+        )
+  (map! :leader
+        :prefix ("s")
+        :desc "Silver search directory" "a" #'helm-ag
+        )
+  :init
+  )
+(after! counsel
+  (map! :leader
+        :prefix ("s")
+        :desc "AG directory" "a" #'counsel-ag
+        )
+  )
+
 
