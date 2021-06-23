@@ -1,6 +1,6 @@
 #+TITLE:   Readme
 #+DATE:    January 17, 2021
-Time-stamp: "2021-06-23 19:04:25 alenalexninan"
+Time-stamp: "2021-06-23 20:06:03 alenalexninan"
 #+SINCE:   2020
 #+STARTUP: inlineimages nofold
 #+AUTHOR: Alen Alex Ninan
@@ -107,7 +107,6 @@ This project is my personal config for DOOM emacs. The config centre's around fo
 7. Edit snippets to fit requirement.
 8. Install conda
 9. Edit details of conda environment in Emacs config.el.
-
 * Troubleshooting
 # Common issues and their solution, or places to look for help.
 Caveat: I am not a programmer. The help I can provide is going to be very limited. Will try my best but don't expect much.
