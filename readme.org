@@ -1,6 +1,6 @@
 #+TITLE:   Readme
 #+DATE:    January 17, 2021
-Time-stamp: "2021-06-23 20:06:03 alenalexninan"
+Time-stamp: "2021-06-24 11:26:58 alenalexninan"
 #+SINCE:   2020
 #+STARTUP: inlineimages nofold
 #+AUTHOR: Alen Alex Ninan
@@ -25,6 +25,10 @@ Time-stamp: "2021-06-23 20:06:03 alenalexninan"
 - [[#features][Features]]
 - [[#configuration][Configuration]]
 - [[#troubleshooting][Troubleshooting]]
+- [[#references][References]]
+  - [[#org-mode---organize-your-life-in-plain-text][Org Mode - Organize Your Life In Plain Text!]]
+  - [[#doom-emacs-configuration][Doom Emacs Configuration]]
+  - [[#consistent-technical-documents-using-emacs-and-org-mode---youtube][Consistent Technical Documents Using Emacs and Org Mode - YouTube]]
 
 * Description
 # A summary of what this module does.
@@ -110,3 +114,14 @@ This project is my personal config for DOOM emacs. The config centre's around fo
 * Troubleshooting
 # Common issues and their solution, or places to look for help.
 Caveat: I am not a programmer. The help I can provide is going to be very limited. Will try my best but don't expect much.
+* References
+** [[http://doc.norang.ca/org-mode.html#Archiving][Org Mode - Organize Your Life In Plain Text!]]
+SCHEDULED: <2021-06-22 Tue>
+[2021-06-22 Tue 20:12]
+** [[https://tecosaur.github.io/emacs-config/config.html][Doom Emacs Configuration]]
+SCHEDULED: <2021-06-23 Wed>
+[2021-06-23 Wed 12:33]
+
+** [[https://www.youtube.com/watch?v=0g9BcZvQbXU&list=PLaMQ5LPbfS12KVsY5XHYf_S-pKi-BMWs1&index=3&t=865s][Consistent Technical Documents Using Emacs and Org Mode - YouTube]]
+SCHEDULED: <2021-06-22 Tue>
+[2021-06-22 Tue 19:53]

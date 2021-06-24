@@ -202,10 +202,16 @@
                  "* %? [[%:link][%(transform-square-brackets-to-round-ones \"%:description\")]]\n"
                  :prepend t
                  :kill-buffer t))
-  (add-to-list 'org-capture-templates
+  ;; (add-to-list 'org-capture-templates
+  ;;              '("cw" "Article"
+  ;;                entry (file+headline +org-capture-notes-file "Inbox")
+  ;;                "* TODO %a\nSCHEDULED: %t\n%U\n%:initial\n\n"
+  ;;                :immediate-finish t)
+  ;;              )
+    (add-to-list 'org-capture-templates
                '("cw" "Article"
                  entry (file+headline +org-capture-notes-file "Inbox")
-                 "* TODO %a\nSCHEDULED: %t\n%U\n%:initial\n\n"
+                 "* TODO %a\n%U\n%:initial\n\n"
                  :immediate-finish t)
                )
   )
@@ -238,6 +244,7 @@ Is relative to `org-directory', unless it is absolute")
   ;; Additional Org modules
   (add-to-list 'org-modules 'org-checklist)
   (add-to-list 'org-modules 'org-habit)
+  (add-to-list 'org-modules 'org-crypt)
   ;; (require 'org-habit)
   )
 (after! org
@@ -365,7 +372,7 @@ Is relative to `org-directory', unless it is absolute")
       :map org-mode-map
       :prefix ("y" . "Edit agenda files")
       :desc "Org agenda add file" "a" #'org-agenda-file-to-front
-      :desc "Org revert all buffers" "r" #'org-remove-file
+      :desc "Org agends remove file" "r" #'org-remove-file
       )
 (after! (org-agenda)
   (defun +my/skip-non-archivable-tasks ()
@@ -697,15 +704,14 @@ Is relative to `org-directory', unless it is absolute")
 \n* ${title}\n  :PROPERTIES:\n  :Custom_ID: ${=key=}\n  :URL: ${url}\n  :AUTHOR: ${author-or-editor}\n  :NOTER_DOCUMENT: %(orb-process-file-field \"${=key=}\")\n  :NOTER_PAGE: \n  :END:\n\n"
 
            :unnarrowed t))))
-(use-package! ivy-bibtex
-  :config
-  (map! :leader
-        :prefix ("ox" . "Bibtex")
-        :desc "ivy-bibtex" "i" #'ivy-bibtex
-        :desc "helm-bibtex" "h" #'helm-bibtex
-        )
-
-  )
+;; (use-package! ivy-bibtex
+;;   :config
+;;   (map! :leader
+;;         :prefix ("ox" . "Bibtex")
+;;         :desc "ivy-bibtex" "i" #'ivy-bibtex
+;;         :desc "helm-bibtex" "h" #'helm-bibtex
+;;         )
+;;   )
 ;; Time-stamp hook
 ;; ------------------------------------------------------------------------------
 (add-hook! 'before-save-hook #'time-stamp)

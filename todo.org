@@ -2,17 +2,35 @@
 #+AUTHOR: Alen Alex Ninan
 #+EMAIL: alenishere@gmail.com
 #+PROPERTY: ANKI_DECK Default
-Time-stamp: "2021-06-23 23:32:49 alenalexninan"
+Time-stamp: "2021-06-24 11:41:56 alenalexninan"
 #+STARTUP: content
 #+STARTUP: indent
 #+STARTUP: align
 #+STARTUP: inlineimages
 #+ARCHIVE: %s_done::
-#+OPTIONS: num:0 toc:nil
+#+OPTIONS: num:2 toc:nil
 #+STARTUP: hidebloacks
 #+STARTUP: hidestars
 #+STARTUP: latexpreview
 #+EXPORT_FILE_NAME: Notes
+
+* Table of contents :TOC:
+- [[#inbox][Inbox]]
+- [[#windows-os][Windows OS]]
+  - [[#conda-config-for-windows][Conda config for Windows]]
+- [[#linux-os][Linux OS]]
+  - [[#virtual-environment-config-in-linux][Virtual environment config in linux]]
+- [[#mac-os][Mac OS]]
+- [[#feature-addition][Feature Addition]]
+  - [[#latex-export-config][Latex export config]]
+  - [[#org-roam-server-config][Org-roam-server config]]
+  - [[#org-roam-bibtex][Org-roam-bibtex]]
+  - [[#idea-org-mode---organize-your-life-in-plain-text][IDEA Org Mode - Organize Your Life In Plain Text!]]
+  - [[#idea-doom-emacs-configuration][IDEA Doom Emacs Configuration]]
+  - [[#idea-consistent-technical-documents-using-emacs-and-org-mode---youtube][IDEA Consistent Technical Documents Using Emacs and Org Mode - YouTube]]
+  - [[#idea-enhancing-your-focus-with-orgmode---youtube][IDEA Enhancing your focus with OrgMode - YouTube]]
+- [[#troubleshooting][Troubleshooting]]
+  - [[#org-habit-not-working][org-habit not working]]
 
 * Inbox
 * Windows OS
@@ -36,5 +54,14 @@ Working in linux without the file preview in linux.
 Working in windows without the file preview in graph mode.
 
 ** TODO Org-roam-bibtex
+** IDEA [[http://doc.norang.ca/org-mode.html#Archiving][Org Mode - Organize Your Life In Plain Text!]]
+[2021-06-22 Tue 20:12]
+** IDEA [[https://tecosaur.github.io/emacs-config/config.html][Doom Emacs Configuration]]
+[2021-06-23 Wed 12:33]
+** IDEA [[https://www.youtube.com/watch?v=0g9BcZvQbXU&list=PLaMQ5LPbfS12KVsY5XHYf_S-pKi-BMWs1&index=3&t=865s][Consistent Technical Documents Using Emacs and Org Mode - YouTube]]
+[2021-06-22 Tue 19:53]
+
+** IDEA [[https://www.youtube.com/watch?v=gDHE23vl9E0][Enhancing your focus with OrgMode - YouTube]]
+[2021-06-22 Tue 16:22]
 * Troubleshooting
 ** TODO org-habit not working
