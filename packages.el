@@ -58,6 +58,7 @@
 (package! zotxt)
 (package! org-re-reveal-ref)
 (package! org-super-agenda)
+(package! org-pdfview)
 
 ;; Learning
 (package! anki-editor)
@@ -78,3 +79,7 @@
 
 ;; Some themes
 (package! modus-themes)
+
+;; bibtex
+(package! helm-bibtex)
+(package! ivy-bibtex)

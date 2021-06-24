@@ -25,6 +25,7 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
+;; (setq doom-theme 'doom-xcode)
 (setq doom-theme 'modus-vivendi)
 ;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
 ;; are the three important ones:
@@ -38,7 +39,10 @@
 ;; font string. You generally only need these two:
 ;; setq doom-font (font-spec :family "cascadia code" :size 14 :weight 'semi-light)
 ;;      doom-variable-pitch-font (font-spec :family "sans" :size 13))
-(setq doom-font (font-spec :family "cascadia code" :size 16 :weight 'semi-light))
+;;(setq doom-font (font-spec :family "cascadia code" :size 16 :weight 'light))
+(setq doom-font (font-spec :family "JetBrains Mono" :size 15 :weight 'light)
+      doom-variable-pitch-font (font-spec :family "Noto Serif" :size 15)
+      ivy-posframe-font (font-spec :family "JetBrainsMono" :size 15))
 
 (after! doom-theme
   (setq doom-themes-enable-bold t
@@ -523,6 +527,17 @@ Is relative to `org-directory', unless it is absolute")
     )
    )
   )
+(after! (pdf-tools)
+(use-package org-pdfview
+     :config
+     ;; https://lists.gnu.org/archive/html/emacs-orgmode/2016-11/msg00169.html
+     ;; Before adding, remove it (to avoid clogging)
+     (delete '("\\.pdf\\'" . default) org-file-apps)
+     ;; https://lists.gnu.org/archive/html/emacs-orgmode/2016-11/msg00176.html
+     (add-to-list 'org-file-apps
+                  '("\\.pdf\\'" . (lambda (file link)
+                                    (org-pdfview-open link)))))
+                )
 (use-package! org-noter
   :after (:any org pdf-view)
   :config
@@ -541,7 +556,8 @@ Is relative to `org-directory', unless it is absolute")
 (setq ispell-personal-dictionary "~/.doom.d/extras/personal/personal_dict.txt")
 (after! spell-fu
   (setq spell-fu-idle-delay 0.5 ; default is 0.25
-        ispell-dictionary "en_GB" ; needed for Macs in particular
+        ;;ispell-dictionary "british" ; needed for Macs in particular
+        ispell-dictionary "en_GB"
         )
 )
 ;; (after! flyspell
@@ -614,7 +630,7 @@ Is relative to `org-directory', unless it is absolute")
   (setq
    org-ref-completion-library 'org-ref-ivy-cite
    org-ref-get-pdf-filename-function 'org-ref-get-pdf-filename-helm-bibtex
-   org-ref-default-bibliography (list (concat org-roam-directory "/Notes/zotLib.bib"))
+   org-ref-default-bibliography (list (concat org-roam-directory "/Notes/MyLibrary.bib"))
    org-ref-bibliography-notes (concat org-roam-directory "/Notes/Notes.org")
    org-ref-note-title-format "* TODO %y - %t\n :PROPERTIES:\n  :Custom_ID: %k\n  :NOTER_DOCUMENT: %F\n :ROAM_KEY: cite:%k\n  :AUTHOR: %9a\n  :JOURNAL: %j\n  :YEAR: %y\n  :VOLUME: %v\n  :PAGES: %p\n  :DOI: %D\n  :URL: %U\n :END:\n\n"
    org-ref-notes-directory (concat org-roam-directory "/Notes/")
@@ -624,7 +640,7 @@ Is relative to `org-directory', unless it is absolute")
 (after! org-ref
   (setq
    bibtex-completion-notes-path (concat org-roam-directory "/Notes/")
-   bibtex-completion-bibliography (concat org-roam-directory "/Notes/zotLib.bib")
+   bibtex-completion-bibliography (concat org-roam-directory "/Notes/MyLibrary.bib")
    bibtex-completion-pdf-field "file"
    bibtex-completion-notes-template-multiple-files
    (concat
@@ -657,6 +673,13 @@ Is relative to `org-directory', unless it is absolute")
         (message "No PDF found for %s" key))))
   (setq org-ref-open-pdf-function 'my/org-ref-open-pdf-at-point)
   )
+(after! org-ref
+  (map! :localleader
+        :map org-mode-map
+        :prefix ("l")
+        :desc "helm-bibtex" "r" #'helm-bibtex
+        )
+)
  (use-package! org-roam-bibtex
   :after (org-roam)
   :hook (org-roam-mode . org-roam-bibtex-mode)
@@ -674,6 +697,15 @@ Is relative to `org-directory', unless it is absolute")
 \n* ${title}\n  :PROPERTIES:\n  :Custom_ID: ${=key=}\n  :URL: ${url}\n  :AUTHOR: ${author-or-editor}\n  :NOTER_DOCUMENT: %(orb-process-file-field \"${=key=}\")\n  :NOTER_PAGE: \n  :END:\n\n"
 
            :unnarrowed t))))
+(use-package! ivy-bibtex
+  :config
+  (map! :leader
+        :prefix ("ox" . "Bibtex")
+        :desc "ivy-bibtex" "i" #'ivy-bibtex
+        :desc "helm-bibtex" "h" #'helm-bibtex
+        )
+
+  )
 ;; Time-stamp hook
 ;; ------------------------------------------------------------------------------
 (add-hook! 'before-save-hook #'time-stamp)

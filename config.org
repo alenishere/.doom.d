@@ -1,7 +1,7 @@
 #+TITLE: My emacs configuration
 #+AUTHOR: Alen Alex Ninan
 #+PROPERTY: ANKI_DECK Default
-Time-stamp: "2021-06-23 19:02:03 alenalexninan"
+Time-stamp: "2021-06-24 10:42:33 alenalexninan"
 #+PROPERTY: header-args:emacs-lisp :tangle yes :cache yes :results silent :padline no
 #+STARTUP: content
 #+STARTUP: indent
@@ -56,6 +56,7 @@ Time-stamp: "2021-06-23 19:02:03 alenalexninan"
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
+;; (setq doom-theme 'doom-xcode)
 (setq doom-theme 'modus-vivendi)
 #+end_src
 ** Fonts
@@ -72,7 +73,10 @@ Time-stamp: "2021-06-23 19:02:03 alenalexninan"
 ;; font string. You generally only need these two:
 ;; setq doom-font (font-spec :family "cascadia code" :size 14 :weight 'semi-light)
 ;;      doom-variable-pitch-font (font-spec :family "sans" :size 13))
-(setq doom-font (font-spec :family "cascadia code" :size 16 :weight 'semi-light))
+;;(setq doom-font (font-spec :family "cascadia code" :size 16 :weight 'light))
+(setq doom-font (font-spec :family "JetBrains Mono" :size 15 :weight 'light)
+      doom-variable-pitch-font (font-spec :family "Noto Serif" :size 15)
+      ivy-posframe-font (font-spec :family "JetBrainsMono" :size 15))
 
 (after! doom-theme
   (setq doom-themes-enable-bold t
@@ -639,7 +643,7 @@ I am keeping my calf view config in personal file since it needs access to my ca
   (setq org-roam-graph-exclude-matcher '("private" "dailies" "archives"))
   )
 #+end_src
-** Easy keybinging for org roam
+** Easy keybinding for org roam
 #+begin_src emacs-lisp
 (map! :after org
       :map org-mode-map
@@ -691,7 +695,21 @@ I am keeping my calf view config in personal file since it needs access to my ca
    )
   )
 #+end_src
-* Org noter config
+** Org PDF
+#+begin_src emacs-lisp
+(after! (pdf-tools)
+(use-package org-pdfview
+     :config
+     ;; https://lists.gnu.org/archive/html/emacs-orgmode/2016-11/msg00169.html
+     ;; Before adding, remove it (to avoid clogging)
+     (delete '("\\.pdf\\'" . default) org-file-apps)
+     ;; https://lists.gnu.org/archive/html/emacs-orgmode/2016-11/msg00176.html
+     (add-to-list 'org-file-apps
+                  '("\\.pdf\\'" . (lambda (file link)
+                                    (org-pdfview-open link)))))
+                )
+#+end_src
+* Org noter configuration
 #+begin_src emacs-lisp
 (use-package! org-noter
   :after (:any org pdf-view)
@@ -716,11 +734,12 @@ I am keeping my calf view config in personal file since it needs access to my ca
 ;;; -----------------------------------------------------------------------------
 (setq ispell-personal-dictionary "~/.doom.d/extras/personal/personal_dict.txt")
 #+end_src
-** Spellfu
+** Spell-fu
 #+begin_src emacs-lisp
 (after! spell-fu
   (setq spell-fu-idle-delay 0.5 ; default is 0.25
-        ispell-dictionary "en_GB" ; needed for Macs in particular
+        ;;ispell-dictionary "british" ; needed for Macs in particular
+        ispell-dictionary "en_GB"
         )
 )
 #+end_src
@@ -757,7 +776,7 @@ I use conda in windows. I have not figured out use and configuration of pyenv-wi
 ** Linux
 
 ** Mac
-* Company autocomppletion
+* Company auto-completion
 #+begin_src emacs-lisp
 ;; Company completion
 (after! company-box
@@ -820,7 +839,7 @@ Using org-ref for citation in org-mode.
   (setq
    org-ref-completion-library 'org-ref-ivy-cite
    org-ref-get-pdf-filename-function 'org-ref-get-pdf-filename-helm-bibtex
-   org-ref-default-bibliography (list (concat org-roam-directory "/Notes/zotLib.bib"))
+   org-ref-default-bibliography (list (concat org-roam-directory "/Notes/MyLibrary.bib"))
    org-ref-bibliography-notes (concat org-roam-directory "/Notes/Notes.org")
    org-ref-note-title-format "* TODO %y - %t\n :PROPERTIES:\n  :Custom_ID: %k\n  :NOTER_DOCUMENT: %F\n :ROAM_KEY: cite:%k\n  :AUTHOR: %9a\n  :JOURNAL: %j\n  :YEAR: %y\n  :VOLUME: %v\n  :PAGES: %p\n  :DOI: %D\n  :URL: %U\n :END:\n\n"
    org-ref-notes-directory (concat org-roam-directory "/Notes/")
@@ -833,7 +852,7 @@ Using org-ref for citation in org-mode.
 (after! org-ref
   (setq
    bibtex-completion-notes-path (concat org-roam-directory "/Notes/")
-   bibtex-completion-bibliography (concat org-roam-directory "/Notes/zotLib.bib")
+   bibtex-completion-bibliography (concat org-roam-directory "/Notes/MyLibrary.bib")
    bibtex-completion-pdf-field "file"
    bibtex-completion-notes-template-multiple-files
    (concat
@@ -870,8 +889,19 @@ Using org-ref for citation in org-mode.
   (setq org-ref-open-pdf-function 'my/org-ref-open-pdf-at-point)
   )
 #+end_src
+** Org-ref keybinding
+#+begin_src emacs-lisp
+(after! org-ref
+  (map! :localleader
+        :map org-mode-map
+        :prefix ("l")
+        :desc "helm-bibtex" "r" #'helm-bibtex
+        )
+)
 
-** Org-roam bibtex
+
+#+end_src
+** Org-roam BibTex
 #+begin_src emacs-lisp
  (use-package! org-roam-bibtex
   :after (org-roam)
@@ -892,6 +922,18 @@ Using org-ref for citation in org-mode.
            :unnarrowed t))))
 #+end_src
 
+** Bibtex keybindings
+#+begin_src emacs-lisp
+(use-package! ivy-bibtex
+  :config
+  (map! :leader
+        :prefix ("ox" . "Bibtex")
+        :desc "ivy-bibtex" "i" #'ivy-bibtex
+        :desc "helm-bibtex" "h" #'helm-bibtex
+        )
+
+  )
+#+end_src
 * Miscellaneous
 Configuring timestamp after file save to track changes.
 #+begin_src emacs-lisp
