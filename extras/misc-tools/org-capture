@@ -10,20 +10,20 @@
 set -e
 
 cleanup() {
-  emacsclient --eval '(let (kill-emacs-hook) (kill-emacs))'
+    /opt/homebrew/bin/emacsclient --eval '(let (kill-emacs-hook) (kill-emacs))'
 }
 
 change_focus() {
-  emacsclient -n -e "(select-frame-set-input-focus (selected-frame))" > /dev/null
+    /opt/homebrew/bin/emacsclient -n -e "(select-frame-set-input-focus (selected-frame))" >/dev/null
 }
 
 if [ $daemon ]; then
-  emacsclient -a "" \
-    -c -F '((name . "org-capture") (width . 70) (height . 25) (transient . t))' \
-    -e "(+org-capture/open-frame \"$str\" ${key:-nil})" && \
-    change_focus
+    /opt/homebrew/bin/emacsclient -a "" \
+        -c -F '((name . "org-capture") (width . 70) (height . 25) (transient . t))' \
+        -e "(+org-capture/open-frame \"$str\" ${key:-nil})" &&
+        change_focus
 else
-  emacsclient -a "" \
-    -e "(+org-capture/open-frame \"$str\" ${key:-nil})" && \
-    change_focus
+    /opt/homebrew/bin/emacsclient -a "" \
+        -e "(+org-capture/open-frame \"$str\" ${key:-nil})" &&
+        change_focus
 fi

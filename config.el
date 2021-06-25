@@ -26,7 +26,13 @@
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 ;; (setq doom-theme 'doom-xcode)
-(setq doom-theme 'modus-vivendi)
+;; (setq doom-theme 'modus-vivendi)
+;; (setq doom-theme 'doom-Iosvkem)
+;; (setq doom-theme 'doom-plain-dark)
+;; (setq doom-theme 'doom-spacegrey)
+;; (setq doom-theme 'doom-solarized-dark-high-contrast)
+;; (setq doom-theme 'doom-wilmersdorf)
+(setq doom-theme 'doom-monokai-ristretto)
 ;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
 ;; are the three important ones:
 ;;
@@ -40,9 +46,15 @@
 ;; setq doom-font (font-spec :family "cascadia code" :size 14 :weight 'semi-light)
 ;;      doom-variable-pitch-font (font-spec :family "sans" :size 13))
 ;;(setq doom-font (font-spec :family "cascadia code" :size 16 :weight 'light))
+
 (setq doom-font (font-spec :family "JetBrains Mono" :size 15 :weight 'light)
       doom-variable-pitch-font (font-spec :family "Noto Serif" :size 15)
       ivy-posframe-font (font-spec :family "JetBrainsMono" :size 15))
+
+;; (setq doom-font (font-spec :family "Iosevka" :size 15 :weight 'light)
+;;       doom-variable-pitch-font (font-spec :family "Noto Serif" :size 15)
+;;       ivy-posframe-font (font-spec :family "Iosevka" :size 15))
+
 
 (after! doom-theme
   (setq doom-themes-enable-bold t
@@ -152,7 +164,8 @@
 ;; Org ellipsis
 (setq org-ellipsis " ▼")
 ;; Org superstar symbols
-(setq org-superstar-headline-bullets-list '("●" "○" "▷" "▸" "◆" "◇" "◉" "◎"))
+;; (setq org-superstar-headline-bullets-list '("⁖" "●" "○" "▷" "▸" "◆" "◇" "◉" "◎"))
+(setq org-superstar-headline-bullets-list '("●"))
 
 ;; Better markdown
 (setq org-hide-emphasis-markers t)
@@ -534,17 +547,17 @@ Is relative to `org-directory', unless it is absolute")
     )
    )
   )
-(after! (pdf-tools)
-(use-package org-pdfview
-     :config
-     ;; https://lists.gnu.org/archive/html/emacs-orgmode/2016-11/msg00169.html
-     ;; Before adding, remove it (to avoid clogging)
-     (delete '("\\.pdf\\'" . default) org-file-apps)
-     ;; https://lists.gnu.org/archive/html/emacs-orgmode/2016-11/msg00176.html
-     (add-to-list 'org-file-apps
-                  '("\\.pdf\\'" . (lambda (file link)
-                                    (org-pdfview-open link)))))
-                )
+;; (after! (pdf-tools)
+;; (use-package org-pdfview
+;;      :config
+;;      ;; https://lists.gnu.org/archive/html/emacs-orgmode/2016-11/msg00169.html
+;;      ;; Before adding, remove it (to avoid clogging)
+;;      (delete '("\\.pdf\\'" . default) org-file-apps)
+;;      ;; https://lists.gnu.org/archive/html/emacs-orgmode/2016-11/msg00176.html
+;;      (add-to-list 'org-file-apps
+;;                   '("\\.pdf\\'" . (lambda (file link)
+;;                                     (org-pdfview-open link)))))
+;;                 )
 (use-package! org-noter
   :after (:any org pdf-view)
   :config
@@ -637,17 +650,17 @@ Is relative to `org-directory', unless it is absolute")
   (setq
    org-ref-completion-library 'org-ref-ivy-cite
    org-ref-get-pdf-filename-function 'org-ref-get-pdf-filename-helm-bibtex
-   org-ref-default-bibliography (list (concat org-roam-directory "/Notes/MyLibrary.bib"))
-   org-ref-bibliography-notes (concat org-roam-directory "/Notes/Notes.org")
+   org-ref-default-bibliography (list (concat org-directory "/MyLibrary.bib"))
+   org-ref-bibliography-notes (concat org-directory "/Notes/Notes.org")
    org-ref-note-title-format "* TODO %y - %t\n :PROPERTIES:\n  :Custom_ID: %k\n  :NOTER_DOCUMENT: %F\n :ROAM_KEY: cite:%k\n  :AUTHOR: %9a\n  :JOURNAL: %j\n  :YEAR: %y\n  :VOLUME: %v\n  :PAGES: %p\n  :DOI: %D\n  :URL: %U\n :END:\n\n"
-   org-ref-notes-directory (concat org-roam-directory "/Notes/")
+   org-ref-notes-directory (concat org-directory "/Notes/")
    org-ref-notes-function 'orb-edit-notes
    )
   )
 (after! org-ref
   (setq
-   bibtex-completion-notes-path (concat org-roam-directory "/Notes/")
-   bibtex-completion-bibliography (concat org-roam-directory "/Notes/MyLibrary.bib")
+   bibtex-completion-notes-path (concat org-directory "/Notes/")
+   bibtex-completion-bibliography (concat org-directory "/MyLibrary.bib")
    bibtex-completion-pdf-field "file"
    bibtex-completion-notes-template-multiple-files
    (concat
@@ -718,6 +731,10 @@ Is relative to `org-directory', unless it is absolute")
 ;;; Doom emacs start maximised
 ;;; -----------------------------------------------------------------------------
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
+(use-package! try
+  :config
+  :init
+  )
 ;;; Hydras
 ;;; -----------------------------------------------------------------------------
 ;; I copied this from blings emacss config
@@ -762,3 +779,15 @@ Is relative to `org-directory', unless it is absolute")
   )
 
 
+(defmacro bind (&rest commands)
+  "Convenience macro which creates a lambda interactive command."
+  `(lambda (arg)
+     (interactive "P")
+     ,@commands))
+
+(global-set-key (kbd "C-x C-c") (bind (message "Thou shall not quit!")))
+(after! evil
+  (defadvice evil-quit (around dotemacs activate)
+    (message "Thou shall not quit!"))
+  (defadvice evil-quit-all (around dotemacs activate)
+    (message "Thou shall not quit!")))

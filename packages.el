@@ -77,9 +77,18 @@
 ;; Search tools
 (package! helm-ag)
 
-;; Some themes
+;; Some themes/Users/alenalexninan/.doom.d/config.el
 (package! modus-themes)
 
-;; bibtex
+;; bibtex/Users/alenalexninan/.doom.d/config.org
 (package! helm-bibtex)
 (package! ivy-bibtex)
+
+;; Doom theme (personal fork for development)
+;; (package! emacs)
+;; (package! doom-themes :disable t)
+;; (unpin! doom-themes)
+;; (package! doom-themes :recipe (:host github :repo "alenalexninan/emacs-doom-themes"))
+
+;; Miscellaneous theme
+(package! try)
