@@ -27,12 +27,14 @@
 ;; `load-theme' function. This is the default:
 ;; (setq doom-theme 'doom-xcode)
 ;; (setq doom-theme 'modus-vivendi)
-;; (setq doom-theme 'doom-Iosvkem)
+(setq doom-theme 'doom-Iosvkem)
 ;; (setq doom-theme 'doom-plain-dark)
 ;; (setq doom-theme 'doom-spacegrey)
 ;; (setq doom-theme 'doom-solarized-dark-high-contrast)
 ;; (setq doom-theme 'doom-wilmersdorf)
-(setq doom-theme 'doom-monokai-ristretto)
+;; (setq doom-theme 'doom-monokai-ristretto)
+;; (setq doom-theme 'doom-nord-light)
+(setq doom-theme 'doom-homage-black)
 ;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
 ;; are the three important ones:
 ;;
@@ -165,7 +167,7 @@
 (setq org-ellipsis " ▼")
 ;; Org superstar symbols
 ;; (setq org-superstar-headline-bullets-list '("⁖" "●" "○" "▷" "▸" "◆" "◇" "◉" "◎"))
-(setq org-superstar-headline-bullets-list '("●"))
+(setq org-superstar-headline-bullets-list '("▶" "▷"))
 
 ;; Better markdown
 (setq org-hide-emphasis-markers t)
@@ -262,7 +264,7 @@ Is relative to `org-directory', unless it is absolute")
   )
 (after! org
 ;; Additional babel languages
-  (add-to-list 'org-structure-template-alist '("p" . "src jupyter-python :session python_default :kernal python3 :async no"))
+  (add-to-list 'org-structure-template-alist '("p" . "src jupyter-python :session python_default :kernal python :async yes"))
   (add-to-list 'org-structure-template-alist '("i" . "src emacs-lisp"))
   (add-to-list 'org-structure-template-alist '("d" . "src dot :file %?.png :async no :cmdline -Kdot -Tpng"))
 )
@@ -447,6 +449,42 @@ Is relative to `org-directory', unless it is absolute")
 (after! org
   (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|org_done\\)$" . org-mode))
   )
+(setq +org-capture-frame-parameters '((name . "doom-capture") (height . 20) (width . 80) (left . 400) (top . 252) (user-position . t) (transient . t) nil (menu-bar-lines . 1)))
+(defun +my/org-capture-open-frame (&optional initial-input key)
+  "Opens the org-capture window in a floating frame that cleans itself up once
+you're done. This can be called from an external shell script."
+  (interactive)
+  (when (and initial-input (string-empty-p initial-input))
+    (setq initial-input nil))
+  (when (and key (string-empty-p key))
+    (setq key nil))
+  (let* ((frame-title-format "")
+         (frame (if (+org-capture-frame-p)
+                    (selected-frame)
+                  (make-frame +org-capture-frame-parameters))))
+    (select-frame-set-input-focus frame)  ; fix MacOS not focusing new frames
+    (with-selected-frame frame
+      (require 'org-capture)
+      (condition-case ex
+          (letf! ((#'pop-to-buffer #'switch-to-buffer))
+            (switch-to-buffer (doom-fallback-buffer))
+            (let ((org-capture-initial initial-input)
+                  org-capture-entry)
+              (when (and key (not (string-empty-p key)))
+                (setq org-capture-entry (org-capture-select-template key)))
+              (funcall +org-capture-fn)))
+        ('error
+         (message "org-capture: %s" (error-message-string ex))
+         (delete-frame frame)
+         ))))
+  (if (equal "org-capture" (frame-parameter nil 'name))
+      (delete-frame))
+  )
+(defun +my/delete-capture-frame (&rest _)
+  "Delete frame with its name frame-parameter set to \"org-capture\"."
+  (if (equal "org-capture" (frame-parameter nil 'name))
+      (delete-frame)))
+(advice-add 'org-capture-finalize :after #'+my/delete-capture-frame)
 ;;; Org roam server settings
 (after! org-roam
 ;; Set default org-roam directory
@@ -488,7 +526,7 @@ Is relative to `org-directory', unless it is absolute")
     (org-roam-server-mode 1)
     (browse-url-xdg-open (format "http://localhost:%d" org-roam-server-port)))
     )
-  (org-roam-server-mode)
+  ;; (org-roam-server-mode)
 )
 (after! org-roam
   (when (string-equal system-type "windows-nt")
@@ -498,6 +536,25 @@ Is relative to `org-directory', unless it is absolute")
             (let ((org-roam-graph-viewer "firefox.exe"))
               (org-roam-graph--open (concat "file:///" file))))))
   )
+ (use-package org-roam-bibtex
+  :after (:all org-roam org-ref)
+  :hook (org-roam-mode . org-roam-bibtex-mode)
+  :config
+  (setq org-roam-bibtex-preformat-keywords
+   '("=key=" "title" "url" "file" "author-or-editor" "keywords"))
+  (setq orb-templates
+        '(("r" "ref" plain (function org-roam-capture--get-point)
+           ""
+           :file-name "Notes/${slug}"
+           :head "#+TITLE: ${=key=}: ${title}\n#+ROAM_KEY: ${ref}
+
+- tags ::
+- keywords :: ${keywords}
+
+\n* ${title}\n  :PROPERTIES:\n  :Custom_ID: ${=key=}\n  :URL: ${url}\n  :AUTHOR: ${author-or-editor}\n  :NOTER_DOCUMENT: %(orb-process-file-field \"${=key=}\")\n  :NOTER_PAGE: \n  :END:\n\n"
+
+           :unnarrowed t)
+                )))
 (after! org-roam
   (setq org-roam-graph-exclude-matcher '("private" "dailies" "archives"))
   )
@@ -562,13 +619,18 @@ Is relative to `org-directory', unless it is absolute")
   :after (:any org pdf-view)
   :config
   (setq
-   ;; The WM can handle splits
-   org-noter-notes-window-location 'other-frame
+   ;; The WM can handle splits. Unable to get code blocks to execute when enabling this.
+   ;; org-noter-notes-window-location 'other-frame
+
    ;; Please stop opening frames
    org-noter-always-create-frame nil
+
    ;; I want to see the whole file
    org-noter-hide-other nil
+
+   ;; Org noter default file path
    org-noter-notes-search-path (list (concat org-roam-directory "/Notes"))
+
    )
   )
 ;;; Ispell personal dictionary
@@ -659,7 +721,7 @@ Is relative to `org-directory', unless it is absolute")
   )
 (after! org-ref
   (setq
-   bibtex-completion-notes-path (concat org-directory "/Notes/")
+   bibtex-completion-notes-path (concat org-roam-directory "/Notes/")
    bibtex-completion-bibliography (concat org-directory "/MyLibrary.bib")
    bibtex-completion-pdf-field "file"
    bibtex-completion-notes-template-multiple-files
@@ -671,7 +733,7 @@ Is relative to `org-directory', unless it is absolute")
     ":PROPERTIES:\n"
     ":Custom_ID: ${=key=}\n"
     ":NOTER_DOCUMENT: %(orb-process-file-field \"${=key=}\")\n"
-    ":AUTHOR: ${author-abbrev}\n"
+    ":AUTHOR: ${author}\n"
     ":JOURNAL: ${journaltitle}\n"
     ":DATE: ${date}\n"
     ":YEAR: ${year}\n"
@@ -699,22 +761,26 @@ Is relative to `org-directory', unless it is absolute")
         :prefix ("l")
         :desc "helm-bibtex" "r" #'helm-bibtex
         )
+  (map! :leader
+        :prefix ("o")
+        :desc "Open books" "x" #'ivy-bibtex
+        )
 )
  (use-package! org-roam-bibtex
   :after (org-roam)
   :hook (org-roam-mode . org-roam-bibtex-mode)
   :config
   (setq org-roam-bibtex-preformat-keywords
-   '("=key=" "title" "url" "file" "author-or-editor" "keywords"))
+   '("=key=" "title" "url" "file" "author" "keywords"))
   (setq orb-templates
         '(("r" "ref" plain (function org-roam-capture--get-point)
            ""
-           :file-name "${slug}"
-           :head "#+TITLE: ${=key=}: ${title}\n#+ROAM_KEY: ${ref}\n#+ROAM_TAGS:
+           :file-name "Notes/${slug}"
+           :head "#+TITLE: ${title}\n#+ROAM_KEY: ${ref}\n#+ROAM_TAGS: literature
 
 - keywords :: ${keywords}
 
-\n* ${title}\n  :PROPERTIES:\n  :Custom_ID: ${=key=}\n  :URL: ${url}\n  :AUTHOR: ${author-or-editor}\n  :NOTER_DOCUMENT: %(orb-process-file-field \"${=key=}\")\n  :NOTER_PAGE: \n  :END:\n\n"
+\n* ${title}\n  :PROPERTIES:\n  :Custom_ID: ${slug}\n  :URL: ${url}\n  :AUTHOR: ${author}\n  :NOTER_DOCUMENT: %(orb-process-file-field \"${slug}\")\n  :NOTER_PAGE: \n  :END:\n\n"
 
            :unnarrowed t))))
 ;; (use-package! ivy-bibtex
@@ -751,6 +817,46 @@ Is relative to `org-directory', unless it is absolute")
    :n "p" #'/hydras/paste/evil-paste-after
    :n "P" #'/hydras/paste/evil-paste-before
    )
+(defhydra hydra-window (:color blue :hint nil)
+  "
+                                                                       ╭─────────┐
+     Move to      Size    Scroll        Split                    Do    │ Windows │
+  ╭────────────────────────────────────────────────────────────────────┴─────────╯
+        ^_k_^           ^_K_^       ^_p_^    ╭─┬─┐^ ^        ╭─┬─┐^ ^         ↺ [_u_] undo layout
+        ^^↑^^           ^^↑^^       ^^↑^^    │ │ │_v_ertical ├─┼─┤_b_alance   ↻ [_r_] restore layout
+    _h_ ←   → _l_   _H_ ←   → _L_   ^^ ^^    ╰─┴─╯^ ^        ╰─┴─╯^ ^         ✗ [_d_] close window
+        ^^↓^^           ^^↓^^       ^^↓^^    ╭───┐^ ^        ╭───┐^ ^         ⇋ [_w_] cycle window
+        ^_j_^           ^_J_^       ^_n_^    ├───┤_s_tack    │   │_z_oom      ↔ [_S_] swap windows
+        ^^ ^^           ^^ ^^       ^^ ^^    ╰───╯^ ^        ╰───╯^ ^
+  --------------------------------------------------------------------------------
+            "
+  ("<tab>" hydra-master/body "back")
+  ("<ESC>" nil "quit")
+  ("n" scroll-other-window :color red)
+  ("p" scroll-other-window-down :color red)
+  ("b" balance-windows)
+  ("d" delete-window)
+  ("H" shrink-window-horizontally :color red)
+  ("h" windmove-left :color red)
+  ("J" shrink-window :color red)
+  ("j" windmove-down :color red)
+  ("K" enlarge-window :color red)
+  ("k" windmove-up :color red)
+  ("L" enlarge-window-horizontally :color red)
+  ("l" windmove-right :color red)
+  ("r" winner-redo :color red)
+  ("s" split-window-vertically :color red)
+  ("u" winner-undo :color red)
+  ("v" split-window-horizontally :color red)
+  ("w" other-window)
+  ("z" delete-other-windows)
+  ("S" ace-swap-window))
+(after! hydra
+  (map! :leader
+        :prefix ("w")
+        :desc "Hydra window" "z" #'hydra-window/body
+        )
+  )
 
 (after! helm
   (define-key helm-map (kbd "<backtab") #'helm-previous-line)
@@ -786,8 +892,9 @@ Is relative to `org-directory', unless it is absolute")
      ,@commands))
 
 (global-set-key (kbd "C-x C-c") (bind (message "Thou shall not quit!")))
-(after! evil
-  (defadvice evil-quit (around dotemacs activate)
-    (message "Thou shall not quit!"))
-  (defadvice evil-quit-all (around dotemacs activate)
-    (message "Thou shall not quit!")))
+;; (after! evil
+;;   (defadvice evil-quit (around dotemacs activate)
+;;     (message "Thou shall not quit!"))
+;;   (defadvice evil-quit-all (around dotemacs activate)
+;;     (message "Thou shall not quit!")))
+;; (load! ~/.doom.d/lisp/touchtyping.el)
