@@ -50,15 +50,21 @@
 ;(unpin! t)
 
 ;; Orgmode
-(package! org-ref)
-(package! org-roam-server)
 (package! helm-bibtex)
-(package! org-roam-bibtex)
 (package! org-projectile)
 (package! zotxt)
 (package! org-re-reveal-ref)
 (package! org-super-agenda)
 (package! org-pdfview)
+
+(unpin! org-roam)
+(package! org-roam-server)
+(package! org-ref)
+(package! org-roam-bibtex)
+
+;; bibtex/Users/alenalexninan/.doom.d/config.org
+(package! helm-bibtex)
+(package! ivy-bibtex)
 
 ;; Learning
 (package! anki-editor)
@@ -79,10 +85,6 @@
 
 ;; Some themes/Users/alenalexninan/.doom.d/config.el
 (package! modus-themes)
-
-;; bibtex/Users/alenalexninan/.doom.d/config.org
-(package! helm-bibtex)
-(package! ivy-bibtex)
 
 ;; Doom theme (personal fork for development)
 ;; (package! emacs)

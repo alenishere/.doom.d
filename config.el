@@ -164,7 +164,9 @@
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/Dropbox/Org")
 ;; Org ellipsis
-(setq org-ellipsis " ▼")
+;; (setq org-ellipsis " ▼")
+(setq org-ellipsis " ⤵")
+
 ;; Org superstar symbols
 ;; (setq org-superstar-headline-bullets-list '("⁖" "●" "○" "▷" "▸" "◆" "◇" "◉" "◎"))
 (setq org-superstar-headline-bullets-list '("▶" "▷"))
@@ -266,7 +268,8 @@ Is relative to `org-directory', unless it is absolute")
 ;; Additional babel languages
   (add-to-list 'org-structure-template-alist '("p" . "src jupyter-python :session python_default :kernal python :async yes"))
   (add-to-list 'org-structure-template-alist '("i" . "src emacs-lisp"))
-  (add-to-list 'org-structure-template-alist '("d" . "src dot :file %?.png :async no :cmdline -Kdot -Tpng"))
+  (add-to-list 'org-structure-template-alist '("d" . "src dot :file ?.png :async no :cmdline -Kdot -Tpng"))
+  (add-to-list 'org-structure-template-alist '("r" . "src rust :tangle ?.rs"))
 )
 (after! org
   ;; Tags for org mode
@@ -527,6 +530,12 @@ you're done. This can be called from an external shell script."
     (browse-url-xdg-open (format "http://localhost:%d" org-roam-server-port)))
     )
   ;; (org-roam-server-mode)
+  (map! :after (org org-roam org-roam-server)
+      :map org-mode-map
+      :localleader
+      :prefix ("m")
+      "s" #'org-roam-server-mode
+      )
 )
 (after! org-roam
   (when (string-equal system-type "windows-nt")
@@ -536,25 +545,11 @@ you're done. This can be called from an external shell script."
             (let ((org-roam-graph-viewer "firefox.exe"))
               (org-roam-graph--open (concat "file:///" file))))))
   )
- (use-package org-roam-bibtex
-  :after (:all org-roam org-ref)
-  :hook (org-roam-mode . org-roam-bibtex-mode)
-  :config
-  (setq org-roam-bibtex-preformat-keywords
-   '("=key=" "title" "url" "file" "author-or-editor" "keywords"))
-  (setq orb-templates
-        '(("r" "ref" plain (function org-roam-capture--get-point)
-           ""
-           :file-name "Notes/${slug}"
-           :head "#+TITLE: ${=key=}: ${title}\n#+ROAM_KEY: ${ref}
-
-- tags ::
-- keywords :: ${keywords}
-
-\n* ${title}\n  :PROPERTIES:\n  :Custom_ID: ${=key=}\n  :URL: ${url}\n  :AUTHOR: ${author-or-editor}\n  :NOTER_DOCUMENT: %(orb-process-file-field \"${=key=}\")\n  :NOTER_PAGE: \n  :END:\n\n"
-
-           :unnarrowed t)
-                )))
+(use-package org-roam-bibtex
+ :after (:all org-roam org-ref)
+ :hook (org-roam-mode . org-roam-bibtex-mode)
+ :config
+ )
 (after! org-roam
   (setq org-roam-graph-exclude-matcher '("private" "dailies" "archives"))
   )
@@ -562,8 +557,8 @@ you're done. This can be called from an external shell script."
       :map org-mode-map
       :localleader
       :prefix ("mc" . "cache")
-      "c" #'org-roam-store-link
-      "d" #'org-roam-jump-to-index
+      "c" #'org-roam-db-build-cache
+      "d" #'org-roam-db-clear
       )
 
 (map! :after org
@@ -620,7 +615,7 @@ you're done. This can be called from an external shell script."
   :config
   (setq
    ;; The WM can handle splits. Unable to get code blocks to execute when enabling this.
-   ;; org-noter-notes-window-location 'other-frame
+   org-noter-notes-window-location 'other-frame
 
    ;; Please stop opening frames
    org-noter-always-create-frame nil
@@ -714,7 +709,6 @@ you're done. This can be called from an external shell script."
    org-ref-get-pdf-filename-function 'org-ref-get-pdf-filename-helm-bibtex
    org-ref-default-bibliography (list (concat org-directory "/MyLibrary.bib"))
    org-ref-bibliography-notes (concat org-directory "/Notes/Notes.org")
-   org-ref-note-title-format "* TODO %y - %t\n :PROPERTIES:\n  :Custom_ID: %k\n  :NOTER_DOCUMENT: %F\n :ROAM_KEY: cite:%k\n  :AUTHOR: %9a\n  :JOURNAL: %j\n  :YEAR: %y\n  :VOLUME: %v\n  :PAGES: %p\n  :DOI: %D\n  :URL: %U\n :END:\n\n"
    org-ref-notes-directory (concat org-directory "/Notes/")
    org-ref-notes-function 'orb-edit-notes
    )
@@ -726,14 +720,16 @@ you're done. This can be called from an external shell script."
    bibtex-completion-pdf-field "file"
    bibtex-completion-notes-template-multiple-files
    (concat
-    "#+TITLE: ${title}\n"
+    "${title}\n"
     "#+ROAM_KEY: cite:${=key=}\n"
-    "#+ROAM_TAGS: ${keywords}\n"
-    "* TODO Notes\n"
+    "#+ROAM_TAGS: literature ${=type=}\n\n"
+    "- keywords :: ${keywords}\n\n"
+    "* TODO ${title}\n"
     ":PROPERTIES:\n"
     ":Custom_ID: ${=key=}\n"
     ":NOTER_DOCUMENT: %(orb-process-file-field \"${=key=}\")\n"
-    ":AUTHOR: ${author}\n"
+    ":AUTHOR: ${author-or-editor}\n"
+    ":TYPE: ${=type=}\n"
     ":JOURNAL: ${journaltitle}\n"
     ":DATE: ${date}\n"
     ":YEAR: ${year}\n"
@@ -766,23 +762,43 @@ you're done. This can be called from an external shell script."
         :desc "Open books" "x" #'ivy-bibtex
         )
 )
- (use-package! org-roam-bibtex
+(use-package! org-roam-bibtex
   :after (org-roam)
   :hook (org-roam-mode . org-roam-bibtex-mode)
   :config
-  (setq org-roam-bibtex-preformat-keywords
-   '("=key=" "title" "url" "file" "author" "keywords"))
-  (setq orb-templates
-        '(("r" "ref" plain (function org-roam-capture--get-point)
-           ""
-           :file-name "Notes/${slug}"
-           :head "#+TITLE: ${title}\n#+ROAM_KEY: ${ref}\n#+ROAM_TAGS: literature
+  ;; (setq org-roam-bibtex-preformat-keywords
+  ;;  '("citekey" "=key=" "title" "url" "file" "author" "keywords"))
+  ;; (setq orb-templates
+  ;;       '(("r" "ref" plain (function org-roam-capture--get-point)
+  ;;          (file "path/to/ref.template")
+  ;;          :file-name "Notes/${slug}"
+  ;;          :head "#+TITLE: ${title}\n"
+  ;;          :unnarrowed t)))
+        (setq orb-preformat-keywords
+        '("=type=" "citekey" "title" "date" "year" "journaltitle" "doi" "url" "author-or-editor" "keywords" "file")
+        orb-process-file-field t
+        orb-process-file-keyword t
+        orb-file-field-extensions '("pdf"))
+        (setq orb-templates
+      '(("n" "ref+noter" plain (function org-roam-capture--get-point)
+         ""
+         :file-name "Notes/${citekey}"
+         :head "#+TITLE:${title}\n#+ROAM_KEY: ${ref} \n#+ROAM_TAGS:literature ${=type=}\n\n- keywords :: ${keywords}\n
+\* TODO ${title}
+:PROPERTIES:
+:Custom_ID: ${citekey}
+:JOURNAL: ${journaltitle}
+:DATE: ${date}
+:YEAR: ${year}
+:DOI: ${doi}
+:URL: ${url}
+:AUTHOR: ${author-or-editor}
+:TYPE: ${=type=}
+:NOTER_DOCUMENT: ${file}
+:NOTER_PAGE:
+:END:")))
 
-- keywords :: ${keywords}
-
-\n* ${title}\n  :PROPERTIES:\n  :Custom_ID: ${slug}\n  :URL: ${url}\n  :AUTHOR: ${author}\n  :NOTER_DOCUMENT: %(orb-process-file-field \"${slug}\")\n  :NOTER_PAGE: \n  :END:\n\n"
-
-           :unnarrowed t))))
+  )
 ;; (use-package! ivy-bibtex
 ;;   :config
 ;;   (map! :leader
