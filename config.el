@@ -164,8 +164,8 @@
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/Dropbox/Org")
 ;; Org ellipsis
-;; (setq org-ellipsis " ▼")
-(setq org-ellipsis " ⤵")
+(setq org-ellipsis " ▼")
+;; (setq org-ellipsis " ⤵")
 
 ;; Org superstar symbols
 ;; (setq org-superstar-headline-bullets-list '("⁖" "●" "○" "▷" "▸" "◆" "◇" "◉" "◎"))
@@ -545,11 +545,11 @@ you're done. This can be called from an external shell script."
             (let ((org-roam-graph-viewer "firefox.exe"))
               (org-roam-graph--open (concat "file:///" file))))))
   )
-(use-package org-roam-bibtex
- :after (:all org-roam org-ref)
- :hook (org-roam-mode . org-roam-bibtex-mode)
- :config
- )
+ (use-package org-roam-bibtex
+  :after (:all org-roam org-ref)
+  :hook (org-roam-mode . org-roam-bibtex-mode)
+  :config
+  )
 (after! org-roam
   (setq org-roam-graph-exclude-matcher '("private" "dailies" "archives"))
   )
@@ -762,7 +762,7 @@ you're done. This can be called from an external shell script."
         :desc "Open books" "x" #'ivy-bibtex
         )
 )
-(use-package! org-roam-bibtex
+ (use-package! org-roam-bibtex
   :after (org-roam)
   :hook (org-roam-mode . org-roam-bibtex-mode)
   :config

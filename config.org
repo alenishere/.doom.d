@@ -1,7 +1,7 @@
 #+TITLE: My emacs configuration
 #+AUTHOR: Alen Alex Ninan
 #+PROPERTY: ANKI_DECK Default
-Time-stamp: "2021-06-29 22:48:42 alenalexninan"
+Time-stamp: "2021-06-30 00:01:20 alenalexninan"
 #+PROPERTY: header-args:emacs-lisp :tangle yes :cache yes :results silent :padline no
 #+STARTUP: content
 #+STARTUP: indent
@@ -231,8 +231,8 @@ Need larger fonts for better visibility
 ** Org mode looks
 #+begin_src emacs-lisp
 ;; Org ellipsis
-;; (setq org-ellipsis " ▼")
-(setq org-ellipsis " ⤵")
+(setq org-ellipsis " ▼")
+;; (setq org-ellipsis " ⤵")
 
 ;; Org superstar symbols
 ;; (setq org-superstar-headline-bullets-list '("⁖" "●" "○" "▷" "▸" "◆" "◇" "◉" "◎"))
