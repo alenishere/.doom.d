@@ -57,10 +57,11 @@
 (package! org-super-agenda)
 (package! org-pdfview)
 
-(unpin! org-roam)
-(package! org-roam-server)
+(package! org-roam
+  :recipe (:host github :repo "org-roam/org-roam" :branch "v2"))
+;; (package! org-roam-server)
 (package! org-ref)
-(package! org-roam-bibtex)
+;; (package! org-roam-bibtex)
 
 ;; bibtex/Users/alenalexninan/.doom.d/config.org
 (package! helm-bibtex)

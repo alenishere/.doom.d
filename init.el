@@ -153,7 +153,7 @@
        ;;nim               ; python + lisp at the speed of c
        ;;nix               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
-       (org +pretty +dragndrop +jupyter +noter +pandoc +gnuplot +roam +hugo +present +journal +export)               ; organize your plain life in plain text
+       (org +pretty +dragndrop +jupyter +noter +pandoc +gnuplot +hugo +present +journal +export)               ; organize your plain life in plain text
        ;;php               ; perl's insecure younger brother
        plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
@@ -190,5 +190,5 @@
        ;;twitter           ; twitter client https://twitter.com/vnought
 
        :config
-       literate
+       ;; literate
        (default +bindings +smartparens))

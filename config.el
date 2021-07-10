@@ -488,55 +488,91 @@ you're done. This can be called from an external shell script."
   (if (equal "org-capture" (frame-parameter nil 'name))
       (delete-frame)))
 (advice-add 'org-capture-finalize :after #'+my/delete-capture-frame)
-;;; Org roam server settings
-(after! org-roam
-;; Set default org-roam directory
-  (setq org-roam-directory "~/pCloud Drive/My Documents/Org/Org-Roam")
+
+;;; Org roam directory settings
+(use-package! org-roam
+  :init
+  (map! :leader
+        :prefix ("nr" . "roam")
+        :desc "org-roam" "l" #'org-roam-buffer-toggle
+        :desc "org-roam-node-insert" "i" #'org-roam-node-insert
+        :desc "org-roam-node-find" "f" #'org-roam-node-find
+        :desc "org-roam-ref-find" "r" #'org-roam-ref-find
+        :desc "org-roam-show-graph" "g" #'org-roam-show-graph
+        :desc "org-roam-capture" "c" #'org-roam-capture
+        :desc "org-roam-dailies-capture-today" "j" #'org-roam-dailies-capture-today)
+  (map! :localleader
+        :map org-mode-map
+        :prefix "m"
+        :desc "org-roam" "l" #'org-roam-buffer-toggle
+        :desc "org-roam-node-insert" "i" #'org-roam-node-insert
+        :desc "org-roam-node-find" "f" #'org-roam-node-find
+        :desc "org-roam-ref-find" "r" #'org-roam-ref-find
+        :desc "org-roam-show-graph" "g" #'org-roam-show-graph
+        :desc "org-roam-capture" "c" #'org-roam-capture
+        :desc "org-roam-dailies-capture-today" "j" #'org-roam-dailies-capture-today)
+
+  (setq org-roam-directory (file-truename "~/pCloud Drive/My Documents/Org/Org-Roam/")
+        org-roam-db-gc-threshold most-positive-fixnum
+        org-id-link-to-org-use-id t)
+
+  :config
+  (setq org-roam-mode-sections
+        (list #'org-roam-backlinks-insert-section
+              #'org-roam-reflinks-insert-section
+              #'org-roam-unlinked-references-insert-section
+              ))
+  (org-roam-setup)
+  (setq org-roam-capture-templates
+        '(("d" "default" plain
+           "%?"
+           :if-new (file+head "${slug}.org"
+                              "#+title: ${title}\n")
+           :immediate-finish t
+           :unnarrowed t)))
+  (setq org-roam-capture-ref-templates
+        '(("r" "ref" plain
+           "%?"
+           :if-new (file+head "${slug}.org"
+                              "#+title: ${title}\n#+filetags:capture literature fleeting\n")
+           :unnarrowed t))
+        )
+  (setq org-roam-dailies-directory "daily/")
+  (setq org-roam-dailies-capture-templates
+        '(("d" "default" entry
+           "* %?"
+           :if-new (file+head "daily/%<%Y-%m-%d>.org"
+                              "#+title: %<%Y-%m-%d>\n"))))
   )
-(after! org-roam
-  (setq org-roam-dailies-capture-templates '(("d" "daily" plain (function org-roam-capture--get-point) ""
-                                              :immediate-finish t
-                                              :file-name "Dailies/%<%Y-%m-%d>"
-                                              :head "#+TITLE: %<%Y-%m-%d>")))
-  (setq  org-roam-capture-ref-templates '(("w" "Web site" plain (function org-roam-capture--get-point)
-                                           "%?"
-                                           :file-name "Websites/%<%Y%m%d>-${slug}"
-                                           :head "#+TITLE: ${title}\n#+CREATED: %U\n#+ROAM_KEY: ${ref}\n#+roam_tags: website fleeting\n\n"
-                                           :unnarrowed t)))
-  )
-(after! org-roam
-  ;; Remove org-roam back link buffer from operning by default
-  (remove-hook! 'find-file-hook #'+org-roam-open-buffer-maybe-h)
-  )
-(after! org-roam
-  ;; Org-roam server configuration
-  (use-package! org-roam-server
-    :config
-    (setq org-roam-server-host "127.0.0.1"
-          org-roam-server-port 8080
-          org-roam-server-authenticate nil
-          org-roam-server-export-inline-images t
-          org-roam-server-serve-files nil
-          org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
-          org-roam-server-network-poll t
-          org-roam-server-network-arrows nil
-          org-roam-server-network-label-truncate t
-          org-roam-server-network-label-truncate-length 60
-          org-roam-server-network-label-wrap-length 20)
-  (defun org-roam-server-open ()
-    "Ensure the server is active, then open the roam graph."
-    (interactive)
-    (org-roam-server-mode 1)
-    (browse-url-xdg-open (format "http://localhost:%d" org-roam-server-port)))
-    )
-  ;; (org-roam-server-mode)
-  (map! :after (org org-roam org-roam-server)
-      :map org-mode-map
-      :localleader
-      :prefix ("m")
-      "s" #'org-roam-server-mode
-      )
-)
+
+  (use-package! org-roam-protocol
+  :after org-protocol)
+
+  ;; this one  is for org-roam-buffer-toggle
+  (setq display-buffer-alist
+        '(;; Left side window
+          (".org-roam.*"
+           (display-buffer-in-side-window)
+           (window-width . 0.40)
+           (side . left)
+           (slot . 0))))
+
+;; (after! org-roam
+;;   (setq org-roam-dailies-capture-templates '(("d" "daily" plain (function org-roam-capture--get-point) ""
+;;                                               :immediate-finish t
+;;                                               :file-name "Dailies/%<%Y-%m-%d>"
+;;                                               :head "#+TITLE: %<%Y-%m-%d>")))
+;;   (setq  org-roam-capture-ref-templates '(("w" "Web site" plain (function org-roam-capture--get-point)
+;;                                            "%?"
+;;                                            :file-name "Websites/%<%Y%m%d>-${slug}"
+;;                                            :head "#+TITLE: ${title}\n#+CREATED: %U\n#+ROAM_KEY: ${ref}\n#+roam_tags: website fleeting\n\n"
+;;                                            :unnarrowed t)))
+;;   )
+;; (after! org-roam
+;;   ;; Remove org-roam back link buffer from operning by default
+;;   (remove-hook! 'find-file-hook #'+org-roam-open-buffer-maybe-h)
+;;   )
+
 (after! org-roam
   (when (string-equal system-type "windows-nt")
     ;; (setq org-roam-graph-executable "neato")
@@ -545,37 +581,15 @@ you're done. This can be called from an external shell script."
             (let ((org-roam-graph-viewer "firefox.exe"))
               (org-roam-graph--open (concat "file:///" file))))))
   )
- (use-package org-roam-bibtex
-  :after (:all org-roam org-ref)
-  :hook (org-roam-mode . org-roam-bibtex-mode)
-  :config
-  )
-(after! org-roam
-  (setq org-roam-graph-exclude-matcher '("private" "dailies" "archives"))
-  )
-(map! :after org
-      :map org-mode-map
-      :localleader
-      :prefix ("mc" . "cache")
-      "c" #'org-roam-db-build-cache
-      "d" #'org-roam-db-clear
-      )
+ ;; (use-package org-roam-bibtex
+ ;;  :after (:all org-roam org-ref)
+ ;;  :hook (org-roam-mode . org-roam-bibtex-mode)
+ ;;  :config
+ ;;  )
+;; (after! org-roam
+;;   (setq org-roam-graph-exclude-matcher '("private" "dailies" "archives"))
+;;   )
 
-(map! :after org
-      :leader
-      :prefix ("nr")
-      "l" #'org-roam-store-link
-      "n" #'org-roam-jump-to-index
-      "z" #'org-roam-random-note
-      )
-
-(map! :after org-roam
-      :map org-mode-map
-      :localleader
-      :prefix ("ma" . "alias")
-      "a" #'org-roam-alias-add
-      "d" #'org-roam-alias-delete
-      )
 ;; PDF view
 (after! pdf-view
   ;; open pdfs scaled to fit page
@@ -762,43 +776,43 @@ you're done. This can be called from an external shell script."
         :desc "Open books" "x" #'ivy-bibtex
         )
 )
- (use-package! org-roam-bibtex
-  :after (org-roam)
-  :hook (org-roam-mode . org-roam-bibtex-mode)
-  :config
-  ;; (setq org-roam-bibtex-preformat-keywords
-  ;;  '("citekey" "=key=" "title" "url" "file" "author" "keywords"))
-  ;; (setq orb-templates
-  ;;       '(("r" "ref" plain (function org-roam-capture--get-point)
-  ;;          (file "path/to/ref.template")
-  ;;          :file-name "Notes/${slug}"
-  ;;          :head "#+TITLE: ${title}\n"
-  ;;          :unnarrowed t)))
-        (setq orb-preformat-keywords
-        '("=type=" "citekey" "title" "date" "year" "journaltitle" "doi" "url" "author-or-editor" "keywords" "file")
-        orb-process-file-field t
-        orb-process-file-keyword t
-        orb-file-field-extensions '("pdf"))
-        (setq orb-templates
-      '(("n" "ref+noter" plain (function org-roam-capture--get-point)
-         ""
-         :file-name "Notes/${citekey}"
-         :head "#+TITLE:${title}\n#+ROAM_KEY: ${ref} \n#+ROAM_TAGS:literature ${=type=}\n\n- keywords :: ${keywords}\n
-\* TODO ${title}
-:PROPERTIES:
-:Custom_ID: ${citekey}
-:JOURNAL: ${journaltitle}
-:DATE: ${date}
-:YEAR: ${year}
-:DOI: ${doi}
-:URL: ${url}
-:AUTHOR: ${author-or-editor}
-:TYPE: ${=type=}
-:NOTER_DOCUMENT: ${file}
-:NOTER_PAGE:
-:END:")))
+;;  (use-package! org-roam-bibtex
+;;   :after (org-roam)
+;;   :hook (org-roam-mode . org-roam-bibtex-mode)
+;;   :config
+;;   ;; (setq org-roam-bibtex-preformat-keywords
+;;   ;;  '("citekey" "=key=" "title" "url" "file" "author" "keywords"))
+;;   ;; (setq orb-templates
+;;   ;;       '(("r" "ref" plain (function org-roam-capture--get-point)
+;;   ;;          (file "path/to/ref.template")
+;;   ;;          :file-name "Notes/${slug}"
+;;   ;;          :head "#+TITLE: ${title}\n"
+;;   ;;          :unnarrowed t)))
+;;         (setq orb-preformat-keywords
+;;         '("=type=" "citekey" "title" "date" "year" "journaltitle" "doi" "url" "author-or-editor" "keywords" "file")
+;;         orb-process-file-field t
+;;         orb-process-file-keyword t
+;;         orb-file-field-extensions '("pdf"))
+;;         (setq orb-templates
+;;       '(("n" "ref+noter" plain (function org-roam-capture--get-point)
+;;          ""
+;;          :file-name "Notes/${citekey}"
+;;          :head "#+TITLE:${title}\n#+ROAM_KEY: ${ref} \n#+ROAM_TAGS:literature ${=type=}\n\n- keywords :: ${keywords}\n
+;; \* TODO ${title}
+;; :PROPERTIES:
+;; :Custom_ID: ${citekey}
+;; :JOURNAL: ${journaltitle}
+;; :DATE: ${date}
+;; :YEAR: ${year}
+;; :DOI: ${doi}
+;; :URL: ${url}
+;; :AUTHOR: ${author-or-editor}
+;; :TYPE: ${=type=}
+;; :NOTER_DOCUMENT: ${file}
+;; :NOTER_PAGE:
+;; :END:")))
 
-  )
+;;   )
 ;; (use-package! ivy-bibtex
 ;;   :config
 ;;   (map! :leader
