@@ -1,0 +1,16 @@
+#+FILETAGS: LITERATURE REVIEWING %^{entry-type}
+
+- tags ::
+- keywords :: %^{keywords}
+
+* %^{title}
+:PROPERTIES:
+:Custom_ID: %^{citekey}
+:DATE: %^{date}
+:YEAR: %^{year}
+:URL: %^{url}
+:DOI: %^{doi}
+:AUTHOR: %^{author-or-editor}
+:NOTER_DOCUMENT: %^{file}
+:NOTER_PAGE: 1
+:END:

@@ -23,10 +23,14 @@
 
        :completion
        (company +childframe)           ; the ultimate code completion backend
-       ;;helm              ; the *other* search engine for love and life
+       ;; (helm               ; the *other* search engine for love and life
+       ;;  +icons
+       ;;  +fuzzy)
        ;;ido               ; the other *other* search engine...
-       (ivy +fuzzy +icons +prescient)               ; a search engine for love and life
-
+       (ivy               ; a search engine for love and life
+       +fuzzy
+       +icons
+       +prescient)
        :ui
        deft              ; notational velocity for Emacs
        doom              ; what makes DOOM look the way it does

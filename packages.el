@@ -58,10 +58,18 @@
 (package! org-pdfview)
 
 (package! org-roam
-  :recipe (:host github :repo "org-roam/org-roam" :branch "v2"))
+  :recipe (:host github
+           :repo "org-roam/org-roam"
+           ;; :branch "v2"
+           ))
 ;; (package! org-roam-server)
 (package! org-ref)
-;; (package! org-roam-bibtex)
+(package! org-roam-bibtex
+  :recipe (:host github
+           :repo "org-roam/org-roam-bibtex"
+           ))
+;; (package! dendroam
+;;   :recipe (:host github :repo "vicrdguez/dendroam" :branch "main"))
 
 ;; bibtex/Users/alenalexninan/.doom.d/config.org
 (package! helm-bibtex)

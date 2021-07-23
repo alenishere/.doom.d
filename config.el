@@ -162,7 +162,9 @@
    ))
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/Dropbox/Org")
+(setq org-roam-directory (file-truename "~/pCloud Drive/My Documents/Org/Org-Roam/")
+      org-directory "~/Dropbox/Org")
+
 ;; Org ellipsis
 (setq org-ellipsis " ▼")
 ;; (setq org-ellipsis " ⤵")
@@ -184,6 +186,17 @@
   (setq org-log-done t)
   (setq org-log-into-drawer t)
   (setq org-clock-persist t)
+
+  (defun +my/org-hide-properties ()
+    "Hide all org-mode headline property drawers in buffer. Could be slow if buffer has a lot of overlays."
+    (interactive)
+    (save-excursion
+      (goto-char (point-min))
+      (while (re-search-forward
+              "^ *:properties:\n\\( *:.+?:.*\n\\)+ *:end:\n" nil t)
+        (let ((ov_this (make-overlay (match-beginning 0) (match-end 0))))
+          (overlay-put ov_this 'invisible t) ;<<<<<<<<<<<<<<<<< This is replaced
+          (overlay-put ov_this 'hidden-prop-drawer t)))))
   )
 (after! org
   ;; Org-attach
@@ -219,20 +232,12 @@
                  "* %? [[%:link][%(transform-square-brackets-to-round-ones \"%:description\")]]\n"
                  :prepend t
                  :kill-buffer t))
-  ;; (add-to-list 'org-capture-templates
-  ;;              '("cw" "Article"
-  ;;                entry (file+headline +org-capture-notes-file "Inbox")
-  ;;                "* TODO %a\nSCHEDULED: %t\n%U\n%:initial\n\n"
-  ;;                :immediate-finish t)
-  ;;              )
-    (add-to-list 'org-capture-templates
+  (add-to-list 'org-capture-templates
                '("cw" "Article"
                  entry (file+headline +org-capture-notes-file "Inbox")
                  "* TODO %a\n%U\n%:initial\n\n"
                  :immediate-finish t)
                )
-  )
-(after! org
   (defvar +org-capture-review-file "review/review.org"
     "Default target for storing review files.
 Is relative to `org-directory', unless it is absolute")
@@ -252,26 +257,21 @@ Is relative to `org-directory', unless it is absolute")
                  (file "~/.doom.d/org_capture_templates/monthly_review.txt")
                  )
                )
-  )
-(after! org
   ;; Setting default capture template
   (setq org-protocol-default-template-key "cw")
-  )
-(after! org
+
   ;; Additional Org modules
   (add-to-list 'org-modules 'org-checklist)
   (add-to-list 'org-modules 'org-habit)
   (add-to-list 'org-modules 'org-crypt)
   ;; (require 'org-habit)
-  )
-(after! org
-;; Additional babel languages
+
+  ;; Additional babel languages
   (add-to-list 'org-structure-template-alist '("p" . "src jupyter-python :session python_default :kernal python :async yes"))
   (add-to-list 'org-structure-template-alist '("i" . "src emacs-lisp"))
   (add-to-list 'org-structure-template-alist '("d" . "src dot :file ?.png :async no :cmdline -Kdot -Tpng"))
   (add-to-list 'org-structure-template-alist '("r" . "src rust :tangle ?.rs"))
-)
-(after! org
+
   ;; Tags for org mode
   (setq org-tag-alist '((:startgrouptag)
                         ("LOCATION")
@@ -314,6 +314,17 @@ Is relative to `org-directory', unless it is absolute")
                         ("FOREBURNER" . ?v)
                         ("BACKBURNER" . ?w)
                         (:endgrouptag)
+                        (:startgrouptag)
+                        ("ROAM")
+                        (:grouptags)
+                        ("SLIPBOXED" . ?0)
+                        ("SOURCE" .?1)
+                        ("FLEETING" . ?2)
+                        ("CAPTURE" . ?3)
+                        ("LITERATURE" . ?4)
+                        ("REVIEWING" . ?5)
+                        ("EVERGREEN" . ?6)
+                        (:endgrouptag)
                         ))
   ;; Tag colour
   (setq org-tag-faces
@@ -339,9 +350,15 @@ Is relative to `org-directory', unless it is absolute")
           ("DECIDE" . (:foreground "GoldenRod" :weight bold))
           ("DELEGATE" . (:foreground "LimeGreen" :weight bold))
           ("DELETE" . (:foreground "OrangeRed" :weight bold))
+          ("SLIPBOXED" . (:foreground "LimeGreen" :weight bold))
+          ("SOURCE" . (:foreground "Blue" :weight bold))
+          ("FLEETING" . (:foreground "Blue" :weight bold))
+          ("CAPTURE" . (:foreground "Blue" :weight bold))
+          ("LITERATURE" . (:foreground "Blue" :weight bold))
+          ("REVIEWING" . (:foreground "Blue" :weight bold))
+          ("EVERGREEN" . (:foreground "Blue" :weight bold))
           ))
-  )
-(after! org
+
 ;;;  Orgmode count done
 ;;;-----------------------------------------------------------------------------
   (defun +my/count-done ()
@@ -366,6 +383,7 @@ Is relative to `org-directory', unless it is absolute")
         :desc "Put rep count" "p" '+my/put-count
         )
   )
+
 (after! ox-clip
   (map! :localleader
         :map org-mode-map
@@ -426,6 +444,7 @@ Is relative to `org-directory', unless it is absolute")
       :desc "Org write all org" "w" 'org-save-all-org-buffers
       :desc "Org revert all buffers" "i" 'org-revert-all-org-buffers
       )
+
 ;;; Org calendar view using calf
 ;;; -----------------------------------------------------------------------------
 ;;; Setup the function below in private file to have view of google calendar in Calf.
@@ -448,10 +467,15 @@ Is relative to `org-directory', unless it is absolute")
       :prefix "oa"
       :desc "Calendar view" "c" #'my-open-calendar
       )
+
 ;;; Org mode map to file extensions
 (after! org
   (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|org_done\\)$" . org-mode))
   )
+
+;; Org-capture settings - For external capture
+;; Modification for doom emacs configs to cater to my system config
+;; Modification for doom emacs configs to cater to my system config
 (setq +org-capture-frame-parameters '((name . "doom-capture") (height . 20) (width . 80) (left . 400) (top . 252) (user-position . t) (transient . t) nil (menu-bar-lines . 1)))
 (defun +my/org-capture-open-frame (&optional initial-input key)
   "Opens the org-capture window in a floating frame that cleans itself up once
@@ -494,7 +518,7 @@ you're done. This can be called from an external shell script."
   :init
   (map! :leader
         :prefix ("nr" . "roam")
-        :desc "org-roam" "l" #'org-roam-buffer-toggle
+        :desc "org-roam" "m" #'org-roam-buffer-toggle
         :desc "org-roam-node-insert" "i" #'org-roam-node-insert
         :desc "org-roam-node-find" "f" #'org-roam-node-find
         :desc "org-roam-ref-find" "r" #'org-roam-ref-find
@@ -503,19 +527,24 @@ you're done. This can be called from an external shell script."
         :desc "org-roam-dailies-capture-today" "j" #'org-roam-dailies-capture-today)
   (map! :localleader
         :map org-mode-map
-        :prefix "m"
-        :desc "org-roam" "l" #'org-roam-buffer-toggle
+        :prefix ("m" . "roam")
+        :desc "org-roam" "m" #'org-roam-buffer-toggle
         :desc "org-roam-node-insert" "i" #'org-roam-node-insert
         :desc "org-roam-node-find" "f" #'org-roam-node-find
         :desc "org-roam-ref-find" "r" #'org-roam-ref-find
         :desc "org-roam-show-graph" "g" #'org-roam-show-graph
         :desc "org-roam-capture" "c" #'org-roam-capture
-        :desc "org-roam-dailies-capture-today" "j" #'org-roam-dailies-capture-today)
+        :desc "org-roam-dailies-capture-today" "j" #'org-roam-dailies-capture-today
+        :desc "toggle properties" "h" #'+my/org-hide-properties
+        :desc "Org-roam alias add" "a" #'org-roam-alias-add
+        :desc "Org-roam alias remove" "A" #'org-roam-alias-remove
+        :desc "Org-roam tag add" "t" #'org-roam-tag-add
+        :desc "Org-roam tag delete" "T" #'org-roam-tag-remove
+        )
 
-  (setq org-roam-directory (file-truename "~/pCloud Drive/My Documents/Org/Org-Roam/")
-        org-roam-db-gc-threshold most-positive-fixnum
+  (setq org-roam-db-gc-threshold most-positive-fixnum
         org-id-link-to-org-use-id t)
-
+  (setq org-roam-v2-ack t)
   :config
   (setq org-roam-mode-sections
         (list #'org-roam-backlinks-insert-section
@@ -523,72 +552,51 @@ you're done. This can be called from an external shell script."
               #'org-roam-unlinked-references-insert-section
               ))
   (org-roam-setup)
-  (setq org-roam-capture-templates
-        '(("d" "default" plain
-           "%?"
-           :if-new (file+head "${slug}.org"
-                              "#+title: ${title}\n")
-           :immediate-finish t
-           :unnarrowed t)))
-  (setq org-roam-capture-ref-templates
-        '(("r" "ref" plain
-           "%?"
-           :if-new (file+head "${slug}.org"
-                              "#+title: ${title}\n#+filetags:capture literature fleeting\n")
-           :unnarrowed t))
-        )
-  (setq org-roam-dailies-directory "daily/")
-  (setq org-roam-dailies-capture-templates
-        '(("d" "default" entry
-           "* %?"
-           :if-new (file+head "daily/%<%Y-%m-%d>.org"
-                              "#+title: %<%Y-%m-%d>\n"))))
+  (setq org-roam-completion-everywhere t)
   )
+(after! org-roam
+  ;; this one  is for org-roam-buffer-toggle
+  (defun +my/org-roam-display-left ()
+    (interactive)
+    (setq display-buffer-alist
+          '(;; Left side window
+            (".org-roam.*"
+             (display-buffer-in-side-window)
+             (window-width . 0.40)
+             (side . left)
+             (slot . 0))))
+
+    )
+  (+my/org-roam-display-left)
+  (defun +my/org-roam-display-right ()
+    (interactive)
+    (setq display-buffer-alist
+          '(;; Left side window
+            (".org-roam.*"
+             (display-buffer-in-side-window)
+             (window-width . 0.40)
+             (side . right)
+             (slot . 0))))
+
+    (map! :localleader
+          :map org-mode-map
+          :prefix ("mo" . "backlink orientation")
+          :desc "Org-roam buffer right" "r" #'+my/org-roam-display-right
+          :desc "Org-roam buffer left" "l" #'+my/org-roam-display-left
+          )
+    )
 
   (use-package! org-roam-protocol
-  :after org-protocol)
-
-  ;; this one  is for org-roam-buffer-toggle
-  (setq display-buffer-alist
-        '(;; Left side window
-          (".org-roam.*"
-           (display-buffer-in-side-window)
-           (window-width . 0.40)
-           (side . left)
-           (slot . 0))))
-
-;; (after! org-roam
-;;   (setq org-roam-dailies-capture-templates '(("d" "daily" plain (function org-roam-capture--get-point) ""
-;;                                               :immediate-finish t
-;;                                               :file-name "Dailies/%<%Y-%m-%d>"
-;;                                               :head "#+TITLE: %<%Y-%m-%d>")))
-;;   (setq  org-roam-capture-ref-templates '(("w" "Web site" plain (function org-roam-capture--get-point)
-;;                                            "%?"
-;;                                            :file-name "Websites/%<%Y%m%d>-${slug}"
-;;                                            :head "#+TITLE: ${title}\n#+CREATED: %U\n#+ROAM_KEY: ${ref}\n#+roam_tags: website fleeting\n\n"
-;;                                            :unnarrowed t)))
-;;   )
-;; (after! org-roam
-;;   ;; Remove org-roam back link buffer from operning by default
-;;   (remove-hook! 'find-file-hook #'+org-roam-open-buffer-maybe-h)
-;;   )
-
-(after! org-roam
-  (when (string-equal system-type "windows-nt")
-    ;; (setq org-roam-graph-executable "neato")
-    (setq org-roam-graph-viewer
-          (lambda (file)
-            (let ((org-roam-graph-viewer "firefox.exe"))
-              (org-roam-graph--open (concat "file:///" file))))))
+    :after org-protocol)
+  (setq org-roam-graph-exclude-matcher '("Private" "Dailies" "Archives"))
+  ;; Windows graphing
+  ;; (when (string-equal system-type "windows-nt")
+  ;;   ;; (setq org-roam-graph-executable "neato")
+  ;;   (setq org-roam-graph-viewer
+  ;;         (lambda (file)
+  ;;           (let ((org-roam-graph-viewer "firefox.exe"))
+  ;;             (org-roam-graph--open (concat "file:///" file))))))
   )
- ;; (use-package org-roam-bibtex
- ;;  :after (:all org-roam org-ref)
- ;;  :hook (org-roam-mode . org-roam-bibtex-mode)
- ;;  :config
- ;;  )
-;; (after! org-roam
-;;   (setq org-roam-graph-exclude-matcher '("private" "dailies" "archives"))
-;;   )
 
 ;; PDF view
 (after! pdf-view
@@ -735,12 +743,23 @@ you're done. This can be called from an external shell script."
    bibtex-completion-notes-template-multiple-files
    (concat
     "${title}\n"
-    "#+ROAM_KEY: cite:${=key=}\n"
-    "#+ROAM_TAGS: literature ${=type=}\n\n"
+    "#+Time-stamp: <>\n"
+    "#+AUTHOR: Alen Alex Ninan\n"
+    "#+PROPERTY: ANKI_DECK Default\n"
+    "#+STARTUP: content\n"
+    "#+STARTUP: indent\n"
+    "#+STARTUP: align\n"
+    "#+STARTUP: inlineimages\n"
+    "#+OPTIONS: num:0 toc:nil\n"
+    "#+STARTUP: hidebloacks\n"
+    "#+STARTUP: hidestars\n"
+    "#+STARTUP: latexpreview\n"
+    "#+EXPORT_FILE_NAME: Notes\n\n"
     "- keywords :: ${keywords}\n\n"
-    "* TODO ${title}\n"
+    "* ${title} :LITERATURE:REVIEWING:${=type=}:\n"
     ":PROPERTIES:\n"
-    ":Custom_ID: ${=key=}\n"
+    ":ID: %<%Y%m%dT%H%M%S>\n"
+    ":ROAM_ALIASES: cite:${=key=}\n"
     ":NOTER_DOCUMENT: %(orb-process-file-field \"${=key=}\")\n"
     ":AUTHOR: ${author-or-editor}\n"
     ":TYPE: ${=type=}\n"
@@ -771,59 +790,56 @@ you're done. This can be called from an external shell script."
         :prefix ("l")
         :desc "helm-bibtex" "r" #'helm-bibtex
         )
-  (map! :leader
-        :prefix ("o")
-        :desc "Open books" "x" #'ivy-bibtex
-        )
-)
-;;  (use-package! org-roam-bibtex
-;;   :after (org-roam)
-;;   :hook (org-roam-mode . org-roam-bibtex-mode)
-;;   :config
-;;   ;; (setq org-roam-bibtex-preformat-keywords
-;;   ;;  '("citekey" "=key=" "title" "url" "file" "author" "keywords"))
-;;   ;; (setq orb-templates
-;;   ;;       '(("r" "ref" plain (function org-roam-capture--get-point)
-;;   ;;          (file "path/to/ref.template")
-;;   ;;          :file-name "Notes/${slug}"
-;;   ;;          :head "#+TITLE: ${title}\n"
-;;   ;;          :unnarrowed t)))
-;;         (setq orb-preformat-keywords
-;;         '("=type=" "citekey" "title" "date" "year" "journaltitle" "doi" "url" "author-or-editor" "keywords" "file")
-;;         orb-process-file-field t
-;;         orb-process-file-keyword t
-;;         orb-file-field-extensions '("pdf"))
-;;         (setq orb-templates
-;;       '(("n" "ref+noter" plain (function org-roam-capture--get-point)
-;;          ""
-;;          :file-name "Notes/${citekey}"
-;;          :head "#+TITLE:${title}\n#+ROAM_KEY: ${ref} \n#+ROAM_TAGS:literature ${=type=}\n\n- keywords :: ${keywords}\n
-;; \* TODO ${title}
-;; :PROPERTIES:
-;; :Custom_ID: ${citekey}
-;; :JOURNAL: ${journaltitle}
-;; :DATE: ${date}
-;; :YEAR: ${year}
-;; :DOI: ${doi}
-;; :URL: ${url}
-;; :AUTHOR: ${author-or-editor}
-;; :TYPE: ${=type=}
-;; :NOTER_DOCUMENT: ${file}
-;; :NOTER_PAGE:
-;; :END:")))
+  (use-package! ivy-bibtex
+    :config
+    (map! :leader
+          :prefix ("ox" . "Bibtex")
+          :desc "ivy-bibtex" "i" #'ivy-bibtex
+          :desc "helm-bibtex" "h" #'helm-bibtex
+          )
+    )
+  )
 
-;;   )
-;; (use-package! ivy-bibtex
-;;   :config
-;;   (map! :leader
-;;         :prefix ("ox" . "Bibtex")
-;;         :desc "ivy-bibtex" "i" #'ivy-bibtex
-;;         :desc "helm-bibtex" "h" #'helm-bibtex
-;;         )
-;;   )
-;; Time-stamp hook
+(use-package! org-roam-bibtex
+  :after org-roam
+  :config
+  (setq orb-preformat-keywords '("citekey" "title" "url" "author-or-editor" "keywords" "file" "year" "doi" "entry-type" "date"))
+  (setq orb-process-file-keyword t)
+  (setq orb-file-field-extensions '("pdf"))
+  (setq orb-note-actions-interface 'ivy)
+  (setq orb-insert-interface 'ivy-bibtex)
+  (org-roam-bibtex-mode)
+  )
+
+(after! org-roam
+  (setq org-roam-capture-templates
+        ;; Default capture template
+        '(("d" "default" plain
+           "%?"
+           :if-new (file+head "${slug}.org"
+                              "#+title: ${title}\n#+filetags: FLEETING\n")
+           :immediate-finish t
+           :unnarrowed t)
+          ("b" "bibliography reference" plain
+                (file "~/.doom.d/org_capture_templates/biblio-template.org") ; <-- template store in a separate file
+           :if-new
+           (file+head "Notes/${citekey}.org" "#+title: ${title}\n")
+           :unnarrowed t
+           :jump-to-captured t)
+          )
+        )
+  (setq org-roam-capture-ref-templates
+        '(("r" "ref" plain
+           "%?"
+           :if-new (file+head "${slug}.org"
+                              "#+title: ${title}\n#+filetags: SOURCE CAPTURE WEBSITE\n")
+           :unnarrowed t)))
+  )
+
+;;; Time-stamp hook
 ;; ------------------------------------------------------------------------------
 (add-hook! 'before-save-hook #'time-stamp)
+
 ;;; Doom emacs start maximised
 ;;; -----------------------------------------------------------------------------
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
@@ -831,6 +847,7 @@ you're done. This can be called from an external shell script."
   :config
   :init
   )
+
 ;;; Hydras
 ;;; -----------------------------------------------------------------------------
 ;; I copied this from blings emacss config
@@ -928,3 +945,8 @@ you're done. This can be called from an external shell script."
 ;;   (defadvice evil-quit-all (around dotemacs activate)
 ;;     (message "Thou shall not quit!")))
 ;; (load! ~/.doom.d/lisp/touchtyping.el)
+
+;;; Dendroam
+;;; -------------------------------------------------------------------------------------
+;; (use-package! dendroam
+;;   :after org-roam)
