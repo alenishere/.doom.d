@@ -162,9 +162,14 @@
    ))
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-roam-directory (file-truename "~/pCloud Drive/My Documents/Org/Org-Roam/")
-      org-directory "~/Dropbox/Org")
-
+(when IS-MAC
+  (setq org-roam-directory (file-truename "~/Org/roam/")
+        org-directory "~/Org")
+  )
+(when IS-LINUX
+  (setq org-roam-directory (file-truename "~/Org/roam/")
+        org-directory "~/Org")
+  )
 ;; Org ellipsis
 (setq org-ellipsis " ▼")
 ;; (setq org-ellipsis " ⤵")
@@ -541,21 +546,12 @@ you're done. This can be called from an external shell script."
         :desc "Org-roam tag add" "t" #'org-roam-tag-add
         :desc "Org-roam tag delete" "T" #'org-roam-tag-remove
         )
-
-  (setq org-roam-db-gc-threshold most-positive-fixnum
-        org-id-link-to-org-use-id t)
-  (setq org-roam-v2-ack t)
-  :config
-  (setq org-roam-mode-sections
-        (list #'org-roam-backlinks-insert-section
-              #'org-roam-reflinks-insert-section
-              #'org-roam-unlinked-references-insert-section
-              ))
-  (org-roam-setup)
-  (setq org-roam-completion-everywhere t)
-  )
-(after! org-roam
-  ;; this one  is for org-roam-buffer-toggle
+  (map! :localleader
+        :map org-mode-map
+        :prefix ("mo" . "backlink orientation")
+        :desc "Org-roam buffer right" "r" #'+my/org-roam-display-right
+        :desc "Org-roam buffer left" "l" #'+my/org-roam-display-left
+        )
   (defun +my/org-roam-display-left ()
     (interactive)
     (setq display-buffer-alist
@@ -567,37 +563,29 @@ you're done. This can be called from an external shell script."
              (slot . 0))))
 
     )
-  (+my/org-roam-display-left)
   (defun +my/org-roam-display-right ()
     (interactive)
     (setq display-buffer-alist
-          '(;; Left side window
+          '(;; Right side window
             (".org-roam.*"
              (display-buffer-in-side-window)
              (window-width . 0.40)
              (side . right)
-             (slot . 0))))
-
-    (map! :localleader
-          :map org-mode-map
-          :prefix ("mo" . "backlink orientation")
-          :desc "Org-roam buffer right" "r" #'+my/org-roam-display-right
-          :desc "Org-roam buffer left" "l" #'+my/org-roam-display-left
-          )
-    )
-
+             (slot . 0)))))
+  (setq org-roam-db-gc-threshold most-positive-fixnum
+        org-id-link-to-org-use-id t)
+  (setq org-roam-v2-ack t)
+  :config
+  (setq org-roam-mode-sections
+        (list #'org-roam-backlinks-insert-section
+              #'org-roam-reflinks-insert-section
+              #'org-roam-unlinked-references-insert-section
+              ))
+  (org-roam-setup)
+  (setq org-roam-completion-everywhere t)
   (use-package! org-roam-protocol
     :after org-protocol)
-  (setq org-roam-graph-exclude-matcher '("Private" "Dailies" "Archives"))
-  ;; Windows graphing
-  ;; (when (string-equal system-type "windows-nt")
-  ;;   ;; (setq org-roam-graph-executable "neato")
-  ;;   (setq org-roam-graph-viewer
-  ;;         (lambda (file)
-  ;;           (let ((org-roam-graph-viewer "firefox.exe"))
-  ;;             (org-roam-graph--open (concat "file:///" file))))))
   )
-
 ;; PDF view
 (after! pdf-view
   ;; open pdfs scaled to fit page
@@ -621,17 +609,7 @@ you're done. This can be called from an external shell script."
     )
    )
   )
-;; (after! (pdf-tools)
-;; (use-package org-pdfview
-;;      :config
-;;      ;; https://lists.gnu.org/archive/html/emacs-orgmode/2016-11/msg00169.html
-;;      ;; Before adding, remove it (to avoid clogging)
-;;      (delete '("\\.pdf\\'" . default) org-file-apps)
-;;      ;; https://lists.gnu.org/archive/html/emacs-orgmode/2016-11/msg00176.html
-;;      (add-to-list 'org-file-apps
-;;                   '("\\.pdf\\'" . (lambda (file link)
-;;                                     (org-pdfview-open link)))))
-;;                 )
+
 (use-package! org-noter
   :after (:any org pdf-view)
   :config
@@ -650,6 +628,7 @@ you're done. This can be called from an external shell script."
 
    )
   )
+
 ;;; Ispell personal dictionary
 ;;; -----------------------------------------------------------------------------
 (setq ispell-personal-dictionary "~/.doom.d/extras/personal/personal_dict.txt")
@@ -659,13 +638,10 @@ you're done. This can be called from an external shell script."
         ispell-dictionary "en_GB"
         )
 )
-;; (after! flyspell
-;;   (setq flyspell-lazy-idle-seconds 60)
-;;   (setq ispell-dictionary "british")
-;;   )
+
 ;;; Python programming
 ;;; -----------------------------------------------------------------------------
-(when (string-equal system-type "windows-nt")
+(when IS-WINDOWS
   (after! conda
     (setq conda-anaconda-home "C:/Users/aaninan/anaconda3")
     ;; (setq conda-anaconda-home (expand-file-name "~/anaconda3"))
@@ -680,10 +656,12 @@ you're done. This can be called from an external shell script."
     ;; (conda-env-activate "base")
     )
   )
+
 ;; Company completion
 (after! company-box
   (setq company-show-numbers t)
   )
+
 ;;; Markdown
 ;;; -----------------------------------------------------------------------------
 (map! :localleader
@@ -809,9 +787,6 @@ you're done. This can be called from an external shell script."
   (setq orb-note-actions-interface 'ivy)
   (setq orb-insert-interface 'ivy-bibtex)
   (org-roam-bibtex-mode)
-  )
-
-(after! org-roam
   (setq org-roam-capture-templates
         ;; Default capture template
         '(("d" "default" plain
@@ -821,7 +796,7 @@ you're done. This can be called from an external shell script."
            :immediate-finish t
            :unnarrowed t)
           ("b" "bibliography reference" plain
-                (file "~/.doom.d/org_capture_templates/biblio-template.org") ; <-- template store in a separate file
+           (file "~/.doom.d/org_capture_templates/biblio-template.org") ; <-- template store in a separate file
            :if-new
            (file+head "Notes/${citekey}.org" "#+title: ${title}\n")
            :unnarrowed t
