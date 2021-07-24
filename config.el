@@ -818,6 +818,8 @@ you're done. This can be called from an external shell script."
 ;;; Doom emacs start maximised
 ;;; -----------------------------------------------------------------------------
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
+;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
+
 (use-package! try
   :config
   :init
