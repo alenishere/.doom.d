@@ -92,7 +92,7 @@
   (let (
         (mypaths
          '(;; Emacs
-           "c:/Users/aaninan/emax64/bin"
+           "c:/Program Files/emax64-27.1/bin"
 
            ;; Git
            "C:/Program Files/Git/bin"
@@ -102,7 +102,7 @@
            ;; "C:/Program Files/Git/usr/bin"
 
            ;; Mingwin tools
-           ;; "c:/Users/aaninan/Home/.doom.d/extras/mingw64/bin"
+           ;; "c:/Users/alenalexninan/Home/.doom.d/extras/mingw64/bin"
            "C:/msys64/mingw64/bin"
            "C:/msys64"
            "C:/msys64/usr/bin"
@@ -111,22 +111,22 @@
            "C:/Program Files (x86)/Java/jre1.8.0_251/bin"
 
            ;; Anaconda path
-           "c:/Users/aaninan/anaconda3"
-           "c:/Users/aaninan/anaconda3/condabin"
-           ;; "c:/Users/aaninan/anaconda3/Library/bin"
+           "c:/Users/alenalexninan/Home/anaconda3"
+           "c:/Users/alenalexninan/Home/anaconda3/condabin"
+           ;; "c:/Users/alenalexninan/Home/anaconda3/Library/bin"
 
            ;; Searchtools
-           "C:/Users/aaninan/Home/.doom.d/extras/fd"
-           "c:/Users/aaninan/Home/.doom.d/extras/ripgrep"
-           "C:/Users/aaninan/Home/.doom.d/extras/ag"
-           "c:/Users/aaninan/Home/.doom.d/extras/languagetool"
+           "C:/Users/alenalexninan/Home/.doom.d/extras/fd"
+           "c:/Users/alenalexninan/Home/.doom.d/extras/ripgrep"
+           "C:/Users/alenalexninan/Home/.doom.d/extras/ag"
+           "c:/Users/alenalexninan/Home/.doom.d/extras/languagetool"
 
            ;; Rust
-           "C:/Users/aaninan/.cargo/bin"
-           "C:/Users/aaninan/.rustup/toolchains/stable-x86_64-pc-windows-msvc/bin"
+           "C:/Users/alenalexninan/.cargo/bin"
+           "C:/Users/alenalexninan/.rustup/toolchains/stable-x86_64-pc-windows-msvc/bin"
 
            ;; Graphviz
-           "c:/Users/aaninan/Home/.doom.d/extras/graphviz/bin"
+           "c:/Users/alenalexninan/Home/.doom.d/extras/graphviz/bin"
 
 
            ;; Firefox
@@ -134,8 +134,7 @@
            "C:/Program Files (x86)/Mozilla Firefox/"
 
            ;; Miketex
-           "c:/Users/aaninan/AppData/Local/Programs/MiKTeX/miktex/bin/x64/"
-
+           "c:/Users/alenalexninan/AppData/Local/Programs/MiKTeX 2.9/miktex/bin/x64/"
            ;; Music
            "C:/Program Files (x86)/LilyPond/usr/bin"
            ) )
@@ -170,6 +169,11 @@
   (setq org-roam-directory (file-truename "~/Org/roam/")
         org-directory "~/Org")
   )
+(when IS-WINDOWS
+  (setq org-roam-directory (file-truename "~/Org/roam/")
+        org-directory "~/Org")
+  )
+
 ;; Org ellipsis
 (setq org-ellipsis " ▼")
 ;; (setq org-ellipsis " ⤵")
@@ -643,8 +647,8 @@ you're done. This can be called from an external shell script."
 ;;; -----------------------------------------------------------------------------
 (when IS-WINDOWS
   (after! conda
-    (setq conda-anaconda-home "C:/Users/aaninan/anaconda3")
-    ;; (setq conda-anaconda-home (expand-file-name "~/anaconda3"))
+    ;; (setq conda-anaconda-home "C:/Users/alenalexninan/Home/anaconda3")
+    (setq conda-anaconda-home (expand-file-name "~/anaconda3"))
     ;; (setq conda-env-home-directory (expand-file-name "~/anaconda3"))
     (conda-env-initialize-interactive-shells)
     ;; if you want eshell support, include:
@@ -652,8 +656,8 @@ you're done. This can be called from an external shell script."
     ;; if you want auto-activation (see below for details), include:
     (conda-env-autoactivate-mode t)
     ;; To activate conda on start
-    (conda-env-activate "python-3.8.3")
-    ;; (conda-env-activate "base")
+    ;; (conda-env-activate "python-3.8.3")
+    (conda-env-activate "base")
     )
   )
 
@@ -716,8 +720,7 @@ you're done. This can be called from an external shell script."
 (after! org-ref
   (setq
    bibtex-completion-notes-path (concat org-roam-directory "/Notes/")
-   bibtex-completion-bibliography (concat org-directory "/MyLibrary.bib")
-   bibtex-completion-pdf-field "file"
+    bibtex-completion-pdf-field "file"
    bibtex-completion-notes-template-multiple-files
    (concat
     "${title}\n"
@@ -749,6 +752,12 @@ you're done. This can be called from an external shell script."
     ":END:\n\n"
     )
    )
+  (when IS-WINDOWS
+     (setq bibtex-completion-bibliography (concat org-directory "/MyLibrary-windows.bib")))
+   (when IS-MAC
+     (setq bibtex-completion-bibliography (concat org-directory "/MyLibrary-mac.bib")))
+   (when IS-LINUX
+     (setq bibtex-completion-bibliography (concat org-directory "/MyLibrary-linux.bib")))
   )
 (after! org-ref
   (defun my/org-ref-open-pdf-at-point ()
@@ -792,7 +801,7 @@ you're done. This can be called from an external shell script."
         '(("d" "default" plain
            "%?"
            :if-new (file+head "${slug}.org"
-                              "#+title: ${title}\n#+filetags: FLEETING\n")
+                              "#+title: ${title}\n#+filetags: FLEETING REVIEWING\n")
            :immediate-finish t
            :unnarrowed t)
           ("b" "bibliography reference" plain
@@ -807,7 +816,7 @@ you're done. This can be called from an external shell script."
         '(("r" "ref" plain
            "%?"
            :if-new (file+head "${slug}.org"
-                              "#+title: ${title}\n#+filetags: SOURCE CAPTURE WEBSITE\n")
+                              "#+title: ${title}\n#+filetags: SOURCE CAPTURE WEBSITE REVIEWING\n")
            :unnarrowed t)))
   )
 
