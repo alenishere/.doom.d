@@ -523,73 +523,73 @@ you're done. This can be called from an external shell script."
 (advice-add 'org-capture-finalize :after #'+my/delete-capture-frame)
 
 ;;; Org roam directory settings
-(use-package! org-roam
-  :init
-  (map! :leader
-        :prefix ("nr" . "roam")
-        :desc "org-roam" "m" #'org-roam-buffer-toggle
-        :desc "org-roam-node-insert" "i" #'org-roam-node-insert
-        :desc "org-roam-node-find" "f" #'org-roam-node-find
-        :desc "org-roam-ref-find" "r" #'org-roam-ref-find
-        :desc "org-roam-show-graph" "g" #'org-roam-show-graph
-        :desc "org-roam-capture" "c" #'org-roam-capture
-        :desc "org-roam-dailies-capture-today" "j" #'org-roam-dailies-capture-today)
-  (map! :localleader
-        :map org-mode-map
-        :prefix ("m" . "roam")
-        :desc "org-roam" "m" #'org-roam-buffer-toggle
-        :desc "org-roam-node-insert" "i" #'org-roam-node-insert
-        :desc "org-roam-node-find" "f" #'org-roam-node-find
-        :desc "org-roam-ref-find" "r" #'org-roam-ref-find
-        :desc "org-roam-show-graph" "g" #'org-roam-show-graph
-        :desc "org-roam-capture" "c" #'org-roam-capture
-        :desc "org-roam-dailies-capture-today" "j" #'org-roam-dailies-capture-today
-        :desc "toggle properties" "h" #'+my/org-hide-properties
-        :desc "Org-roam alias add" "a" #'org-roam-alias-add
-        :desc "Org-roam alias remove" "A" #'org-roam-alias-remove
-        :desc "Org-roam tag add" "t" #'org-roam-tag-add
-        :desc "Org-roam tag delete" "T" #'org-roam-tag-remove
-        )
-  (map! :localleader
-        :map org-mode-map
-        :prefix ("mo" . "backlink orientation")
-        :desc "Org-roam buffer right" "r" #'+my/org-roam-display-right
-        :desc "Org-roam buffer left" "l" #'+my/org-roam-display-left
-        )
-  (defun +my/org-roam-display-left ()
-    (interactive)
-    (setq display-buffer-alist
-          '(;; Left side window
-            (".org-roam.*"
-             (display-buffer-in-side-window)
-             (window-width . 0.40)
-             (side . left)
-             (slot . 0))))
+;; (use-package! org-roam
+;;   :init
+;;   (map! :leader
+;;         :prefix ("nr" . "roam")
+;;         :desc "org-roam" "m" #'org-roam-buffer-toggle
+;;         :desc "org-roam-node-insert" "i" #'org-roam-node-insert
+;;         :desc "org-roam-node-find" "f" #'org-roam-node-find
+;;         :desc "org-roam-ref-find" "r" #'org-roam-ref-find
+;;         :desc "org-roam-show-graph" "g" #'org-roam-show-graph
+;;         :desc "org-roam-capture" "c" #'org-roam-capture
+;;         :desc "org-roam-dailies-capture-today" "j" #'org-roam-dailies-capture-today)
+;;   (map! :localleader
+;;         :map org-mode-map
+;;         :prefix ("m" . "roam")
+;;         :desc "org-roam" "m" #'org-roam-buffer-toggle
+;;         :desc "org-roam-node-insert" "i" #'org-roam-node-insert
+;;         :desc "org-roam-node-find" "f" #'org-roam-node-find
+;;         :desc "org-roam-ref-find" "r" #'org-roam-ref-find
+;;         :desc "org-roam-show-graph" "g" #'org-roam-show-graph
+;;         :desc "org-roam-capture" "c" #'org-roam-capture
+;;         :desc "org-roam-dailies-capture-today" "j" #'org-roam-dailies-capture-today
+;;         :desc "toggle properties" "h" #'+my/org-hide-properties
+;;         :desc "Org-roam alias add" "a" #'org-roam-alias-add
+;;         :desc "Org-roam alias remove" "A" #'org-roam-alias-remove
+;;         :desc "Org-roam tag add" "t" #'org-roam-tag-add
+;;         :desc "Org-roam tag delete" "T" #'org-roam-tag-remove
+;;         )
+;;   (map! :localleader
+;;         :map org-mode-map
+;;         :prefix ("mo" . "backlink orientation")
+;;         :desc "Org-roam buffer right" "r" #'+my/org-roam-display-right
+;;         :desc "Org-roam buffer left" "l" #'+my/org-roam-display-left
+;;         )
+;;   (defun +my/org-roam-display-left ()
+;;     (interactive)
+;;     (setq display-buffer-alist
+;;           '(;; Left side window
+;;             (".org-roam.*"
+;;              (display-buffer-in-side-window)
+;;              (window-width . 0.40)
+;;              (side . left)
+;;              (slot . 0))))
 
-    )
-  (defun +my/org-roam-display-right ()
-    (interactive)
-    (setq display-buffer-alist
-          '(;; Right side window
-            (".org-roam.*"
-             (display-buffer-in-side-window)
-             (window-width . 0.40)
-             (side . right)
-             (slot . 0)))))
-  (setq org-roam-db-gc-threshold most-positive-fixnum
-        org-id-link-to-org-use-id t)
-  (setq org-roam-v2-ack t)
-  :config
-  (setq org-roam-mode-sections
-        (list #'org-roam-backlinks-insert-section
-              #'org-roam-reflinks-insert-section
-              #'org-roam-unlinked-references-insert-section
-              ))
-  (org-roam-setup)
-  (setq org-roam-completion-everywhere t)
-  (use-package! org-roam-protocol
-    :after org-protocol)
-  )
+;;     )
+;;   (defun +my/org-roam-display-right ()
+;;     (interactive)
+;;     (setq display-buffer-alist
+;;           '(;; Right side window
+;;             (".org-roam.*"
+;;              (display-buffer-in-side-window)
+;;              (window-width . 0.40)
+;;              (side . right)
+;;              (slot . 0)))))
+;;   (setq org-roam-db-gc-threshold most-positive-fixnum
+;;         org-id-link-to-org-use-id t)
+;;   (setq org-roam-v2-ack t)
+;;   :config
+;;   (setq org-roam-mode-sections
+;;         (list #'org-roam-backlinks-insert-section
+;;               #'org-roam-reflinks-insert-section
+;;               #'org-roam-unlinked-references-insert-section
+;;               ))
+;;   (org-roam-setup)
+;;   (setq org-roam-completion-everywhere t)
+;;   (use-package! org-roam-protocol
+;;     :after org-protocol)
+;;   )
 ;; PDF view
 (after! pdf-view
   ;; open pdfs scaled to fit page
@@ -628,7 +628,7 @@ you're done. This can be called from an external shell script."
    org-noter-hide-other nil
 
    ;; Org noter default file path
-   org-noter-notes-search-path (list (concat org-roam-directory "/Notes"))
+   org-noter-notes-search-path (list (concat org-roam-directory "/notes"))
 
    )
   )
@@ -708,18 +708,26 @@ you're done. This can be called from an external shell script."
   )
 (use-package! org-ref
   :config
+   (when IS-WINDOWS
+     (setq org-ref-default-bibliography (list (concat org-directory "/MyLibrary-windows.bib")))
+     )
+   (when IS-MAC
+     (setq org-ref-default-bibliography (list (concat org-directory "/MyLibrary-mac.bib")))
+     )
+   (when IS-LINUX
+     (setq org-ref-default-bibliography (list (concat org-directory "/MyLibrary-linux.bib")))
+     )
   (setq
    org-ref-completion-library 'org-ref-ivy-cite
    org-ref-get-pdf-filename-function 'org-ref-get-pdf-filename-helm-bibtex
-   org-ref-default-bibliography (list (concat org-directory "/MyLibrary.bib"))
-   org-ref-bibliography-notes (concat org-directory "/Notes/Notes.org")
-   org-ref-notes-directory (concat org-directory "/Notes/")
+   org-ref-bibliography-notes (concat org-directory "/notes/Notes.org")
+   org-ref-notes-directory (concat org-directory "/notes/")
    org-ref-notes-function 'orb-edit-notes
    )
   )
 (after! org-ref
   (setq
-   bibtex-completion-notes-path (concat org-roam-directory "/Notes/")
+   bibtex-completion-notes-path (concat org-roam-directory "/notes/")
     bibtex-completion-pdf-field "file"
    bibtex-completion-notes-template-multiple-files
    (concat
@@ -807,7 +815,7 @@ you're done. This can be called from an external shell script."
           ("b" "bibliography reference" plain
            (file "~/.doom.d/org_capture_templates/biblio-template.org") ; <-- template store in a separate file
            :if-new
-           (file+head "Notes/${citekey}.org" "#+title: ${title}\n")
+           (file+head "notes/${citekey}.org" "#+title: ${title}\n")
            :unnarrowed t
            :jump-to-captured t)
           )
@@ -826,13 +834,11 @@ you're done. This can be called from an external shell script."
 
 ;;; Doom emacs start maximised
 ;;; -----------------------------------------------------------------------------
-(add-to-list 'initial-frame-alist '(fullscreen . maximized))
-;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
-
-(use-package! try
-  :config
-  :init
-  )
+;; (add-to-list 'initial-frame-alist '(fullscreen . maximized))
+;; Start all frames maximized in windows OS
+;; (when IS-WINDOWS
+;;   (add-to-list 'default-frame-alist '(fullscreen . maximized))
+;;   )
 
 ;;; Hydras
 ;;; -----------------------------------------------------------------------------
@@ -936,3 +942,9 @@ you're done. This can be called from an external shell script."
 ;;; -------------------------------------------------------------------------------------
 ;; (use-package! dendroam
 ;;   :after org-roam)
+
+
+;; Emacs server config
+;;--------------------------------------------------------------------------------
+(setq server-socket-dir "~/.emacs.d/server")
+(server-start)

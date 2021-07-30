@@ -57,11 +57,11 @@
 (package! org-super-agenda)
 (package! org-pdfview)
 
-(package! org-roam
-  :recipe (:host github
-           :repo "org-roam/org-roam"
-           ;; :branch "v2"
-           ))
+;; (package! org-roam
+;;   :recipe (:host github
+;;            :repo "org-roam/org-roam"
+;;            ;; :branch "v2"
+;;            ))
 ;; (package! org-roam-server)
 (package! org-ref)
 (package! org-roam-bibtex
