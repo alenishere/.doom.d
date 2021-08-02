@@ -947,5 +947,7 @@ you're done. This can be called from an external shell script."
 
 ;; Emacs server config
 ;;--------------------------------------------------------------------------------
-(setq server-socket-dir "~/.emacs.d/server")
-(server-start)
+(when IS-WINDOWS
+  (setq server-socket-dir "~/.emacs.d/server")
+  (server-start)
+  )
