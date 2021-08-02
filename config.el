@@ -88,62 +88,63 @@
         :desc "Next page break" :nv "]" #'forward-page))
 ;; Windows Path configuration
 ;; ------------------------------------------------------------------------------
-(when (string-equal system-type "windows-nt")
-  (let (
-        (mypaths
-         '(;; Emacs
-           "c:/Program Files/emax64-27.1/bin"
+;; (when (string-equal system-type "windows-nt")
+;;   (let (
+;;         (mypaths
+;;          '(;; Emacs
+;;            "c:/Program Files/emax64-27.1/bin"
 
-           ;; Git
-           "C:/Program Files/Git/bin"
-           ;; "C:/Program Files/Git/cmd"
-           ;; "C:/Program Files/Git"
-           ;; "C:/Program Files/Git/mingw64/bin"
-           ;; "C:/Program Files/Git/usr/bin"
+;;            ;; Git
+;;            "C:/Program Files/Git/bin"
+;;            ;; "C:/Program Files/Git/cmd"
+;;            ;; "C:/Program Files/Git"
+;;            ;; "C:/Program Files/Git/mingw64/bin"
+;;            ;; "C:/Program Files/Git/usr/bin"
 
-           ;; Mingwin tools
-           ;; "c:/Users/alenalexninan/Home/.doom.d/extras/mingw64/bin"
-           "C:/msys64/mingw64/bin"
-           "C:/msys64"
-           "C:/msys64/usr/bin"
+;;            ;; Mingwin tools
+;;            ;; "c:/Users/alenalexninan/Home/.doom.d/extras/mingw64/bin"
+;;            "C:/msys64/mingw64/bin"
+;;            "C:/msys64"
+;;            "C:/msys64/usr/bin"
 
-           ;; Java runtime
-           "C:/Program Files (x86)/Java/jre1.8.0_251/bin"
+;;            ;; Java runtime
+;;            "C:/Program Files (x86)/Java/jre1.8.0_251/bin"
 
-           ;; Anaconda path
-           "c:/Users/alenalexninan/Home/anaconda3"
-           "c:/Users/alenalexninan/Home/anaconda3/condabin"
-           ;; "c:/Users/alenalexninan/Home/anaconda3/Library/bin"
+;;            ;; Anaconda path
+;;            "c:/Users/alenalexninan/Home/miniconda3"
+;;            "c:/Users/alenalexninan/Home/miniconda3/condabin"
+;;            ;; "c:/Users/alenalexninan/Home/miniconda3/Library/bin"
 
-           ;; Searchtools
-           "C:/Users/alenalexninan/Home/.doom.d/extras/fd"
-           "c:/Users/alenalexninan/Home/.doom.d/extras/ripgrep"
-           "C:/Users/alenalexninan/Home/.doom.d/extras/ag"
-           "c:/Users/alenalexninan/Home/.doom.d/extras/languagetool"
+;;            ;; Searchtools
+;;            "C:/Users/alenalexninan/Home/.doom.d/extras/fd"
+;;            "c:/Users/alenalexninan/Home/.doom.d/extras/ripgrep"
+;;            "C:/Users/alenalexninan/Home/.doom.d/extras/ag"
+;;            "c:/Users/alenalexninan/Home/.doom.d/extras/languagetool"
 
-           ;; Rust
-           "C:/Users/alenalexninan/.cargo/bin"
-           "C:/Users/alenalexninan/.rustup/toolchains/stable-x86_64-pc-windows-msvc/bin"
+;;            ;; Rust
+;;            "C:/Users/alenalexninan/.cargo/bin"
+;;            "C:/Users/alenalexninan/.rustup/toolchains/stable-x86_64-pc-windows-msvc/bin"
 
-           ;; Graphviz
-           "c:/Users/alenalexninan/Home/.doom.d/extras/graphviz/bin"
+;;            ;; Graphviz
+;;            "c:/Users/alenalexninan/Home/.doom.d/extras/graphviz/bin"
 
 
-           ;; Firefox
-           "C:/Program Files/Mozilla Firefox"
-           "C:/Program Files (x86)/Mozilla Firefox/"
+;;            ;; Firefox
+;;            "C:/Program Files/Mozilla Firefox"
+;;            "C:/Program Files (x86)/Mozilla Firefox/"
 
-           ;; Miketex
-           "c:/Users/alenalexninan/AppData/Local/Programs/MiKTeX 2.9/miktex/bin/x64/"
-           ;; Music
-           "C:/Program Files (x86)/LilyPond/usr/bin"
-           ) )
-        )
+;;            ;; Miketex
+;;            "c:/Users/alenalexninan/AppData/Local/Programs/MiKTeX 2.9/miktex/bin/x64/"
+;;            ;; Music
+;;            "C:/Program Files (x86)/LilyPond/usr/bin"
+;;            ) )
+;;         )
 
-    (setenv "PATH" (mapconcat 'identity mypaths ";") )
+;;     (setenv "PATH" (mapconcat 'identity mypaths ";") )
 
-    (setq exec-path (append mypaths (list "." exec-directory)) )
-    ) )
+;;     (setq exec-path (append mypaths (list "." exec-directory)) )
+;;     ) )
+
 ;; Window switch - ace window face
 (after! ace-window
   (custom-set-faces
@@ -647,17 +648,17 @@ you're done. This can be called from an external shell script."
 ;;; -----------------------------------------------------------------------------
 (when IS-WINDOWS
   (after! conda
-    ;; (setq conda-anaconda-home "C:/Users/alenalexninan/Home/anaconda3")
-    (setq conda-anaconda-home (expand-file-name "~/anaconda3"))
-    ;; (setq conda-env-home-directory (expand-file-name "~/anaconda3"))
+    ;; (setq conda-anaconda-home "C:/Users/alenalexninan/Home/miniconda3")
+    (setq conda-anaconda-home (expand-file-name "~/miniconda3"))
+    ;; (setq conda-env-home-directory (expand-file-name "~/miniconda3"))
     (conda-env-initialize-interactive-shells)
     ;; if you want eshell support, include:
     (conda-env-initialize-eshell)
     ;; if you want auto-activation (see below for details), include:
     (conda-env-autoactivate-mode t)
     ;; To activate conda on start
-    ;; (conda-env-activate "python-3.8.3")
-    (conda-env-activate "base")
+    ;; (conda-env-activate "python-3.8.8")
+    ;; (conda-env-activate "base")
     )
   )
 
