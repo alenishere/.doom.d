@@ -61,15 +61,22 @@
 (after! doom-theme
   (setq doom-themes-enable-bold t
         doom-themes-enable-italic t))
-
 (custom-set-faces!
   '(font-lock-comment-face :slant italic)
   '(font-lock-keyword-face :slant italic))
+
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type 'relative)
 ;; Truncate line
 (setq truncate-string-ellipsis "…")
+(map! :leader
+      (:prefix ("t" . "toggle")
+       :desc "Toggle line highlight in frame" "h" #'hl-line-mode
+       :desc "Toggle line highlight globally" "H" #'global-hl-line-mode
+       :desc "Toggle truncate lines" "t" #'toggle-truncate-lines))
+;; Better image for doom dashboard
+(setq fancy-splash-image "~/.doom.d/icon_128x128@2.png")
 (map! :leader
       (:prefix ("t" . "toggle")
        :desc "Toggle line highlight in frame" "h" #'hl-line-mode
@@ -86,65 +93,6 @@
   (map! :prefix "g"
         :desc "Prev page break" :nv "[" #'backward-page
         :desc "Next page break" :nv "]" #'forward-page))
-;; Windows Path configuration
-;; ------------------------------------------------------------------------------
-;; (when (string-equal system-type "windows-nt")
-;;   (let (
-;;         (mypaths
-;;          '(;; Emacs
-;;            "c:/Program Files/emax64-27.1/bin"
-
-;;            ;; Git
-;;            "C:/Program Files/Git/bin"
-;;            ;; "C:/Program Files/Git/cmd"
-;;            ;; "C:/Program Files/Git"
-;;            ;; "C:/Program Files/Git/mingw64/bin"
-;;            ;; "C:/Program Files/Git/usr/bin"
-
-;;            ;; Mingwin tools
-;;            ;; "c:/Users/alenalexninan/Home/.doom.d/extras/mingw64/bin"
-;;            "C:/msys64/mingw64/bin"
-;;            "C:/msys64"
-;;            "C:/msys64/usr/bin"
-
-;;            ;; Java runtime
-;;            "C:/Program Files (x86)/Java/jre1.8.0_251/bin"
-
-;;            ;; Anaconda path
-;;            "c:/Users/alenalexninan/Home/miniconda3"
-;;            "c:/Users/alenalexninan/Home/miniconda3/condabin"
-;;            ;; "c:/Users/alenalexninan/Home/miniconda3/Library/bin"
-
-;;            ;; Searchtools
-;;            "C:/Users/alenalexninan/Home/.doom.d/extras/fd"
-;;            "c:/Users/alenalexninan/Home/.doom.d/extras/ripgrep"
-;;            "C:/Users/alenalexninan/Home/.doom.d/extras/ag"
-;;            "c:/Users/alenalexninan/Home/.doom.d/extras/languagetool"
-
-;;            ;; Rust
-;;            "C:/Users/alenalexninan/.cargo/bin"
-;;            "C:/Users/alenalexninan/.rustup/toolchains/stable-x86_64-pc-windows-msvc/bin"
-
-;;            ;; Graphviz
-;;            "c:/Users/alenalexninan/Home/.doom.d/extras/graphviz/bin"
-
-
-;;            ;; Firefox
-;;            "C:/Program Files/Mozilla Firefox"
-;;            "C:/Program Files (x86)/Mozilla Firefox/"
-
-;;            ;; Miketex
-;;            "c:/Users/alenalexninan/AppData/Local/Programs/MiKTeX 2.9/miktex/bin/x64/"
-;;            ;; Music
-;;            "C:/Program Files (x86)/LilyPond/usr/bin"
-;;            ) )
-;;         )
-
-;;     (setenv "PATH" (mapconcat 'identity mypaths ";") )
-
-;;     (setq exec-path (append mypaths (list "." exec-directory)) )
-;;     ) )
-
 ;; Window switch - ace window face
 (after! ace-window
   (custom-set-faces
@@ -160,6 +108,7 @@
    '(("" . "\\`+?evil[-:]?\\(?:a-\\)?\\(.*\\)") . (nil . "◂\\1"))
    '(("\\`g s" . "\\`evilem--?motion-\\(.*\\)") . (nil . "◃\\1"))
    ))
+
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (when IS-MAC
@@ -211,20 +160,10 @@
 (after! org
   ;; Org-attach
   (setq org-attach-id-dir ".attach/")
-
   ;; Link type to use
   (setq org-link-file-path-type 'relative)
-
   ;; Enabling image scaling for linked image
   (setq org-image-actual-width nil)
-  )
-(after! org
-  ;; Fix some link issues
-  (defun transform-square-brackets-to-round-ones(string-to-transform)
-    "Transforms [ into ( and ] into ), other chars left unchanged."
-    (concat
-     (mapcar #'(lambda (c) (if (equal c ?\[) ?\( (if (equal c ?\]) ?\) c))) string-to-transform))
-    )
   )
 (after! org
   (add-to-list 'org-capture-templates
@@ -328,12 +267,11 @@ Is relative to `org-directory', unless it is absolute")
                         ("ROAM")
                         (:grouptags)
                         ("SLIPBOXED" . ?0)
-                        ("SOURCE" .?1)
+                        ("SOURCE" . ?1)
                         ("FLEETING" . ?2)
-                        ("CAPTURE" . ?3)
-                        ("LITERATURE" . ?4)
-                        ("REVIEWING" . ?5)
-                        ("EVERGREEN" . ?6)
+                        ("LITERATURE" . ?3)
+                        ("REVIEWING" . ?4)
+                        ("EVERGREEN" . ?5)
                         (:endgrouptag)
                         ))
   ;; Tag colour
@@ -363,7 +301,6 @@ Is relative to `org-directory', unless it is absolute")
           ("SLIPBOXED" . (:foreground "LimeGreen" :weight bold))
           ("SOURCE" . (:foreground "Blue" :weight bold))
           ("FLEETING" . (:foreground "Blue" :weight bold))
-          ("CAPTURE" . (:foreground "Blue" :weight bold))
           ("LITERATURE" . (:foreground "Blue" :weight bold))
           ("REVIEWING" . (:foreground "Blue" :weight bold))
           ("EVERGREEN" . (:foreground "Blue" :weight bold))
@@ -393,7 +330,6 @@ Is relative to `org-directory', unless it is absolute")
         :desc "Put rep count" "p" '+my/put-count
         )
   )
-
 (after! ox-clip
   (map! :localleader
         :map org-mode-map
@@ -455,6 +391,14 @@ Is relative to `org-directory', unless it is absolute")
       :desc "Org revert all buffers" "i" 'org-revert-all-org-buffers
       )
 
+;; Write all org buffers
+(map! :localleader
+      :map org-mode-map
+      :prefix ("w" ."Org-buffers")
+      :desc "Org write all org" "w" 'org-save-all-org-buffers
+      :desc "Org revert all buffers" "i" 'org-revert-all-org-buffers
+      )
+
 ;;; Org calendar view using calf
 ;;; -----------------------------------------------------------------------------
 ;;; Setup the function below in private file to have view of google calendar in Calf.
@@ -470,7 +414,7 @@ Is relative to `org-directory', unless it is absolute")
 ;;     ;; (cfw:ical-create-source "Moon" "~/moon.ics" "Gray")  ; ICS source1
 ;;     (cfw:ical-create-source "gcal-main" "https://calendar.google.com/calendar/ical/samplecalendar" "IndianRed") ; google calendar ICS
 ;;     )))
-;
+
 ;; My personal calendar setting are in the Personal file. Nt part of this git project.
 (setq cfw:org-overwrite-default-keybinding t)
 (map! :leader
@@ -486,111 +430,45 @@ Is relative to `org-directory', unless it is absolute")
 ;; Org-capture settings - For external capture
 ;; Modification for doom emacs configs to cater to my system config
 ;; Modification for doom emacs configs to cater to my system config
-(setq +org-capture-frame-parameters '((name . "doom-capture") (height . 20) (width . 80) (left . 400) (top . 252) (user-position . t) (transient . t) nil (menu-bar-lines . 1)))
-(defun +my/org-capture-open-frame (&optional initial-input key)
-  "Opens the org-capture window in a floating frame that cleans itself up once
+(when IS-MAC
+  (setq +org-capture-frame-parameters '((name . "doom-capture") (height . 20) (width . 80) (left . 400) (top . 252) (user-position . t) (transient . t) nil (menu-bar-lines . 1)))
+  (defun +my/org-capture-open-frame (&optional initial-input key)
+    "Opens the org-capture window in a floating frame that cleans itself up once
 you're done. This can be called from an external shell script."
-  (interactive)
-  (when (and initial-input (string-empty-p initial-input))
-    (setq initial-input nil))
-  (when (and key (string-empty-p key))
-    (setq key nil))
-  (let* ((frame-title-format "")
-         (frame (if (+org-capture-frame-p)
-                    (selected-frame)
-                  (make-frame +org-capture-frame-parameters))))
-    (select-frame-set-input-focus frame)  ; fix MacOS not focusing new frames
-    (with-selected-frame frame
-      (require 'org-capture)
-      (condition-case ex
-          (letf! ((#'pop-to-buffer #'switch-to-buffer))
-            (switch-to-buffer (doom-fallback-buffer))
-            (let ((org-capture-initial initial-input)
-                  org-capture-entry)
-              (when (and key (not (string-empty-p key)))
-                (setq org-capture-entry (org-capture-select-template key)))
-              (funcall +org-capture-fn)))
-        ('error
-         (message "org-capture: %s" (error-message-string ex))
-         (delete-frame frame)
-         ))))
-  (if (equal "org-capture" (frame-parameter nil 'name))
-      (delete-frame))
+    (interactive)
+    (when (and initial-input (string-empty-p initial-input))
+      (setq initial-input nil))
+    (when (and key (string-empty-p key))
+      (setq key nil))
+    (let* ((frame-title-format "")
+           (frame (if (+org-capture-frame-p)
+                      (selected-frame)
+                    (make-frame +org-capture-frame-parameters))))
+      (select-frame-set-input-focus frame)  ; fix MacOS not focusing new frames
+      (with-selected-frame frame
+        (require 'org-capture)
+        (condition-case ex
+            (letf! ((#'pop-to-buffer #'switch-to-buffer))
+              (switch-to-buffer (doom-fallback-buffer))
+              (let ((org-capture-initial initial-input)
+                    org-capture-entry)
+                (when (and key (not (string-empty-p key)))
+                  (setq org-capture-entry (org-capture-select-template key)))
+                (funcall +org-capture-fn)))
+          ('error
+           (message "org-capture: %s" (error-message-string ex))
+           (delete-frame frame)
+           ))))
+    (if (equal "org-capture" (frame-parameter nil 'name))
+        (delete-frame))
+    )
+  (defun +my/delete-capture-frame (&rest _)
+    "Delete frame with its name frame-parameter set to \"org-capture\"."
+    (if (equal "org-capture" (frame-parameter nil 'name))
+        (delete-frame)))
+  (advice-add 'org-capture-finalize :after #'+my/delete-capture-frame)
   )
-(defun +my/delete-capture-frame (&rest _)
-  "Delete frame with its name frame-parameter set to \"org-capture\"."
-  (if (equal "org-capture" (frame-parameter nil 'name))
-      (delete-frame)))
-(advice-add 'org-capture-finalize :after #'+my/delete-capture-frame)
 
-;;; Org roam directory settings
-;; (use-package! org-roam
-;;   :init
-;;   (map! :leader
-;;         :prefix ("nr" . "roam")
-;;         :desc "org-roam" "m" #'org-roam-buffer-toggle
-;;         :desc "org-roam-node-insert" "i" #'org-roam-node-insert
-;;         :desc "org-roam-node-find" "f" #'org-roam-node-find
-;;         :desc "org-roam-ref-find" "r" #'org-roam-ref-find
-;;         :desc "org-roam-show-graph" "g" #'org-roam-show-graph
-;;         :desc "org-roam-capture" "c" #'org-roam-capture
-;;         :desc "org-roam-dailies-capture-today" "j" #'org-roam-dailies-capture-today)
-;;   (map! :localleader
-;;         :map org-mode-map
-;;         :prefix ("m" . "roam")
-;;         :desc "org-roam" "m" #'org-roam-buffer-toggle
-;;         :desc "org-roam-node-insert" "i" #'org-roam-node-insert
-;;         :desc "org-roam-node-find" "f" #'org-roam-node-find
-;;         :desc "org-roam-ref-find" "r" #'org-roam-ref-find
-;;         :desc "org-roam-show-graph" "g" #'org-roam-show-graph
-;;         :desc "org-roam-capture" "c" #'org-roam-capture
-;;         :desc "org-roam-dailies-capture-today" "j" #'org-roam-dailies-capture-today
-;;         :desc "toggle properties" "h" #'+my/org-hide-properties
-;;         :desc "Org-roam alias add" "a" #'org-roam-alias-add
-;;         :desc "Org-roam alias remove" "A" #'org-roam-alias-remove
-;;         :desc "Org-roam tag add" "t" #'org-roam-tag-add
-;;         :desc "Org-roam tag delete" "T" #'org-roam-tag-remove
-;;         )
-;;   (map! :localleader
-;;         :map org-mode-map
-;;         :prefix ("mo" . "backlink orientation")
-;;         :desc "Org-roam buffer right" "r" #'+my/org-roam-display-right
-;;         :desc "Org-roam buffer left" "l" #'+my/org-roam-display-left
-;;         )
-;;   (defun +my/org-roam-display-left ()
-;;     (interactive)
-;;     (setq display-buffer-alist
-;;           '(;; Left side window
-;;             (".org-roam.*"
-;;              (display-buffer-in-side-window)
-;;              (window-width . 0.40)
-;;              (side . left)
-;;              (slot . 0))))
-
-;;     )
-;;   (defun +my/org-roam-display-right ()
-;;     (interactive)
-;;     (setq display-buffer-alist
-;;           '(;; Right side window
-;;             (".org-roam.*"
-;;              (display-buffer-in-side-window)
-;;              (window-width . 0.40)
-;;              (side . right)
-;;              (slot . 0)))))
-;;   (setq org-roam-db-gc-threshold most-positive-fixnum
-;;         org-id-link-to-org-use-id t)
-;;   (setq org-roam-v2-ack t)
-;;   :config
-;;   (setq org-roam-mode-sections
-;;         (list #'org-roam-backlinks-insert-section
-;;               #'org-roam-reflinks-insert-section
-;;               #'org-roam-unlinked-references-insert-section
-;;               ))
-;;   (org-roam-setup)
-;;   (setq org-roam-completion-everywhere t)
-;;   (use-package! org-roam-protocol
-;;     :after org-protocol)
-;;   )
 ;; PDF view
 (after! pdf-view
   ;; open pdfs scaled to fit page
@@ -689,6 +567,7 @@ you're done. This can be called from an external shell script."
         :desc "Four"  "4" 'markdown-insert-atx-4
         :desc "Five"  "5" 'markdown-insert-atx-5
         :desc "Six"   "6" 'markdown-insert-atx-6))
+
 ;; Anki editor
 ;; ------------------------------------------------------------------------------
 (use-package! anki-editor
@@ -707,6 +586,9 @@ you're done. This can be called from an external shell script."
          )
         )
   )
+
+;; Bibtex and Org-ref config
+;; -------------------------------------------------------------------------------
 (use-package! org-ref
   :config
    (when IS-WINDOWS
@@ -767,8 +649,6 @@ you're done. This can be called from an external shell script."
      (setq bibtex-completion-bibliography (concat org-directory "/MyLibrary-mac.bib")))
    (when IS-LINUX
      (setq bibtex-completion-bibliography (concat org-directory "/MyLibrary-linux.bib")))
-  )
-(after! org-ref
   (defun my/org-ref-open-pdf-at-point ()
     "Open the pdf for bibtex key under point if it exists."
     (interactive)
@@ -779,8 +659,6 @@ you're done. This can be called from an external shell script."
           (funcall bibtex-completion-pdf-open-function pdf-file)
         (message "No PDF found for %s" key))))
   (setq org-ref-open-pdf-function 'my/org-ref-open-pdf-at-point)
-  )
-(after! org-ref
   (map! :localleader
         :map org-mode-map
         :prefix ("l")
@@ -795,15 +673,136 @@ you're done. This can be called from an external shell script."
           )
     )
   )
+;; Org-roam
+;; ------------------------------------------------------------------------------
+(use-package! org-roam
+  :init
+  (map! :leader
+        :prefix ("nr" . "roam")
+        :desc "org-roam" "m" #'org-roam-buffer-toggle
+        :desc "org-roam-node-insert" "i" #'org-roam-node-insert
+        :desc "org-roam-node-find" "f" #'org-roam-node-find
+        :desc "org-roam-ref-find" "r" #'org-roam-ref-find
+        :desc "org-roam-show-graph" "g" #'org-roam-show-graph
+        :desc "org-roam-capture" "c" #'org-roam-capture
+        :desc "org-roam-dailies-capture-today" "j" #'org-roam-dailies-capture-today)
+  (map! :localleader
+        :map org-mode-map
+        :prefix ("m" . "roam")
+        :desc "org-roam" "m" #'org-roam-buffer-toggle
+        :desc "org-roam-node-insert" "i" #'org-roam-node-insert
+        :desc "org-roam-node-find" "f" #'org-roam-node-find
+        :desc "org-roam-ref-find" "r" #'org-roam-ref-find
+        :desc "org-roam-show-graph" "g" #'org-roam-show-graph
+        :desc "org-roam-capture" "c" #'org-roam-capture
+        :desc "org-roam-dailies-capture-today" "j" #'org-roam-dailies-capture-today
+        :desc "toggle properties" "h" #'+my/org-hide-properties
+        :desc "Org-roam alias add" "a" #'org-roam-alias-add
+        :desc "Org-roam alias remove" "A" #'org-roam-alias-remove
+        :desc "Org-roam tag add" "t" #'org-roam-tag-add
+        :desc "Org-roam tag delete" "T" #'org-roam-tag-remove
+        )
+  ;; (map! :localleader
+  ;;       :map org-mode-map
+  ;;       :prefix ("mo" . "backlink orientation")
+  ;;       :desc "Org-roam buffer right" "r" #'+my/org-roam-display-right
+  ;;       :desc "Org-roam buffer left" "l" #'+my/org-roam-display-left
+  ;;       )
+  ;; (defun +my/org-roam-display-left ()
+  ;;   (interactive)
+  ;;   (setq display-buffer-alist
+  ;;         '(;; Left side window
+  ;;           (".org-roam.*"
+  ;;            (display-buffer-in-side-window)
+  ;;            (window-width . 0.40)
+  ;;            (side . left)
+  ;;            (slot . 0))))
 
+  ;;   )
+  ;; (defun +my/org-roam-display-right ()
+  ;;   (interactive)
+  ;;   (setq display-buffer-alist
+  ;;         '(;; Right side window
+  ;;           (".org-roam.*"
+  ;;            (display-buffer-in-side-window)
+  ;;            (window-width . 0.40)
+  ;;            (side . right)
+  ;;            (slot . 0)))))
+  (setq org-roam-db-gc-threshold most-positive-fixnum
+        org-id-link-to-org-use-id t)
+  (setq org-roam-v2-ack t)
+  :config
+  (setq org-roam-node-display-template "${title:*} ${tags:40}")
+
+  (setq org-roam-mode-sections
+        (list #'org-roam-backlinks-insert-section
+              #'org-roam-reflinks-insert-section
+              #'org-roam-unlinked-references-insert-section
+              ))
+  (org-roam-setup)
+  (setq org-roam-completion-everywhere t)
+  (use-package! org-roam-protocol
+    :after org-protocol)
+
+(when (featurep! :editor evil +everywhere)
+    (add-hook! 'org-roam-mode-hook
+      (defun +org-roam-detach-magit-section-mode-map-h ()
+        "Detach `magit-section-mode-map' from `org-roam-mode-map'.
+Inheriting its keymaps introduces a lot of conflicts in
+`org-roam-mode' based buffers, where Evil and leader keybindings
+will become completely overridden. This is because `magit-section'
+uses 'keymap text-property to attach section-unique keymaps, which
+has a higher level of precedence than `emulation-mode-map-alists'.
+
+Note: We do this each time through the hook, because otherwise
+sections seems to ignore the detachment."
+        (set-keymap-parent org-roam-mode-map nil)))
+
+    (map! :map org-roam-mode-map
+          :nv "]"       #'magit-section-forward-sibling
+          :nv "["       #'magit-section-backward-sibling
+          :nv "gj"      #'magit-section-forward-sibling
+          :nv "gk"      #'magit-section-backward-sibling
+          :nv "gr"      #'revert-buffer
+          :nv "gR"      #'revert-buffer
+          :nv "z1"      #'magit-section-show-level-1
+          :nv "z2"      #'magit-section-show-level-2
+          :nv "z3"      #'magit-section-show-level-3
+          :nv "z4"      #'magit-section-show-level-4
+          :nv "za"      #'magit-section-toggle
+          :nv "zc"      #'magit-section-hide
+          :nv "zC"      #'magit-section-hide-children
+          :nv "zo"      #'magit-section-show
+          :nv "zO"      #'magit-section-show-children
+          :nv "zr"      #'magit-section-show-level-4-all
+          :nv "C-j"     #'magit-section-forward
+          :nv "C-k"     #'magit-section-backward
+          :g  "M-p"     #'magit-section-backward-sibling
+          :g  "M-n"     #'magit-section-forward-sibling
+          :g  [tab]     #'magit-section-toggle
+          :g  [C-tab]   #'magit-section-cycle
+          :g  [backtab] #'magit-section-cycle-global))
+
+(set-popup-rules!
+    `((,(regexp-quote org-roam-buffer) ; persistent org-roam buffer
+       :side right :width .33 :height .5 :ttl nil :modeline nil :quit nil :slot 1)
+      ("^\\*org-roam: " ; node dedicated org-roam buffer
+       :side right :width .33 :height .5 :ttl nil :modeline nil :quit nil :slot 2)))
+  )
+
+;; Org-roam-bibtex
+;; ------------------------------------------------------------------------------
 (use-package! org-roam-bibtex
   :after org-roam
+  ;; :hook (org-roam-mode . org-roam-bibtex-mode)
   :config
+
   (setq orb-preformat-keywords '("citekey" "title" "url" "author-or-editor" "keywords" "file" "year" "doi" "entry-type" "date"))
-  (setq orb-process-file-keyword t)
-  (setq orb-file-field-extensions '("pdf"))
-  (setq orb-note-actions-interface 'ivy)
-  (setq orb-insert-interface 'ivy-bibtex)
+
+  (setq orb-process-file-keyword t
+        orb-file-field-extensions '("pdf")
+        orb-note-actions-interface 'helm
+        orb-insert-interface 'helm-bibtex)
   (org-roam-bibtex-mode)
   (setq org-roam-capture-templates
         ;; Default capture template
@@ -825,8 +824,9 @@ you're done. This can be called from an external shell script."
         '(("r" "ref" plain
            "%?"
            :if-new (file+head "${slug}.org"
-                              "#+title: ${title}\n#+filetags: SOURCE CAPTURE WEBSITE REVIEWING\n")
+                              "#+title: ${title}\n#+filetags: SOURCE REVIEWING website\n")
            :unnarrowed t)))
+  ;; (setq +org-roam-open-buffer-on-find-file nil)
   )
 
 ;;; Time-stamp hook
@@ -932,22 +932,10 @@ you're done. This can be called from an external shell script."
      ,@commands))
 
 (global-set-key (kbd "C-x C-c") (bind (message "Thou shall not quit!")))
-;; (after! evil
-;;   (defadvice evil-quit (around dotemacs activate)
-;;     (message "Thou shall not quit!"))
-;;   (defadvice evil-quit-all (around dotemacs activate)
-;;     (message "Thou shall not quit!")))
+(after! evil
+  (defadvice evil-quit (around dotemacs activate)
+    (message "Thou shall not quit!"))
+  (defadvice evil-quit-all (around dotemacs activate)
+    (message "Thou shall not quit!")))
+
 ;; (load! ~/.doom.d/lisp/touchtyping.el)
-
-;;; Dendroam
-;;; -------------------------------------------------------------------------------------
-;; (use-package! dendroam
-;;   :after org-roam)
-
-
-;; Emacs server config
-;;--------------------------------------------------------------------------------
-(when IS-WINDOWS
-  (setq server-socket-dir "~/.emacs.d/server")
-  (server-start)
-  )
