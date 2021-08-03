@@ -1,6 +1,6 @@
 #+TITLE:   Readme
 #+DATE:    January 17, 2021
-Time-stamp: "2021-06-24 11:26:58 alenalexninan"
+Time-stamp: "2021-08-03 16:32:53 alenalexninan"
 #+SINCE:   2020
 #+STARTUP: inlineimages nofold
 #+AUTHOR: Alen Alex Ninan
@@ -125,3 +125,6 @@ SCHEDULED: <2021-06-23 Wed>
 ** [[https://www.youtube.com/watch?v=0g9BcZvQbXU&list=PLaMQ5LPbfS12KVsY5XHYf_S-pKi-BMWs1&index=3&t=865s][Consistent Technical Documents Using Emacs and Org Mode - YouTube]]
 SCHEDULED: <2021-06-22 Tue>
 [2021-06-22 Tue 19:53]
+
+1. [[id:d08d0e5b-3f43-403e-af90-017aa7c7f9f6][dots/config.el at master · jethrokuan/dots]]
+2. [[id:fb815a9f-4a00-4c16-9183-d69bf7676170][bling/dotemacs: emacs configuration for vim users]]

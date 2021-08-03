@@ -697,43 +697,18 @@ you're done. This can be called from an external shell script."
         :desc "org-roam-capture" "c" #'org-roam-capture
         :desc "org-roam-dailies-capture-today" "j" #'org-roam-dailies-capture-today
         :desc "toggle properties" "h" #'+my/org-hide-properties
-        :desc "Org-roam alias add" "a" #'org-roam-alias-add
-        :desc "Org-roam alias remove" "A" #'org-roam-alias-remove
-        :desc "Org-roam tag add" "t" #'org-roam-tag-add
-        :desc "Org-roam tag delete" "T" #'org-roam-tag-remove
+;;        :desc "Org-roam alias add" "a" #'org-roam-alias-add
+;;        :desc "Org-roam alias remove" "A" #'org-roam-alias-remove
+;;        :desc "Org-roam tag add" "t" #'org-roam-tag-add
+;;        :desc "Org-roam tag delete" "T" #'org-roam-tag-remove
         )
-  ;; (map! :localleader
-  ;;       :map org-mode-map
-  ;;       :prefix ("mo" . "backlink orientation")
-  ;;       :desc "Org-roam buffer right" "r" #'+my/org-roam-display-right
-  ;;       :desc "Org-roam buffer left" "l" #'+my/org-roam-display-left
-  ;;       )
-  ;; (defun +my/org-roam-display-left ()
-  ;;   (interactive)
-  ;;   (setq display-buffer-alist
-  ;;         '(;; Left side window
-  ;;           (".org-roam.*"
-  ;;            (display-buffer-in-side-window)
-  ;;            (window-width . 0.40)
-  ;;            (side . left)
-  ;;            (slot . 0))))
-
-  ;;   )
-  ;; (defun +my/org-roam-display-right ()
-  ;;   (interactive)
-  ;;   (setq display-buffer-alist
-  ;;         '(;; Right side window
-  ;;           (".org-roam.*"
-  ;;            (display-buffer-in-side-window)
-  ;;            (window-width . 0.40)
-  ;;            (side . right)
-  ;;            (slot . 0)))))
-  (setq org-roam-db-gc-threshold most-positive-fixnum
+   (setq org-roam-db-gc-threshold most-positive-fixnum
         org-id-link-to-org-use-id t)
   (setq org-roam-v2-ack t)
   :config
   (setq org-roam-node-display-template "${title:*} ${tags:40}")
-
+  (setq org-roam-db-location
+            (concat doom-etc-dir "org-roam.db"))
   (setq org-roam-mode-sections
         (list #'org-roam-backlinks-insert-section
               #'org-roam-reflinks-insert-section
