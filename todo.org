@@ -2,7 +2,7 @@
 #+AUTHOR: Alen Alex Ninan
 #+EMAIL: alenishere@gmail.com
 #+PROPERTY: ANKI_DECK Default
-Time-stamp: "2021-08-01 09:16:46 alenalexninan"
+Time-stamp: "2021-08-03 19:40:46 alenalexninan"
 #+STARTUP: content
 #+STARTUP: indent
 #+STARTUP: align
@@ -23,7 +23,8 @@ Time-stamp: "2021-08-01 09:16:46 alenalexninan"
 - [[#mac-os][Mac OS]]
 - [[#feature-addition][Feature Addition]]
   - [[#latex-export-config][Latex export config]]
-  - [[#org-roam-server-config][Org-roam-server config]]
+  - [[#kill-org-roam-server-config][KILL Org-roam-server config]]
+  - [[#org-roam-ui][Org-roam UI]]
   - [[#idea-org-mode---organize-your-life-in-plain-text][IDEA Org Mode - Organize Your Life In Plain Text!]]
   - [[#idea-doom-emacs-configuration][IDEA Doom Emacs Configuration]]
   - [[#idea-consistent-technical-documents-using-emacs-and-org-mode---youtube][IDEA Consistent Technical Documents Using Emacs and Org Mode - YouTube]]
@@ -41,16 +42,12 @@ Time-stamp: "2021-08-01 09:16:46 alenalexninan"
 
 [[file:~/.doom.d/config.el:::config]]
 
-** TODO Org-roam-server config
+** KILL Org-roam-server config
+CLOSED: [2021-08-03 Tue 19:40]
 
 [[file:~/.doom.d/config.el::(after! org-roam]]
-*** DONE File preview in Mac
-CLOSED: [2021-06-15 Tue 22:40]
-*** TODO File preview in Linux
-Working in linux without the file preview in linux.
-*** TODO File preview in Windows
-Working in windows without the file preview in graph mode.
-
+** DONE Org-roam UI
+CLOSED: [2021-08-03 Tue 19:40]
 ** IDEA [[http://doc.norang.ca/org-mode.html#Archiving][Org Mode - Organize Your Life In Plain Text!]]
 [2021-06-22 Tue 20:12]
 ** IDEA [[https://tecosaur.github.io/emacs-config/config.html][Doom Emacs Configuration]]
