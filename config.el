@@ -84,6 +84,65 @@
        :desc "Toggle truncate lines" "t" #'toggle-truncate-lines))
 ;; Better image for doom dashboard
 (setq fancy-splash-image "~/.doom.d/icon_128x128@2.png")
+
+;; Windows Path configuration
+;; ------------------------------------------------------------------------------
+(when IS-WINDOWS
+  (let (
+        (mypaths
+         '(;; Emacs
+           "c:/Program Files/emax64-27.1/bin"
+
+           ;; Mingwin tools
+           ;; "c:/Users/alenalexninan/Home/.doom.d/extras/mingw64/bin"
+           "C:/msys64/mingw64/bin"
+           "C:/msys64"
+           "C:/msys64/usr/bin"
+
+           ;; Git
+           "C:/Program Files/Git/bin"
+           ;; "C:/Program Files/Git/cmd"
+           ;; "C:/Program Files/Git"
+           ;; "C:/Program Files/Git/mingw64/bin"
+           ;; "C:/Program Files/Git/usr/bin"
+
+           ;; Java runtime
+           "C:/Program Files (x86)/Java/jre1.8.0_251/bin"
+
+           ;; Anaconda path
+           "c:/Users/alenalexninan/Home/miniconda3"
+           "c:/Users/alenalexninan/Home/miniconda3/condabin"
+
+           ;; Searchtools
+           "C:/Users/alenalexninan/Home/.doom.d/extras/fd"
+           "c:/Users/alenalexninan/Home/.doom.d/extras/ripgrep"
+           "C:/Users/alenalexninan/Home/.doom.d/extras/ag"
+           "c:/Users/alenalexninan/Home/.doom.d/extras/languagetool"
+
+           ;; Rust
+           "C:/Users/alenalexninan/.cargo/bin"
+           "C:/Users/alenalexninan/.rustup/toolchains/stable-x86_64-pc-windows-msvc/bin"
+
+           ;; Graphviz
+           "c:/Users/alenalexninan/Home/.doom.d/extras/graphviz/bin"
+
+           ;; Firefox
+           "C:/Program Files/Mozilla Firefox"
+           "C:/Program Files (x86)/Mozilla Firefox/"
+
+           ;; Miketex
+           "c:/Users/alenalexninan/AppData/Local/Programs/MiKTeX 2.9/miktex/bin/x64/"
+
+           ;; Music
+           "C:/Program Files (x86)/LilyPond/usr/bin"
+           ) )
+        )
+    (setenv "PATH" (mapconcat 'identity mypaths ";") )
+    (setq exec-path (append mypaths (list "." exec-directory)) )
+    )
+  )
+
+;; Page breaks display in emacs
 (use-package! page-break-lines
   :commands page-break-lines-mode
   :init
@@ -706,7 +765,7 @@ you're done. This can be called from an external shell script."
         org-id-link-to-org-use-id t)
   (setq org-roam-v2-ack t)
   :config
-  (setq org-roam-node-display-template "${title:*} ${tags:40}")
+  (setq org-roam-node-display-template "${title:*} ${tags:50}")
   (setq org-roam-db-location
             (concat doom-etc-dir "org-roam.db"))
   (setq org-roam-mode-sections
