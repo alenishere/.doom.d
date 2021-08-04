@@ -745,22 +745,44 @@ you're done. This can be called from an external shell script."
         :desc "org-roam-show-graph" "g" #'org-roam-show-graph
         :desc "org-roam-capture" "c" #'org-roam-capture
         :desc "org-roam-dailies-capture-today" "j" #'org-roam-dailies-capture-today)
-  (map! :localleader
-        :map org-mode-map
-        :prefix ("m" . "roam")
-        :desc "org-roam" "m" #'org-roam-buffer-toggle
-        :desc "org-roam-node-insert" "i" #'org-roam-node-insert
-        :desc "org-roam-node-find" "f" #'org-roam-node-find
-        :desc "org-roam-ref-find" "r" #'org-roam-ref-find
-        :desc "org-roam-show-graph" "g" #'org-roam-show-graph
-        :desc "org-roam-capture" "c" #'org-roam-capture
-        :desc "org-roam-dailies-capture-today" "j" #'org-roam-dailies-capture-today
-        :desc "toggle properties" "h" #'+my/org-hide-properties
-;;        :desc "Org-roam alias add" "a" #'org-roam-alias-add
-;;        :desc "Org-roam alias remove" "A" #'org-roam-alias-remove
-;;        :desc "Org-roam tag add" "t" #'org-roam-tag-add
-;;        :desc "Org-roam tag delete" "T" #'org-roam-tag-remove
-        )
+  (map! (:map org-mode-map
+         :localleader
+         :prefix ("m" . "org-roam")
+         "D" #'org-roam-demote-entire-buffer
+         "f" #'org-roam-node-find
+         "F" #'org-roam-ref-find
+         "g" #'org-roam-graph
+         "i" #'org-roam-node-insert
+         "I" #'org-id-get-create
+         "m" #'org-roam-buffer-toggle
+         "M" #'org-roam-buffer-display-dedicated
+         "n" #'org-roam-capture
+         "r" #'org-roam-refile
+         "R" #'org-roam-link-replace-all
+         (:prefix ("d" . "by date")
+          :desc "Goto previous note" "b" #'org-roam-dailies-goto-previous-note
+          :desc "Goto date"          "d" #'org-roam-dailies-goto-date
+          :desc "Capture date"       "D" #'org-roam-dailies-capture-date
+          :desc "Goto next note"     "f" #'org-roam-dailies-goto-next-note
+          :desc "Goto tomorrow"      "m" #'org-roam-dailies-goto-tomorrow
+          :desc "Capture tomorrow"   "M" #'org-roam-dailies-capture-tomorrow
+          :desc "Capture today"      "n" #'org-roam-dailies-capture-today
+          :desc "Goto today"         "t" #'org-roam-dailies-goto-today
+          :desc "Capture today"      "T" #'org-roam-dailies-capture-today
+          :desc "Goto yesterday"     "y" #'org-roam-dailies-goto-yesterday
+          :desc "Capture yesterday"  "Y" #'org-roam-dailies-capture-yesterday
+          :desc "Find directory"     "-" #'org-roam-dailies-find-directory)
+         (:prefix ("o" . "node properties")
+          "a" #'org-roam-alias-add
+          "A" #'org-roam-alias-remove
+          "t" #'org-roam-tag-add
+          "T" #'org-roam-tag-remove
+          "r" #'org-roam-ref-add
+          "R" #'org-roam-ref-remove)
+         (:prefix ("s" . "UI")
+          "o" #'org-roam-ui-mode
+          "f" #'org-roam-ui-follow-mode
+          )))
    (setq org-roam-db-gc-threshold most-positive-fixnum
         org-id-link-to-org-use-id t)
   (setq org-roam-v2-ack t)
