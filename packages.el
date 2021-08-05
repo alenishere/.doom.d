@@ -58,10 +58,10 @@
 (package! org-pdfview)
 
 ;; Org-roam
-;; (package! org-roam
-;;   :recipe (:host github
-;;            :repo "org-roam/org-roam"
-;;            ))
+(package! org-roam
+  :recipe (:host github
+           :repo "org-roam/org-roam"
+           ))
 (package! org-ref)
 (package! org-roam-bibtex
   :recipe (:host github
