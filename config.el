@@ -900,7 +900,7 @@ sections seems to ignore the detachment."
         '(("r" "ref" plain
            "%?"
            :if-new (file+head "${slug}.org"
-                              "#+title: ${title}\n#+filetags: SOURCE REVIEWING website\n")
+                              "#+title: ${title}\n#+filetags: :REVIEWING:online:\n")
            :unnarrowed t)))
   ;; (setq +org-roam-open-buffer-on-find-file nil)
   )

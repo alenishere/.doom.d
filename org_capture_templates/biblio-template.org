@@ -1,7 +1,7 @@
-#+FILETAGS: SOURCE LITERATURE REVIEWING %^{entry-type}
+#+FILETAGS: :LITERATURE:REVIEWING:%^{entry-type}:
 #+AUTHOR: Alen Alex Ninan
 #+PROPERTY: ANKI_DECK Default
-Time-stamp: "2021-08-04 23:35:38 alenalexninan"
+Time-stamp: "2021-08-05 19:58:06 alenalexninan"
 #+STARTUP: content
 #+STARTUP: indent
 #+STARTUP: align
