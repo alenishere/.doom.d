@@ -734,71 +734,71 @@ you're done. This can be called from an external shell script."
   )
 ;; Org-roam
 ;; ------------------------------------------------------------------------------
-(use-package! org-roam
-  :init
-  (map! :leader
-        :prefix ("nr" . "roam")
-        :desc "org-roam" "m" #'org-roam-buffer-toggle
-        :desc "org-roam-node-insert" "i" #'org-roam-node-insert
-        :desc "org-roam-node-find" "f" #'org-roam-node-find
-        :desc "org-roam-ref-find" "r" #'org-roam-ref-find
-        :desc "org-roam-show-graph" "g" #'org-roam-show-graph
-        :desc "org-roam-capture" "c" #'org-roam-capture
-        :desc "org-roam-dailies-capture-today" "j" #'org-roam-dailies-capture-today)
-  (map! (:map org-mode-map
-         :localleader
-         :prefix ("m" . "org-roam")
-         "D" #'org-roam-demote-entire-buffer
-         "f" #'org-roam-node-find
-         "F" #'org-roam-ref-find
-         "g" #'org-roam-graph
-         "i" #'org-roam-node-insert
-         "I" #'org-id-get-create
-         "m" #'org-roam-buffer-toggle
-         "M" #'org-roam-buffer-display-dedicated
-         "n" #'org-roam-capture
-         "r" #'org-roam-refile
-         "R" #'org-roam-link-replace-all
-         (:prefix ("d" . "by date")
-          :desc "Goto previous note" "b" #'org-roam-dailies-goto-previous-note
-          :desc "Goto date"          "d" #'org-roam-dailies-goto-date
-          :desc "Capture date"       "D" #'org-roam-dailies-capture-date
-          :desc "Goto next note"     "f" #'org-roam-dailies-goto-next-note
-          :desc "Goto tomorrow"      "m" #'org-roam-dailies-goto-tomorrow
-          :desc "Capture tomorrow"   "M" #'org-roam-dailies-capture-tomorrow
-          :desc "Capture today"      "n" #'org-roam-dailies-capture-today
-          :desc "Goto today"         "t" #'org-roam-dailies-goto-today
-          :desc "Capture today"      "T" #'org-roam-dailies-capture-today
-          :desc "Goto yesterday"     "y" #'org-roam-dailies-goto-yesterday
-          :desc "Capture yesterday"  "Y" #'org-roam-dailies-capture-yesterday
-          :desc "Find directory"     "-" #'org-roam-dailies-find-directory)
-         (:prefix ("o" . "node properties")
-          "a" #'org-roam-alias-add
-          "A" #'org-roam-alias-remove
-          "t" #'org-roam-tag-add
-          "T" #'org-roam-tag-remove
-          "r" #'org-roam-ref-add
-          "R" #'org-roam-ref-remove)
-         (:prefix ("s" . "UI")
-          "o" #'org-roam-ui-mode
-          "f" #'org-roam-ui-follow-mode
-          )))
-   (setq org-roam-db-gc-threshold most-positive-fixnum
-        org-id-link-to-org-use-id t)
-  (setq org-roam-v2-ack t)
-  :config
-  (setq org-roam-node-display-template "${title:*} ${tags:50}")
-  (setq org-roam-db-location
-            (concat doom-etc-dir "org-roam.db"))
-  (setq org-roam-mode-sections
-        (list #'org-roam-backlinks-insert-section
-              #'org-roam-reflinks-insert-section
-              #'org-roam-unlinked-references-insert-section
-              ))
-  (org-roam-setup)
-  (setq org-roam-completion-everywhere t)
-  (use-package! org-roam-protocol
-    :after org-protocol)
+;; (use-package! org-roam
+;;   :init
+;;   (map! :leader
+;;         :prefix ("nr" . "roam")
+;;         :desc "org-roam" "m" #'org-roam-buffer-toggle
+;;         :desc "org-roam-node-insert" "i" #'org-roam-node-insert
+;;         :desc "org-roam-node-find" "f" #'org-roam-node-find
+;;         :desc "org-roam-ref-find" "r" #'org-roam-ref-find
+;;         :desc "org-roam-show-graph" "g" #'org-roam-show-graph
+;;         :desc "org-roam-capture" "c" #'org-roam-capture
+;;         :desc "org-roam-dailies-capture-today" "j" #'org-roam-dailies-capture-today)
+;;   (map! (:map org-mode-map
+;;          :localleader
+;;          :prefix ("m" . "org-roam")
+;;          "D" #'org-roam-demote-entire-buffer
+;;          "f" #'org-roam-node-find
+;;          "F" #'org-roam-ref-find
+;;          "g" #'org-roam-graph
+;;          "i" #'org-roam-node-insert
+;;          "I" #'org-id-get-create
+;;          "m" #'org-roam-buffer-toggle
+;;          "M" #'org-roam-buffer-display-dedicated
+;;          "n" #'org-roam-capture
+;;          "r" #'org-roam-refile
+;;          "R" #'org-roam-link-replace-all
+;;          (:prefix ("d" . "by date")
+;;           :desc "Goto previous note" "b" #'org-roam-dailies-goto-previous-note
+;;           :desc "Goto date"          "d" #'org-roam-dailies-goto-date
+;;           :desc "Capture date"       "D" #'org-roam-dailies-capture-date
+;;           :desc "Goto next note"     "f" #'org-roam-dailies-goto-next-note
+;;           :desc "Goto tomorrow"      "m" #'org-roam-dailies-goto-tomorrow
+;;           :desc "Capture tomorrow"   "M" #'org-roam-dailies-capture-tomorrow
+;;           :desc "Capture today"      "n" #'org-roam-dailies-capture-today
+;;           :desc "Goto today"         "t" #'org-roam-dailies-goto-today
+;;           :desc "Capture today"      "T" #'org-roam-dailies-capture-today
+;;           :desc "Goto yesterday"     "y" #'org-roam-dailies-goto-yesterday
+;;           :desc "Capture yesterday"  "Y" #'org-roam-dailies-capture-yesterday
+;;           :desc "Find directory"     "-" #'org-roam-dailies-find-directory)
+;;          (:prefix ("o" . "node properties")
+;;           "a" #'org-roam-alias-add
+;;           "A" #'org-roam-alias-remove
+;;           "t" #'org-roam-tag-add
+;;           "T" #'org-roam-tag-remove
+;;           "r" #'org-roam-ref-add
+;;           "R" #'org-roam-ref-remove)
+;;          (:prefix ("s" . "UI")
+;;           "o" #'org-roam-ui-mode
+;;           "f" #'org-roam-ui-follow-mode
+;;           )))
+;;    (setq org-roam-db-gc-threshold most-positive-fixnum
+;;         org-id-link-to-org-use-id t)
+;;   (setq org-roam-v2-ack t)
+;;   :config
+;;   (setq org-roam-node-display-template "${title:*} ${tags:50}")
+;;   (setq org-roam-db-location
+;;             (concat doom-etc-dir "org-roam.db"))
+;;   (setq org-roam-mode-sections
+;;         (list #'org-roam-backlinks-insert-section
+;;               #'org-roam-reflinks-insert-section
+;;               #'org-roam-unlinked-references-insert-section
+;;               ))
+;;   (org-roam-setup)
+;;   (setq org-roam-completion-everywhere t)
+;;   (use-package! org-roam-protocol
+;;     :after org-protocol)
 
 ;; (when (featurep! :editor evil +everywhere)
 ;;     (add-hook! 'org-roam-mode-hook
@@ -839,12 +839,12 @@ you're done. This can be called from an external shell script."
 ;;           :g  [C-tab]   #'magit-section-cycle
 ;;           :g  [backtab] #'magit-section-cycle-global))
 
-(set-popup-rules!
-    `((,(regexp-quote org-roam-buffer) ; persistent org-roam buffer
-       :side right :width .33 :height .5 :ttl nil :modeline nil :quit nil :slot 1)
-      ("^\\*org-roam: " ; node dedicated org-roam buffer
-       :side right :width .33 :height .5 :ttl nil :modeline nil :quit nil :slot 2)))
-  )
+;; (set-popup-rules!
+;;     `((,(regexp-quote org-roam-buffer) ; persistent org-roam buffer
+;;        :side right :width .33 :height .5 :ttl nil :modeline nil :quit nil :slot 1)
+;;       ("^\\*org-roam: " ; node dedicated org-roam buffer
+;;        :side right :width .33 :height .5 :ttl nil :modeline nil :quit nil :slot 2)))
+;;   )
 ;; Org-roam-ui
 ;; ------------------------------------------------------------------------------
 (use-package! org-roam-ui
