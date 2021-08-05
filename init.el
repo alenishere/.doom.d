@@ -27,10 +27,13 @@
        ;;  +icons
        ;;  +fuzzy)
        ;;ido               ; the other *other* search engine...
-       (ivy               ; a search engine for love and life
-       +fuzzy
-       +icons
-       +prescient)
+       ;; (ivy               ; a search engine for love and life
+       ;; +fuzzy
+       ;; +icons
+       ;; +prescient)
+       (vertico          ; the search engine of the future
+        +icons)
+
        :ui
        deft              ; notational velocity for Emacs
        doom              ; what makes DOOM look the way it does
