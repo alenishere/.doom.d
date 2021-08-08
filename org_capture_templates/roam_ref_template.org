@@ -1,0 +1,14 @@
+#+filetags: :REVIEWING:online:
+#+PROPERTY: ANKI_DECK Default
+Time-stamp: "2021-08-08 15:51:28 alenalexninan"
+#+STARTUP: content
+#+STARTUP: indent
+#+STARTUP: align
+#+STARTUP: inlineimages
+#+ARCHIVE: %s_done::
+#+OPTIONS: num:0 toc:nil
+#+STARTUP: hidebloacks
+#+STARTUP: hidestars
+#+STARTUP: latexpreview
+#+EXPORT_FILE_NAME: Notes
+#+EXCLUDE_TAGS: noexport

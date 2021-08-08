@@ -193,11 +193,43 @@
 
 ;; Better markdown
 (setq org-hide-emphasis-markers t)
-(setq org-indent-indentation-per-level 2)
+;; (setq org-indent-indentation-per-level 2)
+
+;; Background colour for inline images - Mainly in org
+;; ----------------------------------------------------------------------------------
+(defcustom org-inline-image-background nil
+  "The color used as the default background for inline images.
+When nil, use the default face background."
+  :group 'org
+  :type '(choice color (const nil)))
+
+(defun create-image-with-background-color (args)
+  "Specify background color of Org-mode inline image through modify `ARGS'."
+  (let* ((file (car args))
+         (type (cadr args))
+         (data-p (caddr args))
+         (props (cdddr args)))
+    ;; Get this return result style from `create-image'.
+    (append (list file type data-p)
+            (list :background (or org-inline-image-background (face-background 'default)))
+            props)))
+
+(advice-add 'create-image :filter-args
+            #'create-image-with-background-color)
+
 ;; Enabling inline images by default
-(setq org-display-inline-images t)
-(setq org-redisplay-inline-images t)
-(setq org-startup-with-inline-images "inlineimages")
+(after! org
+  (setq org-display-inline-images t)
+  (setq org-redisplay-inline-images t)
+  (setq org-startup-with-inline-images "inlineimages")
+  (setq +org-startup-with-animated-gifs "at-point")
+  ;; Add option to resize image in Org mode
+  (setq org-image-actual-width nil)
+
+  ;; Using above defined "org-inline-image-background"
+  (setq org-inline-image-background "white")
+  )
+
 (after! org
   ;; Drawer use
   (setq org-clock-into-drawer t)
@@ -781,10 +813,7 @@ you're done. This can be called from an external shell script."
           "T" #'org-roam-tag-remove
           "r" #'org-roam-ref-add
           "R" #'org-roam-ref-remove)
-         (:prefix ("u" . "UI")
-          "o" #'org-roam-ui-mode
-          "f" #'org-roam-ui-follow-mode
-          )))
+         ))
    (setq org-roam-db-gc-threshold most-positive-fixnum
         org-id-link-to-org-use-id t)
   (setq org-roam-v2-ack t)
@@ -863,12 +892,12 @@ sections seems to ignore the detachment."
         org-roam-ui-follow t
         org-roam-ui-update-on-save t
         org-roam-ui-open-on-start t)
-  ;; (map! (:map org-mode-map
-  ;;        :localleader
-  ;;        :prefix ("ms" . "UI")
-  ;;        "o" #'org-roam-ui-mode
-  ;;        "f" #'org-roam-ui-follow-mode
-  ;;        ))
+  (map! (:map org-mode-map
+         :localleader
+         :prefix ("mu" . "UI")
+         "o" #'org-roam-ui-mode
+         "f" #'org-roam-ui-follow-mode
+         ))
   )
 
 ;; Org-roam-bibtex
@@ -900,11 +929,10 @@ sections seems to ignore the detachment."
         )
   (setq org-roam-capture-ref-templates
         '(("r" "ref" plain
-           "%?"
+           (file "~/.doom.d/org_capture_templates/roam_ref_template.org")
            :if-new (file+head "${slug}.org"
-                              "#+title: ${title}\n#+filetags: :REVIEWING:online:\n")
+                              "#+title: ${title}\n")
            :unnarrowed t)))
-  ;; (setq +org-roam-open-buffer-on-find-file nil)
   )
 
 ;;; Time-stamp hook
@@ -1017,3 +1045,4 @@ sections seems to ignore the detachment."
     (message "Thou shall not quit!")))
 
 ;; (load! ~/.doom.d/lisp/touchtyping.el)
+
