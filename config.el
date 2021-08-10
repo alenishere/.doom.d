@@ -195,29 +195,10 @@
 (setq org-hide-emphasis-markers t)
 ;; (setq org-indent-indentation-per-level 2)
 
-;; Background colour for inline images - Mainly in org
-;; ----------------------------------------------------------------------------------
-(defcustom org-inline-image-background nil
-  "The color used as the default background for inline images.
-When nil, use the default face background."
-  :group 'org
-  :type '(choice color (const nil)))
-
-(defun create-image-with-background-color (args)
-  "Specify background color of Org-mode inline image through modify `ARGS'."
-  (let* ((file (car args))
-         (type (cadr args))
-         (data-p (caddr args))
-         (props (cdddr args)))
-    ;; Get this return result style from `create-image'.
-    (append (list file type data-p)
-            (list :background (or org-inline-image-background (face-background 'default)))
-            props)))
-
-(advice-add 'create-image :filter-args
-            #'create-image-with-background-color)
-
 ;; Enabling inline images by default
+;; Custom function to set backgroud colour of the inline images.
+(load! "./lisp/my-inline-image-background.el")
+;; Other settings for Inline Images.
 (after! org
   (setq org-display-inline-images t)
   (setq org-redisplay-inline-images t)
@@ -226,8 +207,8 @@ When nil, use the default face background."
   ;; Add option to resize image in Org mode
   (setq org-image-actual-width nil)
 
-  ;; Using above defined "org-inline-image-background"
-  (setq org-inline-image-background "white")
+  ;; Using above defined "org-inline-image-background". Use code Below to set the image colour.
+  (setq my-inline-image-background "white")
   )
 
 (after! org
@@ -629,7 +610,7 @@ you're done. This can be called from an external shell script."
     (conda-env-autoactivate-mode t)
     ;; To activate conda on start
     ;; (conda-env-activate "python-3.8.8")
-    ;; (conda-env-activate "base")
+    (conda-env-activate "base")
     )
   )
 
