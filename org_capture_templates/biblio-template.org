@@ -14,7 +14,6 @@ Time-stamp: "2021-08-05 19:58:06 alenalexninan"
 #+EXPORT_FILE_NAME: Notes
 #+EXCLUDE_TAGS: noexport
 
-- tags ::
 - keywords :: %^{keywords}
 
 * %^{title}
@@ -28,3 +27,4 @@ Time-stamp: "2021-08-05 19:58:06 alenalexninan"
 :NOTER_DOCUMENT: %^{file}
 :NOTER_PAGE: 1
 :END:
+%?

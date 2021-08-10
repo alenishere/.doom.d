@@ -1043,6 +1043,3 @@ sections seems to ignore the detachment."
     (message "Thou shall not quit!"))
   (defadvice evil-quit-all (around dotemacs activate)
     (message "Thou shall not quit!")))
-
-;; (load! ~/.doom.d/lisp/touchtyping.el)
-
