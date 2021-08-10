@@ -184,8 +184,8 @@
   )
 
 ;; Org ellipsis
-(setq org-ellipsis " ▼")
-;; (setq org-ellipsis " ⤵")
+;; (setq org-ellipsis " ▼")
+(setq org-ellipsis " ⤵")
 
 ;; Org superstar symbols
 ;; (setq org-superstar-headline-bullets-list '("⁖" "●" "○" "▷" "▸" "◆" "◇" "◉" "◎"))
