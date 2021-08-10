@@ -796,13 +796,13 @@ you're done. This can be called from an external shell script."
           "r" #'org-roam-ref-add
           "R" #'org-roam-ref-remove)
          ))
-   (setq org-roam-db-gc-threshold most-positive-fixnum
+  (setq org-roam-db-gc-threshold most-positive-fixnum
         org-id-link-to-org-use-id t)
   (setq org-roam-v2-ack t)
   :config
   (setq org-roam-node-display-template "${title:*} ${tags:50}")
   (setq org-roam-db-location
-            (concat doom-etc-dir "org-roam.db"))
+        (concat doom-etc-dir "org-roam.db"))
   (setq org-roam-mode-sections
         (list #'org-roam-backlinks-insert-section
               #'org-roam-reflinks-insert-section
@@ -813,46 +813,7 @@ you're done. This can be called from an external shell script."
   (use-package! org-roam-protocol
     :after org-protocol)
 
-(when (featurep! :editor evil +everywhere)
-    (add-hook! 'org-roam-mode-hook
-      (defun +org-roam-detach-magit-section-mode-map-h ()
-        "Detach `magit-section-mode-map' from `org-roam-mode-map'.
-Inheriting its keymaps introduces a lot of conflicts in
-`org-roam-mode' based buffers, where Evil and leader keybindings
-will become completely overridden. This is because `magit-section'
-uses 'keymap text-property to attach section-unique keymaps, which
-has a higher level of precedence than `emulation-mode-map-alists'.
-
-Note: We do this each time through the hook, because otherwise
-sections seems to ignore the detachment."
-        (set-keymap-parent org-roam-mode-map nil)))
-
-    (map! :map org-roam-mode-map
-          :nv "]"       #'magit-section-forward-sibling
-          :nv "["       #'magit-section-backward-sibling
-          :nv "gj"      #'magit-section-forward-sibling
-          :nv "gk"      #'magit-section-backward-sibling
-          :nv "gr"      #'revert-buffer
-          :nv "gR"      #'revert-buffer
-          :nv "z1"      #'magit-section-show-level-1
-          :nv "z2"      #'magit-section-show-level-2
-          :nv "z3"      #'magit-section-show-level-3
-          :nv "z4"      #'magit-section-show-level-4
-          :nv "za"      #'magit-section-toggle
-          :nv "zc"      #'magit-section-hide
-          :nv "zC"      #'magit-section-hide-children
-          :nv "zo"      #'magit-section-show
-          :nv "zO"      #'magit-section-show-children
-          :nv "zr"      #'magit-section-show-level-4-all
-          :nv "C-j"     #'magit-section-forward
-          :nv "C-k"     #'magit-section-backward
-          :g  "M-p"     #'magit-section-backward-sibling
-          :g  "M-n"     #'magit-section-forward-sibling
-          :g  [tab]     #'magit-section-toggle
-          :g  [C-tab]   #'magit-section-cycle
-          :g  [backtab] #'magit-section-cycle-global))
-
-(set-popup-rules!
+  (set-popup-rules!
     `((,(regexp-quote org-roam-buffer) ; persistent org-roam buffer
        :side right :width .33 :height .5 :ttl nil :modeline nil :quit nil :slot 1)
       ("^\\*org-roam: " ; node dedicated org-roam buffer
