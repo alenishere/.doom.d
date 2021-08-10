@@ -93,18 +93,19 @@
          '(;; Emacs
            "c:/Program Files/emax64-27.1/bin"
 
-           ;; Mingwin tools
-           ;; "c:/Users/alenalexninan/Home/.doom.d/extras/mingw64/bin"
-           "C:/msys64/mingw64/bin"
-           "C:/msys64"
-           "C:/msys64/usr/bin"
-
            ;; Git
            "C:/Program Files/Git/bin"
            ;; "C:/Program Files/Git/cmd"
            ;; "C:/Program Files/Git"
            ;; "C:/Program Files/Git/mingw64/bin"
            ;; "C:/Program Files/Git/usr/bin"
+
+           ;; Mingwin tools
+           ;; "c:/Users/alenalexninan/Home/.doom.d/extras/mingw64/bin"
+           "C:/msys64/mingw64/bin"
+           "C:/msys64"
+           "C:/msys64/usr/bin"
+
 
            ;; Java runtime
            "C:/Program Files (x86)/Java/jre1.8.0_251/bin"
