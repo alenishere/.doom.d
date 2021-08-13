@@ -209,7 +209,7 @@
   (setq org-image-actual-width nil)
 
   ;; Using above defined "org-inline-image-background". Use code Below to set the image colour.
-  (setq my-inline-image-background "white")
+  ;; (setq my-inline-image-background "white")
   )
 
 (after! org

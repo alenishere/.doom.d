@@ -24,4 +24,3 @@ When nil, use the default face background."
 (advice-add 'create-image :filter-args
             #'create-image-with-background-color)
 
-;;(put 'my-inline-image-background 'safe-local-variable #'stringp)
