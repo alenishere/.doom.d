@@ -84,12 +84,16 @@
        :term
        eshell            ; the elisp shell that works everywhere
        shell             ; simple shell REPL for Emacs
-       ;;term              ; basic terminal emulator for Emacs
-       vterm             ; the best terminal emulation in Emacs
+       term              ; basic terminal emulator for Emacs
+       (:unless IS-WINDOWS ; the best terminal emulation in Emacs
+        vterm)
 
        :checkers
        syntax              ; tasing you for every semicolon you forget
-       (spell +aspell +everywhere) ; tasing you for misspelling mispelling
+       (spell              ; tasing you for misspelling mispelling
+        +aspell
+        +flyspell
+        +everywhere)
        ;;grammar           ; tasing grammar mistake every you make
 
        :tools
