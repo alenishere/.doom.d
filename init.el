@@ -175,7 +175,7 @@
         +present
         +journal
         +export
-        ;; +roam2
+        ;;+roam2
         )
        ;;php               ; perl's insecure younger brother
        plantuml          ; diagrams for confusing people more

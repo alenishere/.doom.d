@@ -27,14 +27,21 @@
 ;; `load-theme' function. This is the default:
 ;; (setq doom-theme 'doom-xcode)
 ;; (setq doom-theme 'modus-vivendi)
-(setq doom-theme 'doom-Iosvkem)
+;; (setq doom-theme 'modus-operandi)
+;; (setq doom-theme 'doom-Iosvkem)
 ;; (setq doom-theme 'doom-plain-dark)
 ;; (setq doom-theme 'doom-spacegrey)
 ;; (setq doom-theme 'doom-solarized-dark-high-contrast)
+;; (setq doom-theme 'doom-monokai-octagon)
+;; (setq doom-theme 'doom-miramare)
+;; (setq doom-theme 'doom-gruvbox-light)
 ;; (setq doom-theme 'doom-wilmersdorf)
 ;; (setq doom-theme 'doom-monokai-ristretto)
 ;; (setq doom-theme 'doom-nord-light)
-(setq doom-theme 'doom-homage-black)
+;; (setq doom-theme 'doom-homage-white)
+;; (setq doom-theme 'doom-city-lights)
+;; (setq doom-theme 'doom-homage-black)
+(setq doom-theme 'doom-ephemeral)
 ;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
 ;; are the three important ones:
 ;;
@@ -76,14 +83,7 @@
        :desc "Toggle line highlight globally" "H" #'global-hl-line-mode
        :desc "Toggle truncate lines" "t" #'toggle-truncate-lines))
 ;; Better image for doom dashboard
-(setq fancy-splash-image "~/.doom.d/icon_128x128@2.png")
-(map! :leader
-      (:prefix ("t" . "toggle")
-       :desc "Toggle line highlight in frame" "h" #'hl-line-mode
-       :desc "Toggle line highlight globally" "H" #'global-hl-line-mode
-       :desc "Toggle truncate lines" "t" #'toggle-truncate-lines))
-;; Better image for doom dashboard
-(setq fancy-splash-image "~/.doom.d/icon_128x128@2.png")
+(setq fancy-splash-image "~/.doom.d/icon.png")
 
 ;; Windows Path configuration
 ;; ------------------------------------------------------------------------------
@@ -801,6 +801,8 @@ you're done. This can be called from an external shell script."
   (setq org-roam-v2-ack t)
   :config
   (setq org-roam-node-display-template "${title:*} ${tags:50}")
+  (setq org-roam-node-display-template
+        "${doom-hierarchy:*} ${doom-tags:45}")
   (setq org-roam-db-location
         (concat doom-etc-dir "org-roam.db"))
   (setq org-roam-mode-sections
@@ -818,6 +820,64 @@ you're done. This can be called from an external shell script."
        :side right :width .33 :height .5 :ttl nil :modeline nil :quit nil :slot 1)
       ("^\\*org-roam: " ; node dedicated org-roam buffer
        :side right :width .33 :height .5 :ttl nil :modeline nil :quit nil :slot 2)))
+
+;;; Custom node accessors
+;;;###autoload (autoload 'org-roam-node-doom-filetitle "lang/org/autoload/contrib-roam2" nil t)
+  (cl-defmethod org-roam-node-doom-filetitle ((node org-roam-node))
+    "Return the value of \"#+title:\" (if any) from file that NODE resides in.
+If there's no file-level title in the file, return empty string."
+    (or (if (= (org-roam-node-level node) 0)
+            (org-roam-node-title node)
+          (org-roam-get-keyword "TITLE" (org-roam-node-file node)))
+        ""))
+
+;;;###autoload (autoload 'org-roam-node-doom-hierarchy "lang/org/autoload/contrib-roam2" nil t)
+  (cl-defmethod org-roam-node-doom-hierarchy ((node org-roam-node))
+    "Return hierarchy for NODE, constructed of its file title, OLP and direct title.
+If some elements are missing, they will be stripped out."
+    (let ((title     (org-roam-node-title node))
+          (olp       (org-roam-node-olp   node))
+          (level     (org-roam-node-level node))
+          (filetitle (org-roam-node-doom-filetitle node))
+          (separator (propertize " > " 'face 'shadow)))
+      (cl-case level
+        ;; node is a top-level file
+        (0 filetitle)
+        ;; node is a level 1 heading
+        (1 (concat (propertize filetitle 'face '(shadow italic))
+                   separator title))
+        ;; node is a heading with an arbitrary outline path
+        (t (concat (propertize filetitle 'face '(shadow italic))
+                   separator (propertize (string-join olp " > ") 'face '(shadow italic))
+                   separator title)))))
+
+;;;###autoload (autoload 'org-roam-node-doom-subdirs "lang/org/autoload/contrib-roam2" nil t)
+  (cl-defmethod org-roam-node-doom-subdirs ((node org-roam-node))
+    "Return subdirectories of `org-roam-directory' in which NODE resides in.
+If there's none, return an empty string."
+    (if-let ((dirs (thread-first node
+                     (org-roam-node-file)
+                     (file-relative-name org-roam-directory)
+                     (file-name-directory))))
+        dirs
+      ""))
+
+;;;###autoload (autoload 'org-roam-node-doom-tags "lang/org/autoload/contrib-roam2" nil t)
+  (cl-defmethod org-roam-node-doom-tags ((node org-roam-node))
+    "Return tags formatted in the same way how they appear in org files.
+Treat subdirectories as tags too. If there's no elements to build
+the tags of, return an empty string."
+    (let ((tags (org-roam-node-tags node))
+          (subdirs (org-roam-node-doom-subdirs node)))
+      (when tags
+        (setq tags (propertize (concat (mapconcat (lambda (s) (concat ":" s)) tags nil) ":")
+                               'face 'shadow)))
+      (unless (string-empty-p subdirs)
+        (setq subdirs (propertize (concat ":" (replace-regexp-in-string "/\\|\\\\" ":" subdirs))
+                                  'face '(shadow italic))))
+      (replace-regexp-in-string ":+" (propertize ":" 'face 'shadow) (concat subdirs tags))))
+
+
   )
 
 ;; Org-roam-ui
