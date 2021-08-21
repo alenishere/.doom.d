@@ -22,7 +22,7 @@
        ;;layout            ; auie,ctsrnm is the superior home row
 
        :completion
-       (company +childframe)           ; the ultimate code completion backend
+       (company +tng)           ; the ultimate code completion backend
        ;; (helm               ; the *other* search engine for love and life
        ;;  +icons
        ;;  +fuzzy)

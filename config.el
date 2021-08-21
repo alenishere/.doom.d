@@ -587,13 +587,17 @@ you're done. This can be called from an external shell script."
    )
   )
 
+(use-package! nov
+  :hook (nov-mode . variable-pitch-mode)
+  :mode ("\\.\\(epub\\|mobi\\)\\'" . nov-mode))
+
 ;;; Ispell personal dictionary
 ;;; -----------------------------------------------------------------------------
 (setq ispell-personal-dictionary "~/.doom.d/extras/personal/personal_dict.txt")
 (setq ispell-dictionary "en_GB")
 (after! spell-fu
   (setq spell-fu-idle-delay 0.5 ; default is 0.25
-        ;;ispell-dictionary "british" ; needed for Macs in particular
+        ispell-dictionary "british" ; needed for Macs in particular
         )
   )
 
