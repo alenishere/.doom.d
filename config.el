@@ -935,6 +935,18 @@ the tags of, return an empty string."
            (file+head "notes/${citekey}.org" "#+title: ${title}\n")
            :unnarrowed t
            :jump-to-captured t)
+          ("f" "FA" plain
+           (file "~/.doom.d/org_capture_templates/roam_default-template.org")
+           :if-new (file+head "FA/${slug}.org"
+                              "#+title: ${title}\n")
+           :immediate-finish t
+           :unnarrowed t)
+          ("m" "FA" plain
+           (file "~/.doom.d/org_capture_templates/roam_default-template.org")
+           :if-new (file+head "maths/${slug}.org"
+                              "#+title: ${title}\n")
+           :immediate-finish t
+           :unnarrowed t)
           )
         )
   (setq org-roam-capture-ref-templates
