@@ -779,7 +779,7 @@ you're done. This can be called from an external shell script."
          "I" #'org-id-get-create
          "m" #'org-roam-buffer-toggle
          "M" #'org-roam-buffer-display-dedicated
-         "n" #'org-roam-capture
+         "c" #'org-roam-capture
          "r" #'org-roam-refile
          "R" #'org-roam-link-replace-all
          (:prefix ("d" . "by date")
