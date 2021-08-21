@@ -624,6 +624,9 @@ you're done. This can be called from an external shell script."
   (setq company-show-numbers t)
   )
 
+(use-package! company-posframe
+  :hook (company-mode . company-posframe-mode))
+
 ;;; Markdown
 ;;; -----------------------------------------------------------------------------
 (map! :localleader

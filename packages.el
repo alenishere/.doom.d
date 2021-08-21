@@ -94,6 +94,10 @@
 ;; Some themes/Users/alenalexninan/.doom.d/config.el
 (package! modus-themes)
 
+;; Epub reader
+(package! nov
+  :recipe (:type git :repo "https://depp.brause.cc/nov.el.git"))
+
 ;; Doom theme (personal fork for development)
 ;; (package! emacs)
 ;; (package! doom-themes :disable t)
