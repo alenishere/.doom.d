@@ -100,6 +100,7 @@
        (:unless  IS-WINDOWS
         (spell              ; tasing you for misspelling mispelling
          +aspell
+         +flyspell
          +everywhere)
         )
        ;;grammar           ; tasing grammar mistake every you make
