@@ -26,7 +26,7 @@
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 ;; (setq doom-theme 'doom-xcode)
-;; (setq doom-theme 'modus-vivendi)
+(setq doom-theme 'modus-vivendi)
 ;; (setq doom-theme 'modus-operandi)
 ;; (setq doom-theme 'doom-Iosvkem)
 ;; (setq doom-theme 'doom-plain-dark)
@@ -41,7 +41,18 @@
 ;; (setq doom-theme 'doom-homage-white)
 ;; (setq doom-theme 'doom-city-lights)
 ;; (setq doom-theme 'doom-homage-black)
-(setq doom-theme 'doom-ephemeral)
+
+;; Better doom theme for black picture borders
+;; (setq doom-theme 'doom-ephemeral)
+
+;; Better theme for orgmode and text edits
+;; (setq doom-theme 'poet)
+
+;; Variable pitch for text edits
+;; (add-hook 'text-mode-hook
+;;            (lambda ()
+;;             (variable-pitch-mode 1)))
+
 ;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
 ;; are the three important ones:
 ;;
@@ -624,8 +635,8 @@ you're done. This can be called from an external shell script."
   (setq company-show-numbers t)
   )
 
-(use-package! company-posframe
-  :hook (company-mode . company-posframe-mode))
+;; (use-package! company-posframe
+;;   :hook (company-mode . company-posframe-mode))
 
 ;;; Markdown
 ;;; -----------------------------------------------------------------------------
@@ -1050,6 +1061,21 @@ the tags of, return an empty string."
         :prefix ("s")
         :desc "AG directory" "a" #'counsel-ag
         )
+  )
+
+;; Olivetti mode
+(use-package! olivetti
+  :config
+  (setq olivetti-body-width 0.80)
+  (setq olivetti-minimum-body-width 80)
+  (setq olivetti-recall-visual-line-mode-entry-state t)
+  (setq olivetti-style 'fancy)
+  (defun +my/olivetti-mode-on()
+    "My custom configuration for 'org-mode'."
+    (olivetti-mode)
+    (olivetti-set-width 100)
+    )
+  (add-hook! 'org-mode-hook #'+my/olivetti-mode-on)
   )
 
 
