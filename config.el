@@ -220,7 +220,7 @@
   (setq org-image-actual-width nil)
 
   ;; Using above defined "org-inline-image-background". Use code Below to set the image colour.
-  ;; (setq my-inline-image-background "white")
+  (setq my-inline-image-background "white")
   )
 
 (after! org
@@ -1069,7 +1069,7 @@ the tags of, return an empty string."
 (use-package! olivetti
   :config
   (setq olivetti-body-width 0.80)
-  (setq olivetti-minimum-body-width 80)
+  (setq olivetti-minimum-body-width 72)
   (setq olivetti-recall-visual-line-mode-entry-state t)
   (setq olivetti-style 'fancy)
   (defun +my/olivetti-mode-on()

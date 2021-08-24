@@ -10,6 +10,10 @@ When nil, use the default face background."
   :safe #'stringp
   )
 
+;; (defvar my-inline-image-background nil  ;; placeholder for buffer-local variable
+;;   "Current conda environment for the project.  Should always be buffer-local.")
+
+
 (defun create-image-with-background-color (args)
   "Specify background color of inline image through modify `ARGS'."
   (let* ((file (car args))
@@ -24,3 +28,5 @@ When nil, use the default face background."
 (advice-add 'create-image :filter-args
             #'create-image-with-background-color)
 
+;; ensure it's considered safe
+;; (put 'my-inline-image-background 'safe-local-variable 'stringp)
