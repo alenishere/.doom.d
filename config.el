@@ -839,6 +839,8 @@ you're done. This can be called from an external shell script."
       ("^\\*org-roam: " ; node dedicated org-roam buffer
        :side right :width .33 :height .5 :ttl nil :modeline nil :quit nil :slot 2)))
 
+  (add-hook 'org-roam-mode-hook #'turn-on-visual-line-mode)
+
 ;;; Custom node accessors
 ;;;###autoload (autoload 'org-roam-node-doom-filetitle "lang/org/autoload/contrib-roam2" nil t)
   (cl-defmethod org-roam-node-doom-filetitle ((node org-roam-node))
