@@ -374,6 +374,7 @@ Is relative to `org-directory', unless it is absolute")
           ("[&]" . +org-todo-onhold)
           ("[^]" . +org-todo-project)
           ("[/]"   . +org-todo-cancel)
+          ("NO"   . +org-todo-cancel)
           ))
   ;; Tags for org mode
   (setq org-tag-alist '((:startgrouptag)
