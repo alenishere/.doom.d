@@ -56,7 +56,10 @@
 (package! org-re-reveal-ref)
 (package! org-super-agenda)
 (package! org-pdfview)
-
+(package! ox-ipynb
+  :recipe (:host github
+           :repo "jkitchin/ox-ipynb"
+           ))
 ;; Org-roam
 (package! org-roam
   :recipe (:host github

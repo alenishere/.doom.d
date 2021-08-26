@@ -208,16 +208,17 @@
 ;; (setq org-indent-indentation-per-level 2)
 
 ;; Enabling inline images by default
-;; Custom function to set backgroud colour of the inline images.
-(load! "./lisp/my-inline-image-background.el")
 ;; Other settings for Inline Images.
 (after! org
   (setq org-display-inline-images t)
   (setq org-redisplay-inline-images t)
   (setq org-startup-with-inline-images "inlineimages")
   (setq +org-startup-with-animated-gifs "at-point")
+
   ;; Add option to resize image in Org mode
   (setq org-image-actual-width nil)
+  ;; Custom function to set backgroud colour of the inline images.
+  (load! "./lisp/my-inline-image-background.el")
 
   ;; Using above defined "org-inline-image-background". Use code Below to set the image colour.
   (setq my-inline-image-background "white")
@@ -1164,3 +1165,10 @@ the tags of, return an empty string."
     (message "Thou shall not quit!"))
   (defadvice evil-quit-all (around dotemacs activate)
     (message "Thou shall not quit!")))
+
+;; Org to Ipython export
+;; -----------------------------------------------------------------------
+(use-package! ox-ipynb
+  :after org
+  :config
+  )
