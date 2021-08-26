@@ -250,6 +250,52 @@
   (setq org-image-actual-width nil)
   )
 (after! org
+  (setq org-capture-templates
+        '(("t" "Personal todo" entry
+           (file+headline +org-capture-todo-file "Inbox")
+           "* [ ] %?\n%i\n%a" :prepend t)
+          ("n" "Personal notes" entry
+           (file+headline +org-capture-notes-file "Inbox")
+           "* %u %?\n%i\n%a" :prepend t)
+          ("j" "Journal" entry
+           (file+olp+datetree +org-capture-journal-file)
+           "* %U %?\n%i\n%a" :prepend t)
+
+          ;; Will use {project-root}/{todo,notes,changelog}.org, unless a
+          ;; {todo,notes,changelog}.org file is found in a parent directory.
+          ;; Uses the basename from `+org-capture-todo-file',
+          ;; `+org-capture-changelog-file' and `+org-capture-notes-file'.
+          ("p" "Templates for projects")
+          ("pt" "Project-local todo" entry  ; {project-root}/todo.org
+           (file+headline +org-capture-project-todo-file "Inbox")
+           "* [ ] %?\n%i\n%a" :prepend t)
+          ("pn" "Project-local notes" entry  ; {project-root}/notes.org
+           (file+headline +org-capture-project-notes-file "Inbox")
+           "* %U %?\n%i\n%a" :prepend t)
+          ("pc" "Project-local changelog" entry  ; {project-root}/changelog.org
+           (file+headline +org-capture-project-changelog-file "Unreleased")
+           "* %U %?\n%i\n%a" :prepend t)
+
+          ;; Will use {org-directory}/{+org-capture-projects-file} and store
+          ;; these under {ProjectName}/{Tasks,Notes,Changelog} headings. They
+          ;; support `:parents' to specify what headings to put them under, e.g.
+          ;; :parents ("Projects")
+          ("o" "Centralized templates for projects")
+          ("ot" "Project todo" entry
+           (function +org-capture-central-project-todo-file)
+           "* [ ] %?\n %i\n %a"
+           :heading "Tasks"
+           :prepend nil)
+          ("on" "Project notes" entry
+           (function +org-capture-central-project-notes-file)
+           "* %U %?\n %i\n %a"
+           :heading "Notes"
+           :prepend t)
+          ("oc" "Project changelog" entry
+           (function +org-capture-central-project-changelog-file)
+           "* %U %?\n %i\n %a"
+           :heading "Changelog"
+           :prepend t)))
   (add-to-list 'org-capture-templates
                '("c" "Org-protocol"))
   ;; Firefox
@@ -268,7 +314,7 @@
   (add-to-list 'org-capture-templates
                '("cw" "Article"
                  entry (file+headline +org-capture-notes-file "Inbox")
-                 "* TODO %a\n%U\n%:initial\n\n"
+                 "* [ ] %a\n%U\n%:initial\n\n"
                  :immediate-finish t)
                )
   (defvar +org-capture-review-file "review/review.org"
@@ -305,6 +351,30 @@ Is relative to `org-directory', unless it is absolute")
   (add-to-list 'org-structure-template-alist '("d" . "src dot :file ?.png :async no :cmdline -Kdot -Tpng"))
   (add-to-list 'org-structure-template-alist '("r" . "src rust :tangle ?.rs"))
 
+  ;; Todo Keywords to use
+  (setq org-todo-keywords
+        '((sequence
+           "[ ](t)"   ; A task that needs doing
+           "[-](s)"   ; Task is in progress
+           "[?](w)"   ; Task is being held up or paused
+           "[^](P)"   ; Project
+           "[&](D)"   ; Task delegated
+           "|"
+           "[X](d)"   ; Task was completed
+           "[/](k)"   ; Task was cancelled, aborted or is no longer applicable
+           )
+          (sequence
+           "|"
+           "OKAY(o)"
+           "YES(y)"
+           "NO(n)"))
+        org-todo-keyword-faces
+        '(("[-]"  . +org-todo-active)
+          ("[?]"  . +org-todo-onhold)
+          ("[&]" . +org-todo-onhold)
+          ("[^]" . +org-todo-project)
+          ("[/]"   . +org-todo-cancel)
+          ))
   ;; Tags for org mode
   (setq org-tag-alist '((:startgrouptag)
                         ("LOCATION")
