@@ -1146,10 +1146,11 @@ the tags of, return an empty string."
   (setq olivetti-style 'fancy)
   (defun +my/olivetti-mode-on()
     "My custom configuration for 'org-mode'."
+    (interactive)
     (olivetti-mode)
     (olivetti-set-width 100)
     )
-  (add-hook! 'org-mode-hook #'+my/olivetti-mode-on)
+  ;; (add-hook! 'org-mode-hook #'+my/olivetti-mode-on)
   )
 
 
