@@ -1032,6 +1032,12 @@ the tags of, return an empty string."
                               "#+title: ${title}\n")
            :immediate-finish t
            :unnarrowed t)
+          ("l" "medical" plain
+           (file "~/.doom.d/org_capture_templates/roam_default-template.org")
+           :if-new (file+head "medical/${slug}.org"
+                              "#+title: ${title}\n")
+           :immediate-finish t
+           :unnarrowed t)
           )
         )
   (setq org-roam-capture-ref-templates
