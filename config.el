@@ -26,7 +26,7 @@
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 ;; (setq doom-theme 'doom-xcode)
-(setq doom-theme 'modus-vivendi)
+;; (setq doom-theme 'modus-vivendi)
 ;; (setq doom-theme 'modus-operandi)
 ;; (setq doom-theme 'doom-Iosvkem)
 ;; (setq doom-theme 'doom-plain-dark)
@@ -43,7 +43,7 @@
 ;; (setq doom-theme 'doom-homage-black)
 
 ;; Better doom theme for black picture borders
-;; (setq doom-theme 'doom-ephemeral)
+(setq doom-theme 'doom-ephemeral)
 
 ;; Better theme for orgmode and text edits
 ;; (setq doom-theme 'poet)
@@ -1010,14 +1010,13 @@ the tags of, return an empty string."
         ;; Default capture template
         '(("d" "default" plain
            (file "~/.doom.d/org_capture_templates/roam_default-template.org")
-           :if-new (file+head "${slug}.org"
+           :target (file+head "${slug}.org"
                               "#+title: ${title}\n")
            :immediate-finish t
            :unnarrowed t)
           ("b" "bibliography reference" plain
            (file "~/.doom.d/org_capture_templates/biblio-template.org") ; <-- template store in a separate file
-           :if-new
-           (file+head "notes/${citekey}.org" "#+title: ${title}\n")
+           :target (file+head "notes/${citekey}.org" "#+title: ${title}\n")
            :unnarrowed t
            :jump-to-captured t)
           ("f" "FA" plain
@@ -1028,13 +1027,13 @@ the tags of, return an empty string."
            :unnarrowed t)
           ("m" "maths" plain
            (file "~/.doom.d/org_capture_templates/roam_default-template.org")
-           :if-new (file+head "maths/${slug}.org"
+           :target (file+head "maths/${slug}.org"
                               "#+title: ${title}\n")
            :immediate-finish t
            :unnarrowed t)
           ("l" "medical" plain
            (file "~/.doom.d/org_capture_templates/roam_default-template.org")
-           :if-new (file+head "medical/${slug}.org"
+           :target (file+head "medical/${slug}.org"
                               "#+title: ${title}\n")
            :immediate-finish t
            :unnarrowed t)
@@ -1043,7 +1042,7 @@ the tags of, return an empty string."
   (setq org-roam-capture-ref-templates
         '(("r" "ref" plain
            (file "~/.doom.d/org_capture_templates/roam_ref_template.org")
-           :if-new (file+head "${slug}.org"
+           :target (file+head "${slug}.org"
                               "#+title: ${title}\n")
            :unnarrowed t)))
   )
