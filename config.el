@@ -272,11 +272,13 @@
 (after! org
   ;; Org-attach
   (setq org-attach-id-dir ".attach/")
+  (setq org-attach-dir-relative t)
   ;; Link type to use
   (setq org-link-file-path-type 'relative)
   ;; Enabling image scaling for linked image
   (setq org-image-actual-width nil)
   )
+
 (after! org
   (setq org-capture-templates
         '(("t" "Personal todo" entry
@@ -1049,6 +1051,12 @@ the tags of, return an empty string."
           ("f" "FA" plain
            (file "~/.doom.d/org_capture_templates/roam_default-template.org")
            :if-new (file+head "FA/${slug}.org"
+                              "#+title: ${title}\n")
+           :immediate-finish t
+           :unnarrowed t)
+          ("p" "Programming" plain
+           (file "~/.doom.d/org_capture_templates/roam_default-template.org")
+           :target (file+head "programming/${slug}.org"
                               "#+title: ${title}\n")
            :immediate-finish t
            :unnarrowed t)
