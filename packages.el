@@ -72,12 +72,6 @@
            ))
 (package! websocket)
 (package! org-roam-ui :recipe (:host github :repo "org-roam/org-roam-ui" :files ("*.el" "out")))
-;; In ~/.doom.d/package.el
-(package! org-transclusion
-  :recipe (:host github
-           :repo "nobiot/org-transclusion"
-           :branch "main"
-           :files ("*.el")))
 
 ;; bibtex/Users/alenalexninan/.doom.d/config.org
 (package! helm-bibtex)

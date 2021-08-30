@@ -1076,16 +1076,7 @@ the tags of, return an empty string."
 
 ;;; Org-transclusion
 ;;; ------------------------------------------------------------------------------------------
-;; In ~/.doom.d/config.el
-(use-package! org-transclusion
-  :defer
-  :after org
-  :init
-  (map!
-   :map global-map "<f12>" #'org-transclusion-add
-   :leader
-   :prefix "t"
-   :desc "Org Transclusion Mode" "o" #'org-transclusion-mode))
+
 
 ;;; Time-stamp hook
 ;; ------------------------------------------------------------------------------

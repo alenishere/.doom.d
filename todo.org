@@ -2,7 +2,7 @@
 #+AUTHOR: Alen Alex Ninan
 #+EMAIL: alenishere@gmail.com
 #+PROPERTY: ANKI_DECK Default
-Time-stamp: "2021-08-03 19:40:46 alenalexninan"
+Time-stamp: "2021-08-30 19:10:56 alenalexninan"
 #+STARTUP: content
 #+STARTUP: indent
 #+STARTUP: align
@@ -16,6 +16,7 @@ Time-stamp: "2021-08-03 19:40:46 alenalexninan"
 
 * Table of contents :TOC:
 - [[#inbox][Inbox]]
+  - [[#--org-transclusion-configuration][[ ] Org-transclusion configuration]]
 - [[#windows-os][Windows OS]]
   - [[#conda-config-for-windows][Conda config for Windows]]
 - [[#linux-os][Linux OS]]
@@ -32,6 +33,9 @@ Time-stamp: "2021-08-03 19:40:46 alenalexninan"
 - [[#troubleshooting][Troubleshooting]]
 
 * Inbox
+** [ ] Org-transclusion configuration
+
+[[file:~/.doom.d/config.el][file:~/.doom.d/config.el]]
 * Windows OS
 ** TODO Conda config for Windows
 * Linux OS
