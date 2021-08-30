@@ -22,32 +22,6 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-;; There are two ways to load a theme. Both assume the theme is installed and
-;; available. You can either set `doom-theme' or manually load a theme with the
-;; `load-theme' function. This is the default:
-;; (setq doom-theme 'doom-xcode)
-;; (setq doom-theme 'modus-vivendi)
-;; (setq doom-theme 'modus-operandi)
-;; (setq doom-theme 'doom-Iosvkem)
-;; (setq doom-theme 'doom-plain-dark)
-;; (setq doom-theme 'doom-spacegrey)
-;; (setq doom-theme 'doom-solarized-dark-high-contrast)
-;; (setq doom-theme 'doom-monokai-octagon)
-;; (setq doom-theme 'doom-miramare)
-;; (setq doom-theme 'doom-gruvbox-light)
-;; (setq doom-theme 'doom-wilmersdorf)
-;; (setq doom-theme 'doom-monokai-ristretto)
-;; (setq doom-theme 'doom-nord-light)
-;; (setq doom-theme 'doom-homage-white)
-;; (setq doom-theme 'doom-city-lights)
-;; (setq doom-theme 'doom-homage-black)
-
-;; Better doom theme for black picture borders
-(setq doom-theme 'doom-ephemeral)
-
-;; Better theme for orgmode and text edits
-;; (setq doom-theme 'poet)
-
 ;; Variable pitch for text edits
 ;; (add-hook 'text-mode-hook
 ;;            (lambda ()
@@ -95,6 +69,59 @@
        :desc "Toggle truncate lines" "t" #'toggle-truncate-lines))
 ;; Better image for doom dashboard
 (setq fancy-splash-image "~/.doom.d/icon.png")
+
+;; Doom themes
+;; ------------------------------------------------------------------------------
+
+(use-package modus-themes
+  :ensure
+  :init
+  ;; Add all your customizations prior to loading the themes
+  (setq modus-themes-italic-constructs t
+        modus-themes-completions 'opinionated
+        modus-themes-variable-pitch-headings t
+        modus-themes-scale-headings t
+        modus-themes-variable-pitch-ui t
+        modus-themes-org-agenda
+        '((header-block . (variable-pitch scale-title))
+          (header-date . (grayscale bold-all)))
+        modus-themes-org-blocks
+        '(grayscale)
+        modus-themes-mode-line
+        '(borderless)
+        modus-themes-region '(bg-only no-extend))
+
+  ;; Load the theme files before enabling a theme
+  (modus-themes-load-themes)
+  :config
+  (modus-themes-load-operandi)
+  :bind ("<f5>" . modus-themes-toggle))
+
+;; There are two ways to load a theme. Both assume the theme is installed and
+;; available. You can either set `doom-theme' or manually load a theme with the
+;; `load-theme' function. This is the default:
+;; (setq doom-theme 'doom-xcode)
+(setq doom-theme 'modus-vivendi)
+;; (setq doom-theme 'modus-operandi)
+;; (setq doom-theme 'doom-Iosvkem)
+;; (setq doom-theme 'doom-plain-dark)
+;; (setq doom-theme 'doom-spacegrey)
+;; (setq doom-theme 'doom-solarized-dark-high-contrast)
+;; (setq doom-theme 'doom-monokai-octagon)
+;; (setq doom-theme 'doom-miramare)
+;; (setq doom-theme 'doom-gruvbox-light)
+;; (setq doom-theme 'doom-wilmersdorf)
+;; (setq doom-theme 'doom-monokai-ristretto)
+;; (setq doom-theme 'doom-nord-light)
+;; (setq doom-theme 'doom-homage-white)
+;; (setq doom-theme 'doom-city-lights)
+;; (setq doom-theme 'doom-homage-black)
+
+;; Better doom theme for black picture borders
+;; (setq doom-theme 'doom-ephemeral)
+
+;; Better theme for orgmode and text edits
+;; (setq doom-theme 'poet)
 
 ;; Windows Path configuration
 ;; ------------------------------------------------------------------------------
