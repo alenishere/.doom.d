@@ -42,8 +42,9 @@
 ;;(setq doom-font (font-spec :family "cascadia code" :size 16 :weight 'light))
 
 (setq doom-font (font-spec :family "JetBrains Mono" :size 15 :weight 'light)
-      doom-variable-pitch-font (font-spec :family "Noto Serif" :size 15)
-      ivy-posframe-font (font-spec :family "JetBrainsMono" :size 15))
+      doom-variable-pitch-font (font-spec :family "Roboto" :size 15)
+      ;; ivy-posframe-font (font-spec :family "JetBrainsMono" :size 15)
+      )
 
 ;; (setq doom-font (font-spec :family "Iosevka" :size 15 :weight 'light)
 ;;       doom-variable-pitch-font (font-spec :family "Noto Serif" :size 15)
