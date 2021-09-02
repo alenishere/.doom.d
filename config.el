@@ -1027,6 +1027,7 @@ the tags of, return an empty string."
 
 ;; Org-roam-bibtex
 ;; ------------------------------------------------------------------------------
+;; Need to migrate to :target once org-roam-bibtex support it
 (use-package! org-roam-bibtex
   :after org-roam
   :config
@@ -1040,13 +1041,13 @@ the tags of, return an empty string."
         ;; Default capture template
         '(("d" "default" plain
            (file "~/.doom.d/org_capture_templates/roam_default-template.org")
-           :target (file+head "${slug}.org"
+           :if-new (file+head "${slug}.org"
                               "#+title: ${title}\n")
            :immediate-finish t
            :unnarrowed t)
           ("b" "bibliography reference" plain
            (file "~/.doom.d/org_capture_templates/biblio-template.org") ; <-- template store in a separate file
-           :target (file+head "notes/${citekey}.org" "#+title: ${title}\n")
+           :if-new (file+head "notes/${citekey}.org" "#+title: ${title}\n")
            :unnarrowed t
            :jump-to-captured t)
           ("f" "FA" plain
@@ -1057,19 +1058,19 @@ the tags of, return an empty string."
            :unnarrowed t)
           ("p" "Programming" plain
            (file "~/.doom.d/org_capture_templates/roam_default-template.org")
-           :target (file+head "programming/${slug}.org"
+           :if-new (file+head "programming/${slug}.org"
                               "#+title: ${title}\n")
            :immediate-finish t
            :unnarrowed t)
           ("m" "maths" plain
            (file "~/.doom.d/org_capture_templates/roam_default-template.org")
-           :target (file+head "maths/${slug}.org"
+           :if-new (file+head "maths/${slug}.org"
                               "#+title: ${title}\n")
            :immediate-finish t
            :unnarrowed t)
           ("l" "medical" plain
            (file "~/.doom.d/org_capture_templates/roam_default-template.org")
-           :target (file+head "medical/${slug}.org"
+           :if-new (file+head "medical/${slug}.org"
                               "#+title: ${title}\n")
            :immediate-finish t
            :unnarrowed t)
@@ -1078,7 +1079,7 @@ the tags of, return an empty string."
   (setq org-roam-capture-ref-templates
         '(("r" "ref" plain
            (file "~/.doom.d/org_capture_templates/roam_ref_template.org")
-           :target (file+head "${slug}.org"
+           :if-new (file+head "${slug}.org"
                               "#+title: ${title}\n")
            :unnarrowed t)))
   )

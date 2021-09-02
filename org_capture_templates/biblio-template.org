@@ -1,7 +1,7 @@
 #+FILETAGS: :LITERATURE:REVIEWING:%^{entry-type}:
 #+AUTHOR: Alen Alex Ninan
 #+PROPERTY: ANKI_DECK Default
-Time-stamp: "2021-08-11 01:34:08 alenalexninan"
+Time-stamp: "2021-09-01 10:09:13 alenalexninan"
 #+STARTUP: content
 #+STARTUP: indent
 #+STARTUP: align
