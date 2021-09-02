@@ -42,7 +42,7 @@
 ;;(setq doom-font (font-spec :family "cascadia code" :size 16 :weight 'light))
 
 (setq doom-font (font-spec :family "JetBrains Mono" :size 15 :weight 'light)
-      doom-variable-pitch-font (font-spec :family "Roboto" :size 15)
+      doom-variable-pitch-font (font-spec :family "Noto Serif" :size 15)
       ;; ivy-posframe-font (font-spec :family "JetBrainsMono" :size 15)
       )
 
@@ -74,15 +74,15 @@
 ;; Doom themes
 ;; ------------------------------------------------------------------------------
 
-(use-package modus-themes
+(use-package! modus-themes
   :ensure
   :init
   ;; Add all your customizations prior to loading the themes
   (setq modus-themes-italic-constructs t
         modus-themes-completions 'opinionated
-        modus-themes-variable-pitch-headings t
+        ;; modus-themes-variable-pitch-headings t
         modus-themes-scale-headings t
-        modus-themes-variable-pitch-ui t
+        ;; modus-themes-variable-pitch-ui t
         modus-themes-org-agenda
         '((header-block . (variable-pitch scale-title))
           (header-date . (grayscale bold-all)))
