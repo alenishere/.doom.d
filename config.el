@@ -900,9 +900,9 @@ you're done. This can be called from an external shell script."
         org-id-link-to-org-use-id t)
   (setq org-roam-v2-ack t)
   :config
-  (setq org-roam-node-display-template "${title:*} ${tags:50}")
+  ;; (setq org-roam-node-display-template "${title:*} ${tags:50}")
   (setq org-roam-node-display-template
-        "${doom-hierarchy:*} ${doom-tags:45}")
+        "${doom-hierarchy:*} ${todo:5} ${doom-tags:45}")
   (setq org-roam-db-location
         (concat doom-etc-dir "org-roam.db"))
   (setq org-roam-mode-sections
@@ -924,7 +924,7 @@ you're done. This can be called from an external shell script."
   (add-hook 'org-roam-mode-hook #'turn-on-visual-line-mode)
 
 ;;; Custom node accessors
-;;;###autoload (autoload 'org-roam-node-doom-filetitle "lang/org/autoload/contrib-roam2" nil t)
+;;;###autoload
   (cl-defmethod org-roam-node-doom-filetitle ((node org-roam-node))
     "Return the value of \"#+title:\" (if any) from file that NODE resides in.
 If there's no file-level title in the file, return empty string."
@@ -933,7 +933,7 @@ If there's no file-level title in the file, return empty string."
           (org-roam-get-keyword "TITLE" (org-roam-node-file node)))
         ""))
 
-;;;###autoload (autoload 'org-roam-node-doom-hierarchy "lang/org/autoload/contrib-roam2" nil t)
+;;;###autoload
   (cl-defmethod org-roam-node-doom-hierarchy ((node org-roam-node))
     "Return hierarchy for NODE, constructed of its file title, OLP and direct title.
 If some elements are missing, they will be stripped out."
@@ -953,7 +953,7 @@ If some elements are missing, they will be stripped out."
                    separator (propertize (string-join olp " > ") 'face '(shadow italic))
                    separator title)))))
 
-;;;###autoload (autoload 'org-roam-node-doom-subdirs "lang/org/autoload/contrib-roam2" nil t)
+;;;###autoload
   (cl-defmethod org-roam-node-doom-subdirs ((node org-roam-node))
     "Return subdirectories of `org-roam-directory' in which NODE resides in.
 If there's none, return an empty string."
@@ -964,7 +964,7 @@ If there's none, return an empty string."
         dirs
       ""))
 
-;;;###autoload (autoload 'org-roam-node-doom-tags "lang/org/autoload/contrib-roam2" nil t)
+;;;###autoload
   (cl-defmethod org-roam-node-doom-tags ((node org-roam-node))
     "Return tags formatted in the same way how they appear in org files.
 Treat subdirectories as tags too. If there's no elements to build
