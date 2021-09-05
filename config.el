@@ -1021,36 +1021,36 @@ the tags of, return an empty string."
         ;; Default capture template
         '(("d" "default" plain
            (file "~/.doom.d/org_capture_templates/roam_default-template.org")
-           :if-new (file+head "${slug}.org"
+           :target (file+head "${slug}.org"
                               "#+title: ${title}\n")
            :immediate-finish t
            :unnarrowed t)
           ("b" "bibliography reference" plain
            (file "~/.doom.d/org_capture_templates/biblio-template.org") ; <-- template store in a separate file
-           :if-new (file+head "notes/${citekey}.org" "#+title: ${title}\n")
+           :target (file+head "notes/${citekey}.org" "#+title: ${title}\n")
            :unnarrowed t
            :jump-to-captured t)
           ("f" "FA" plain
            (file "~/.doom.d/org_capture_templates/roam_default-template.org")
-           :if-new (file+head "FA/${slug}.org"
+           :target (file+head "FA/${slug}.org"
                               "#+title: ${title}\n")
            :immediate-finish t
            :unnarrowed t)
           ("p" "Programming" plain
            (file "~/.doom.d/org_capture_templates/roam_default-template.org")
-           :if-new (file+head "programming/${slug}.org"
+           :target (file+head "programming/${slug}.org"
                               "#+title: ${title}\n")
            :immediate-finish t
            :unnarrowed t)
           ("m" "maths" plain
            (file "~/.doom.d/org_capture_templates/roam_default-template.org")
-           :if-new (file+head "maths/${slug}.org"
+           :target (file+head "maths/${slug}.org"
                               "#+title: ${title}\n")
            :immediate-finish t
            :unnarrowed t)
           ("l" "medical" plain
            (file "~/.doom.d/org_capture_templates/roam_default-template.org")
-           :if-new (file+head "medical/${slug}.org"
+           :target (file+head "medical/${slug}.org"
                               "#+title: ${title}\n")
            :immediate-finish t
            :unnarrowed t)
@@ -1059,7 +1059,7 @@ the tags of, return an empty string."
   (setq org-roam-capture-ref-templates
         '(("r" "ref" plain
            (file "~/.doom.d/org_capture_templates/roam_ref_template.org")
-           :if-new (file+head "${slug}.org"
+           :target (file+head "${slug}.org"
                               "#+title: ${title}\n")
            :unnarrowed t)))
   )
