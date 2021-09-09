@@ -50,7 +50,6 @@
 ;(unpin! t)
 
 ;; Orgmode
-(package! helm-bibtex)
 (package! org-projectile)
 (package! zotxt)
 (package! org-re-reveal-ref)
@@ -90,9 +89,6 @@
 
 ;; Page Break
 (package! page-break-lines :recipe (:host github :repo "purcell/page-break-lines"))
-
-;; Search tools
-(package! helm-ag)
 
 ;; Some themes/Users/alenalexninan/.doom.d/config.el
 (package! modus-themes)
