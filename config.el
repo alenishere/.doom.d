@@ -388,21 +388,17 @@ Is relative to `org-directory', unless it is absolute")
            "[ ](t)"   ; A task that needs doing
            "[-](s)"   ; Task is in progress
            "[?](w)"   ; Task is being held up or paused
+           "[&](d)"   ; Task delegated
            "[^](P)"   ; Project
-           "[&](D)"   ; Task delegated
            "|"
            "[X](d)"   ; Task was completed
            "[/](k)"   ; Task was cancelled, aborted or is no longer applicable
            )
-          (sequence
-           "|"
-           "OKAY(o)"
-           "YES(y)"
-           "NO(n)"))
+          )
         org-todo-keyword-faces
         '(("[-]"  . +org-todo-active)
+          ("[&]"  . +org-todo-active)
           ("[?]"  . +org-todo-onhold)
-          ("[&]" . +org-todo-onhold)
           ("[^]" . +org-todo-project)
           ("[/]"   . +org-todo-cancel)
           ("NO"   . +org-todo-cancel)
