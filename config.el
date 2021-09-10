@@ -283,7 +283,7 @@
   (setq org-capture-templates
         '(("t" "Personal todo" entry
            (file+headline +org-capture-todo-file "Inbox")
-           "* [ ] %?\n%i\n%a" :prepend t)
+           "* TODO %?\n%i\n%a" :prepend t)
           ("n" "Personal notes" entry
            (file+headline +org-capture-notes-file "Inbox")
            "* %u %?\n%i\n%a" :prepend t)
@@ -295,14 +295,14 @@
           ;; {todo,notes,changelog}.org file is found in a parent directory.
           ;; Uses the basename from `+org-capture-todo-file',
           ;; `+org-capture-changelog-file' and `+org-capture-notes-file'.
-          ("p" "Templates for projects")
-          ("pt" "Project-local todo" entry  ; {project-root}/todo.org
+          ("o" "Templates for projects")
+          ("ot" "Project-local todo" entry  ; {project-root}/todo.org
            (file+headline +org-capture-project-todo-file "Inbox")
-           "* [ ] %?\n%i\n%a" :prepend t)
-          ("pn" "Project-local notes" entry  ; {project-root}/notes.org
+           "* TODO %?\n%i\n%a" :prepend t)
+          ("on" "Project-local notes" entry  ; {project-root}/notes.org
            (file+headline +org-capture-project-notes-file "Inbox")
            "* %U %?\n%i\n%a" :prepend t)
-          ("pc" "Project-local changelog" entry  ; {project-root}/changelog.org
+          ("oc" "Project-local changelog" entry  ; {project-root}/changelog.org
            (file+headline +org-capture-project-changelog-file "Unreleased")
            "* %U %?\n%i\n%a" :prepend t)
 
@@ -310,18 +310,18 @@
           ;; these under {ProjectName}/{Tasks,Notes,Changelog} headings. They
           ;; support `:parents' to specify what headings to put them under, e.g.
           ;; :parents ("Projects")
-          ("o" "Centralized templates for projects")
-          ("ot" "Project todo" entry
+          ("p" "Centralized templates for projects")
+          ("pt" "Project todo" entry
            (function +org-capture-central-project-todo-file)
-           "* [ ] %?\n %i\n %a"
-           :heading "Tasks"
+           "* TODO %?\n %i\n %a"
+           :heading "Inbox"
            :prepend nil)
-          ("on" "Project notes" entry
+          ("pn" "Project notes" entry
            (function +org-capture-central-project-notes-file)
            "* %U %?\n %i\n %a"
            :heading "Notes"
            :prepend t)
-          ("oc" "Project changelog" entry
+          ("pc" "Project changelog" entry
            (function +org-capture-central-project-changelog-file)
            "* %U %?\n %i\n %a"
            :heading "Changelog"
@@ -344,7 +344,7 @@
   (add-to-list 'org-capture-templates
                '("cw" "Article"
                  entry (file+headline +org-capture-notes-file "Inbox")
-                 "* [ ] %a\n%U\n%:initial\n\n"
+                 "* TODO %a\n%U\n%:initial\n\n"
                  :immediate-finish t)
                )
   (defvar +org-capture-review-file "review/review.org"
@@ -384,23 +384,22 @@ Is relative to `org-directory', unless it is absolute")
   ;; Todo Keywords to use
   (setq org-todo-keywords
         '((sequence
-           "[ ](t)"   ; A task that needs doing
-           "[-](s)"   ; Task is in progress
-           "[?](w)"   ; Task is being held up or paused
-           "[&](d)"   ; Task delegated
-           "[^](P)"   ; Project
+           "TODO(t)"   ; A task that needs doing
+           "NOW(n)"   ; Task is in progress
+           "WAIT(w)"   ; Task is being held up or paused
+           "DELEGATE(d)"   ; Task delegated
+           "PROJECT(P)"   ; Project
            "|"
-           "[X](d)"   ; Task was completed
-           "[/](k)"   ; Task was cancelled, aborted or is no longer applicable
+           "DONE(d)"   ; Task was completed
+           "KILL(k)"   ; Task was cancelled, aborted or is no longer applicable
            )
           )
         org-todo-keyword-faces
-        '(("[-]"  . +org-todo-active)
-          ("[&]"  . +org-todo-active)
-          ("[?]"  . +org-todo-onhold)
-          ("[^]" . +org-todo-project)
-          ("[/]"   . +org-todo-cancel)
-          ("NO"   . +org-todo-cancel)
+        '(("TODO"  . +org-todo-active)
+          ("NOW"  . +org-todo-active)
+          ("WAIT"  . +org-todo-onhold)
+          ("PROJECT" . +org-todo-project)
+          ("KILL"   . +org-todo-cancel)
           ))
   ;; Tags for org mode
   (setq org-tag-alist '((:startgrouptag)
@@ -1025,15 +1024,15 @@ the tags of, return an empty string."
            :target (file+head "notes/${citekey}.org" "#+title: ${title}\n")
            :unnarrowed t
            :jump-to-captured t)
-          ("f" "FA" plain
+          ("e" "Engineering" plain
            (file "~/.doom.d/org_capture_templates/roam_default-template.org")
-           :target (file+head "FA/${slug}.org"
+           :target (file+head "engineering/${slug}.org"
                               "#+title: ${title}\n")
            :immediate-finish t
            :unnarrowed t)
-          ("p" "Programming" plain
+          ("c" "Computer" plain
            (file "~/.doom.d/org_capture_templates/roam_default-template.org")
-           :target (file+head "programming/${slug}.org"
+           :target (file+head "computer/${slug}.org"
                               "#+title: ${title}\n")
            :immediate-finish t
            :unnarrowed t)
@@ -1043,9 +1042,21 @@ the tags of, return an empty string."
                               "#+title: ${title}\n")
            :immediate-finish t
            :unnarrowed t)
-          ("l" "medical" plain
+          ("h" "health" plain
            (file "~/.doom.d/org_capture_templates/roam_default-template.org")
            :target (file+head "medical/${slug}.org"
+                              "#+title: ${title}\n")
+           :immediate-finish t
+           :unnarrowed t)
+          ("p" "Personal Development" plain
+           (file "~/.doom.d/org_capture_templates/roam_default-template.org")
+           :target (file+head "PD/${slug}.org"
+                              "#+title: ${title}\n")
+           :immediate-finish t
+           :unnarrowed t)
+          ("l" "Language" plain
+           (file "~/.doom.d/org_capture_templates/roam_default-template.org")
+           :target (file+head "language/${slug}.org"
                               "#+title: ${title}\n")
            :immediate-finish t
            :unnarrowed t)
@@ -1054,7 +1065,7 @@ the tags of, return an empty string."
   (setq org-roam-capture-ref-templates
         '(("r" "ref" plain
            (file "~/.doom.d/org_capture_templates/roam_ref_template.org")
-           :target (file+head "${slug}.org"
+           :target (file+head "capture/${slug}.org"
                               "#+title: ${title}\n")
            :unnarrowed t)))
   )
