@@ -393,6 +393,11 @@ Is relative to `org-directory', unless it is absolute")
            "DONE(d)"   ; Task was completed
            "KILL(k)"   ; Task was cancelled, aborted or is no longer applicable
            )
+          (sequence
+           "|"
+           "OKAY(o)"
+           "YES(y)"
+           "NO(n)")
           )
         org-todo-keyword-faces
         '(("TODO"  . +org-todo-active)
@@ -400,6 +405,7 @@ Is relative to `org-directory', unless it is absolute")
           ("WAIT"  . +org-todo-onhold)
           ("PROJECT" . +org-todo-project)
           ("KILL"   . +org-todo-cancel)
+          ("NO" . +org-todo-onhold)
           ))
   ;; Tags for org mode
   (setq org-tag-alist '((:startgrouptag)
