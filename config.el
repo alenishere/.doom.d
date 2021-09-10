@@ -212,15 +212,15 @@
 ;; change `org-directory'. It must be set before org loads!
 (when IS-MAC
   (setq org-roam-directory (file-truename "~/Org/roam/")
-        org-directory "~/Org")
+        org-directory "~/Dropbox/Org")
   )
 (when IS-LINUX
   (setq org-roam-directory (file-truename "~/Org/roam/")
-        org-directory "~/Org")
+        org-directory "~/Dropbox/Org")
   )
 (when IS-WINDOWS
   (setq org-roam-directory (file-truename "~/Org/roam/")
-        org-directory "~/Org")
+        org-directory "~/Dropbox/Org")
   )
 
 ;; Org ellipsis
