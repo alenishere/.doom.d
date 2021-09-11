@@ -686,11 +686,14 @@ you're done. This can be called from an external shell script."
 
 ;;; Ispell personal dictionary
 ;;; -----------------------------------------------------------------------------
-(setq ispell-personal-dictionary "~/.doom.d/extras/personal/personal_dict.txt")
-(setq ispell-dictionary "en_GB")
+(after! flyspell
+  (setq ispell-personal-dictionary (expand-file-name "~/.doom.d/extras/personal/personal_dict.txt"))
+  (setq ispell-dictionary "en_GB")
+  )
 (after! spell-fu
   (setq spell-fu-idle-delay 0.5 ; default is 0.25
-        ispell-dictionary "british" ; needed for Macs in particular
+        ispell-personal-dictionary (expand-file-name "~/.doom.d/extras/personal/personal_dict.txt")
+        ispell-dictionary "en_GB" ; needed for Macs in particular
         )
   )
 
