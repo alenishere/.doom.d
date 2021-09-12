@@ -1073,6 +1073,7 @@ the tags of, return an empty string."
            (file "~/.doom.d/org_capture_templates/roam_ref_template.org")
            :target (file+head "capture/${slug}.org"
                               "#+title: ${title}\n")
+           :immediate-finish t
            :unnarrowed t)))
   )
 
