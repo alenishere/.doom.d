@@ -903,6 +903,7 @@ you're done. This can be called from an external shell script."
         org-id-link-to-org-use-id t)
   (setq org-roam-v2-ack t)
   :config
+  (setq org-roam-dailies-directory "daily/")
   ;; (setq org-roam-node-display-template "${title:*} ${tags:50}")
   (setq org-roam-node-display-template
         "${doom-hierarchy:*} ${todo:5} ${doom-tags:45}")
@@ -1078,6 +1079,11 @@ the tags of, return an empty string."
                               "#+title: ${title}\n")
            :immediate-finish t
            :unnarrowed t)))
+  (setq org-roam-dailies-capture-templates
+        '(("d" "default" entry
+           "* TODO Gratitude\n %?\n* TODO Daily Review"
+           :target (file+head "%<%Y-%m-%d>.org"
+                              "#+title: %<%Y-%m-%d>\n"))))
   )
 
 ;;; Org-transclusion

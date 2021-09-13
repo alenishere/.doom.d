@@ -1,6 +1,6 @@
 #+filetags: :REVIEWING:
 #+PROPERTY: ANKI_DECK Default
-Time-stamp: "2021-09-13 02:51:09 alenalexninan"
+Time-stamp: "2021-09-13 05:35:04 alenalexninan"
 #+STARTUP: content
 #+STARTUP: indent
 #+STARTUP: align
