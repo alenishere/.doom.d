@@ -868,6 +868,12 @@ you're done. This can be called from an external shell script."
          :localleader
          :prefix ("m" . "org-roam")
          "D" #'org-roam-demote-entire-buffer
+         (:prefix ("b" . "database")
+          :desc "Datbase clear" "C" #'org-roam-db-clear-all
+          :desc "Database clear file" "F" #'org-roam-db-clear-file
+          :desc "Database sync" "s" #'org-roam-db-sync
+          :desc "Database update file" "f" #'org-roam-db-update-file
+          )
          "f" #'org-roam-node-find
          "F" #'org-roam-ref-find
          "g" #'org-roam-graph
@@ -1029,7 +1035,7 @@ the tags of, return an empty string."
                               "#+title: ${title}\n")
            :immediate-finish t
            :unnarrowed t)
-          ("b" "bibliography reference" plain
+          ("x" "bibliography reference" plain
            (file "~/.doom.d/org_capture_templates/biblio-template.org") ; <-- template store in a separate file
            :target (file+head "notes/${citekey}.org" "#+title: ${title}\n")
            :unnarrowed t
@@ -1067,6 +1073,12 @@ the tags of, return an empty string."
           ("l" "Language" plain
            (file "~/.doom.d/org_capture_templates/roam_default-template.org")
            :target (file+head "language/${slug}.org"
+                              "#+title: ${title}\n")
+           :immediate-finish t
+           :unnarrowed t)
+          ("b" "Business" plain
+           (file "~/.doom.d/org_capture_templates/roam_default-template.org")
+           :target (file+head "business/${slug}.org"
                               "#+title: ${title}\n")
            :immediate-finish t
            :unnarrowed t)
