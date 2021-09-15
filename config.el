@@ -998,15 +998,15 @@ the tags of, return an empty string."
     (lambda (node)
       (member tag-name (org-roam-node-tags node))))
   (defun my/org-roam-list-notes-by-tag (tag-name)
-    (mapcar #'org-roam-node-file
+    (delete-duplicates (mapcar #'org-roam-node-file
             (seq-filter
              (my/org-roam-filter-by-tag tag-name)
-             (org-roam-node-list))))
+             (org-roam-node-list))) :test #'string-equal))
   (defun my/org-roam-refresh-agenda-list ()
     (interactive)
     (setq org-agenda-files (my/org-roam-list-notes-by-tag "PLANNED")))
   ;; Build the agenda list the firt time for the session
-  (my/org-roam-refresh-agenda-list)
+  (add-hook 'org-agenda-mode-hook 'my/org-roam-refresh-agenda-list)
 
   ;; Copy done to dailies for the day
   (defun my/org-roam-copy-todo-to-today ()
