@@ -432,13 +432,14 @@ Is relative to `org-directory', unless it is absolute")
                         (:endgrouptag)
                         (:startgrouptag)
                         (:grouptags)
-                        ("ZETTEL" . ?0)
+                        ("PLANNED" . ?0)
                         ("STRUCTURE" . ?1)
                         ("SOURCE" . ?2)
                         ("FLEETING" . ?3)
                         ("LITERATURE" . ?4)
                         ("REVIEWING" . ?5)
                         ("EVERGREEN" . ?6)
+                        ("ZETTEL" . ?7)
                         (:endgrouptag)
                         ))
   ;; Tag colour
@@ -472,6 +473,7 @@ Is relative to `org-directory', unless it is absolute")
           ("LITERATURE" . (:foreground "Blue" :weight bold))
           ("REVIEWING" . (:foreground "Blue" :weight bold))
           ("EVERGREEN" . (:foreground "Blue" :weight bold))
+          ("PLANNED" . (:foreground "OrangeRed" :weight bold))
           ))
 
 ;;;  Orgmode count done
@@ -868,6 +870,12 @@ you're done. This can be called from an external shell script."
          :localleader
          :prefix ("m" . "org-roam")
          "D" #'org-roam-demote-entire-buffer
+         (:prefix ("b" . "database")
+          :desc "Datbase clear" "C" #'org-roam-db-clear-all
+          :desc "Database clear file" "F" #'org-roam-db-clear-file
+          :desc "Database sync" "s" #'org-roam-db-sync
+          :desc "Database update file" "f" #'org-roam-db-update-file
+          )
          "f" #'org-roam-node-find
          "F" #'org-roam-ref-find
          "g" #'org-roam-graph
@@ -983,7 +991,84 @@ the tags of, return an empty string."
                                   'face '(shadow italic))))
       (replace-regexp-in-string ":+" (propertize ":" 'face 'shadow) (concat subdirs tags))))
 
+  ;; Custom org-agenda based on "PLANNED" tags in org-roam
+  ;; The buffer you put this code in must have lexical-binding set to t!
+  ;; See the final configuration at the end for more details.
+  (defun my/org-roam-filter-by-tag (tag-name)
+    (lambda (node)
+      (member tag-name (org-roam-node-tags node))))
+  (defun my/org-roam-list-notes-by-tag (tag-name)
+    (mapcar #'org-roam-node-file
+            (seq-filter
+             (my/org-roam-filter-by-tag tag-name)
+             (org-roam-node-list))))
+  (defun my/org-roam-refresh-agenda-list ()
+    (interactive)
+    (setq org-agenda-files (my/org-roam-list-notes-by-tag "PLANNED")))
+  ;; Build the agenda list the firt time for the session
+  (my/org-roam-refresh-agenda-list)
 
+  ;; Copy done to dailies for the day
+  (defun my/org-roam-copy-todo-to-today ()
+    (interactive)
+    (let ((org-refile-keep t) ;; Set this to nil to delete the original!
+          (org-roam-dailies-capture-templates
+           '(("t" "tasks" entry "%?"
+              :if-new (file+head+olp "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n" ("Tasks")))))
+          (org-after-refile-insert-hook #'save-buffer)
+          today-file
+          pos)
+      (save-window-excursion
+        (org-roam-dailies--capture (current-time) t)
+        (setq today-file (buffer-file-name))
+        (setq pos (point)))
+      ;; Only refile if the target file is different than the current file
+      (unless (equal (file-truename today-file)
+                     (file-truename (buffer-file-name)))
+        (org-refile nil nil (list "Tasks" today-file nil pos)))))
+  (add-to-list 'org-after-todo-state-change-hook
+               (lambda ()
+                 (when (equal org-state "DONE")
+                   (my/org-roam-copy-todo-to-today))))
+
+  (when (featurep! :editor evil +everywhere)
+    (add-hook! 'org-roam-mode-hook
+      (defun +org-roam-detach-magit-section-mode-map-h ()
+        "Detach `magit-section-mode-map' from `org-roam-mode-map'.
+Inheriting its keymaps introduces a lot of conflicts in
+`org-roam-mode' based buffers, where Evil and leader keybindings
+will become completely overridden. This is because `magit-section'
+uses 'keymap text-property to attach section-unique keymaps, which
+has a higher level of precedence than `emulation-mode-map-alists'.
+
+Note: We do this each time through the hook, because otherwise
+sections seems to ignore the detachment."
+        (set-keymap-parent org-roam-mode-map nil)))
+
+    (map! :map org-roam-mode-map
+          :nv "]"       #'magit-section-forward-sibling
+          :nv "["       #'magit-section-backward-sibling
+          :nv "gj"      #'magit-section-forward-sibling
+          :nv "gk"      #'magit-section-backward-sibling
+          :nv "gr"      #'revert-buffer
+          :nv "gR"      #'revert-buffer
+          :nv "z1"      #'magit-section-show-level-1
+          :nv "z2"      #'magit-section-show-level-2
+          :nv "z3"      #'magit-section-show-level-3
+          :nv "z4"      #'magit-section-show-level-4
+          :nv "za"      #'magit-section-toggle
+          :nv "zc"      #'magit-section-hide
+          :nv "zC"      #'magit-section-hide-children
+          :nv "zo"      #'magit-section-show
+          :nv "zO"      #'magit-section-show-children
+          :nv "zr"      #'magit-section-show-level-4-all
+          :nv "C-j"     #'magit-section-forward
+          :nv "C-k"     #'magit-section-backward
+          :g  "M-p"     #'magit-section-backward-sibling
+          :g  "M-n"     #'magit-section-forward-sibling
+          :g  [tab]     #'magit-section-toggle
+          :g  [C-tab]   #'magit-section-cycle
+          :g  [backtab] #'magit-section-cycle-global))
   )
 
 ;; Org-roam-ui
@@ -1029,7 +1114,7 @@ the tags of, return an empty string."
                               "#+title: ${title}\n")
            :immediate-finish t
            :unnarrowed t)
-          ("b" "bibliography reference" plain
+          ("x" "bibliography reference" plain
            (file "~/.doom.d/org_capture_templates/biblio-template.org") ; <-- template store in a separate file
            :target (file+head "notes/${citekey}.org" "#+title: ${title}\n")
            :unnarrowed t
@@ -1067,6 +1152,12 @@ the tags of, return an empty string."
           ("l" "Language" plain
            (file "~/.doom.d/org_capture_templates/roam_default-template.org")
            :target (file+head "language/${slug}.org"
+                              "#+title: ${title}\n")
+           :immediate-finish t
+           :unnarrowed t)
+          ("b" "Business" plain
+           (file "~/.doom.d/org_capture_templates/roam_default-template.org")
+           :target (file+head "business/${slug}.org"
                               "#+title: ${title}\n")
            :immediate-finish t
            :unnarrowed t)
