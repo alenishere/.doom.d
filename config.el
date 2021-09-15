@@ -906,7 +906,7 @@ you're done. This can be called from an external shell script."
   (setq org-roam-dailies-directory "daily/")
   ;; (setq org-roam-node-display-template "${title:*} ${tags:50}")
   (setq org-roam-node-display-template
-        "${doom-hierarchy:*} ${todo:5} ${doom-tags:45}")
+        "${doom-hierarchy:*} ${todo:8} ${doom-tags:45}")
   (setq org-roam-db-location
         (concat doom-etc-dir "org-roam.db"))
   (setq org-roam-mode-sections
