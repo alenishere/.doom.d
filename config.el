@@ -1003,7 +1003,7 @@ the tags of, return an empty string."
              (org-roam-node-list))) :test #'string-equal))
   (defun my/org-roam-refresh-agenda-list ()
     (interactive)
-    (setq org-agenda-files (append (directory-files-recursively org-directory "\.org$") (my/org-roam-list-notes-by-tag "PLANNED")))
+    (setq org-agenda-files (append (directory-files-recursively org-directory "\.org$") (my/org-roam-list-notes-by-tag "PLANNED"))))
   ;; Build the agenda list the firt time for the session
   (add-hook 'org-agenda-mode-hook 'my/org-roam-refresh-agenda-list)
 
