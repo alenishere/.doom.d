@@ -200,12 +200,12 @@
 (setq which-key-idle-delay 0.5)
 
 (setq which-key-allow-multiple-replacements t)
-(after! which-key
-  (pushnew!
-   which-key-replacement-alist
-   '(("" . "\\`+?evil[-:]?\\(?:a-\\)?\\(.*\\)") . (nil . "◂\\1"))
-   '(("\\`g s" . "\\`evilem--?motion-\\(.*\\)") . (nil . "◃\\1"))
-   ))
+;; (after! which-key
+;;   (pushnew!
+;;    which-key-replacement-alist
+;;    '(("" . "\\`+?evil[-:]?\\(?:a-\\)?\\(.*\\)") . (nil . "◂\\1"))
+;;    '(("\\`g s" . "\\`evilem--?motion-\\(.*\\)") . (nil . "◃\\1"))
+;;    ))
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -1311,3 +1311,15 @@ sections seems to ignore the detachment."
   :after org
   :config
   )
+
+;; Evil cursor
+;; -----------------------------------------------------------------------
+;; (after! evil
+;;   (setq evil-default-cursor '+evil-default-cursor-fn
+;;        evil-normal-state-cursor 'box
+;;        evil-emacs-state-cursor  '(box +evil-emacs-cursor-fn)
+;;        evil-insert-state-cursor 'bar
+;;        evil-visual-state-cursor 'hollow))
+(setq evil-normal-state-cursor '(box "light blue")
+      evil-insert-state-cursor '(bar "medium sea green")
+      evil-visual-state-cursor '(hollow "orange"))
