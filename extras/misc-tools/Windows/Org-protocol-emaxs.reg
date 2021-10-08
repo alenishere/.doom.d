@@ -9,4 +9,4 @@ Windows Registry Editor Version 5.00
 [HKEY_CLASSES_ROOT\org-protocol\shell\open]
 
 [HKEY_CLASSES_ROOT\org-protocol\shell\open\command]
-@="\"C:\\Program Files\\emax64-27.1\\bin\\emacsclientw.exe\"  \"%1\""
+@="\"C:\\emacs\\bin\\emacsclientw.exe\"  \"%1\""

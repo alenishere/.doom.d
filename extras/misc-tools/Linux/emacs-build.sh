@@ -14,7 +14,13 @@ sudo apt install -y autoconf make gcc texinfo libgtk-3-dev libxpm-dev \
             --with-threads --with-included-regex --with-zlib --with-sound \
             --with-xpm --with-jpeg --with-tiff --with-gif --with-png \
             --with-rsvg --with-imagemagick  --with-toolkit-scroll-bars \
-            --without-gpm --without-dbus --with-makeinfo --with-xwidgets \
-            --with-mailutils --with-gsettings --with-pop --with-libxml2
+            --without-gpm --without-dbus --with-xwidgets \
+            --with-mailutils --with-gsettings --with-pop --with-xml2 --with-native-compilation \
+            --host=x86_64-w64-mingw32 \
+            --target=x86_64-w64-mingw32 \
+            --build=x86_64-w64-mingw32 \
+            --with-wide-int \
+            'CFLAGS=-I/mingw64/include/noX' \
+            prefix=$target
 make
 sudo make install

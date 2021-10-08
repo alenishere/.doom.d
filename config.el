@@ -200,12 +200,12 @@
 (setq which-key-idle-delay 0.5)
 
 (setq which-key-allow-multiple-replacements t)
-;; (after! which-key
-;;   (pushnew!
-;;    which-key-replacement-alist
-;;    '(("" . "\\`+?evil[-:]?\\(?:a-\\)?\\(.*\\)") . (nil . "◂\\1"))
-;;    '(("\\`g s" . "\\`evilem--?motion-\\(.*\\)") . (nil . "◃\\1"))
-;;    ))
+(after! which-key
+  (pushnew!
+   which-key-replacement-alist
+   '(("" . "\\`+?evil[-:]?\\(?:a-\\)?\\(.*\\)") . (nil . "◂\\1"))
+   '(("\\`g s" . "\\`evilem--?motion-\\(.*\\)") . (nil . "◃\\1"))
+   ))
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -375,7 +375,7 @@ Is relative to `org-directory', unless it is absolute")
   ;; (require 'org-habit)
 
   ;; Additional babel languages
-  (add-to-list 'org-structure-template-alist '("p" . "src jupyter-python :session python_default :kernal python :async yes"))
+  (add-to-list 'org-structure-template-alist '("p" . "src jupyter-python :session python_default :kernal python :async yes\n"))
   (add-to-list 'org-structure-template-alist '("i" . "src emacs-lisp"))
   (add-to-list 'org-structure-template-alist '("d" . "src dot :file ?.png :async no :cmdline -Kdot -Tpng"))
   (add-to-list 'org-structure-template-alist '("r" . "src rust :tangle ?.rs"))
@@ -1314,12 +1314,55 @@ sections seems to ignore the detachment."
 
 ;; Evil cursor
 ;; -----------------------------------------------------------------------
-;; (after! evil
-;;   (setq evil-default-cursor '+evil-default-cursor-fn
-;;        evil-normal-state-cursor 'box
-;;        evil-emacs-state-cursor  '(box +evil-emacs-cursor-fn)
-;;        evil-insert-state-cursor 'bar
-;;        evil-visual-state-cursor 'hollow))
+;; Disable the system cursor caused by screen reader etc.
+(when IS-WINDOWS 
+(setq w32-use-visible-system-caret nil)
+)
+
 (setq evil-normal-state-cursor '(box "light blue")
       evil-insert-state-cursor '(bar "medium sea green")
       evil-visual-state-cursor '(hollow "orange"))
+
+;; Latex configuration
+;; ------------------------------------------------------------------------
+;; Set after the default-packages list anyway
+(setq org-latex-packages-alist 'nil)
+(setq org-latex-default-packages-alist
+  '(("AUTO" "inputenc"  t ("pdflatex"))
+    ("T1"   "fontenc"   t ("pdflatex"))
+    (""     "graphicx"  t)
+    (""     "grffile"   t)
+    (""     "minted"   t)
+    ;; ("dvipsnames,svgnames*,x11names*,table"     "xcolor"   t)
+    (""     "longtable" nil)
+    (""     "wrapfig"   nil)
+    (""     "rotating"  nil)
+    ("normalem" "ulem"  t)
+    (""     "amsmath"   t)
+    (""     "amssymb"   t)
+    (""     "unicode-math"   t)
+    (""     "mathtools"   t)
+    (""     "textcomp"  t)
+    (""     "capt-of"   nil)
+    (""     "hyperref"  nil)))
+;; (add-to-list 'org-latex-default-packages-alist '("" "fontspec" t))
+;; (setq org-latex-inputenc-alist '(("utf8" . "utf8x")))
+;; (add-to-list 'org-latex-packages-alist '("" "unicode-math"))
+(plist-put org-format-latex-options :scale 2.2)
+(add-to-list 'org-preview-latex-process-alist '(dvixelatex :programs
+         ("xetex" "convert")
+         :description "pdf > png" :message "you need to install the programs: xetex and imagemagick." :image-input-type "pdf" :image-output-type "png" :image-size-adjust
+         (1.0 . 1.0)
+         :latex-compiler
+         ("xelatex -no-pdf -interaction nonstopmode -output-directory %o %f")
+         :image-converter
+         ("dvisvgm %f -n -b min -c %S -o %O")))
+
+(add-to-list 'org-preview-latex-process-alist '(imagexetex :programs
+         ("xelatex" "convert")
+         :description "pdf > png" :message "you need to install the programs: xelatex and imagemagick." :image-input-type "pdf" :image-output-type "png" :image-size-adjust
+         (1.0 . 1.0)
+         :latex-compiler
+         ("xelatex -interaction nonstopmode -output-directory %o %f")
+         :image-converter
+         ("convert -density %D -trim -antialias %f -quality 100 %O")))
