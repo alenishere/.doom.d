@@ -22,17 +22,17 @@
        ;;layout            ; auie,ctsrnm is the superior home row
 
        :completion
-       (company +childframe)           ; the ultimate code completion backend
+       (company)           ; the ultimate code completion backend
        ;; (helm               ; the *other* search engine for love and life
        ;;  +icons
        ;;  +fuzzy)
        ;;ido               ; the other *other* search engine...
-       ;; (ivy               ; a search engine for love and life
-       ;; +fuzzy
-       ;; +icons
-       ;; +prescient)
-       (vertico          ; the search engine of the future
-        +icons)
+       (ivy               ; a search engine for love and life
+       +fuzzy
+       +icons
+       +prescient)
+       ;; (vertico          ; the search engine of the future
+       ;;  +icons)
 
        :ui
        deft              ; notational velocity for Emacs
@@ -106,6 +106,7 @@
        ;;grammar           ; tasing grammar mistake every you make
 
        :tools
+       ;;biblio
        ansible
        debugger          ; FIXME stepping through code, to help you add bugs
        direnv
@@ -119,7 +120,7 @@
         +docsets
         +dictionary
         +offline)
-       (lsp +peek)
+       (lsp +eglot +peek)
        (magit +forge)            ; a git porcelain for Emacs
        make              ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
@@ -192,16 +193,10 @@
        ;;php               ; perl's insecure younger brother
        plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
-       (:unless IS-WINDOWS
-        (python             ; beautiful is better than ugly
-         +pyenv
-         +lsp
-         +poetry))
-       (:if IS-WINDOWS
-        (python             ; beautiful is better than ugly
-         +conda
-         +lsp
-         +poetry))
+       (python             ; beautiful is better than ugly
+        +conda
+        +lsp
+        +poetry)
        ;;qt                ; the 'cutest' gui framework ever
        ;;racket            ; a DSL for DSLs
        ;;raku              ; the artist formerly known as perl6

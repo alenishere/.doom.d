@@ -54,27 +54,27 @@
 (package! zotxt)
 (package! org-re-reveal-ref)
 (package! org-super-agenda)
-(package! org-pdfview)
+(package! citeproc)
 (package! ox-ipynb
   :recipe (:host github
-           :repo "jkitchin/ox-ipynb"
-           ))
+           :repo "jkitchin/ox-ipynb"))
+(package! scimax
+  :recipe (:host github
+           :repo "jkitchin/scimax"))
+;; (package! org-db)
+
 ;; Org-roam
-(package! org-roam
-  :recipe (:host github
-           :repo "org-roam/org-roam"
-           ))
-(package! org-ref)
-(package! org-roam-bibtex
-  :recipe (:host github
-           :repo "org-roam/org-roam-bibtex"
-           ))
+(package! org-roam)
 (package! websocket)
 (package! org-roam-ui :recipe (:host github :repo "org-roam/org-roam-ui" :files ("*.el" "out")))
+(package! org-roam-bibtex)
 
 ;; bibtex/Users/alenalexninan/.doom.d/config.org
-(package! helm-bibtex)
 (package! ivy-bibtex)
+(package! bibtex-completion)
+(package! org-ref
+  :recipe (:host github
+           :repo "jkitchin/org-ref"))
 
 ;; Learning
 (package! anki-editor)
@@ -82,10 +82,9 @@
 ;; Searching tools
 (package! ripgrep)
 (package! ag)
-(package! helm-ag)
 
 ;; Company
-;; (package! company-posframe)
+(package! company-posframe)
 
 ;; Page Break
 (package! page-break-lines :recipe (:host github :repo "purcell/page-break-lines"))
@@ -97,15 +96,6 @@
 (package! nov
   :recipe (:type git :repo "https://depp.brause.cc/nov.el.git"))
 
-;; Doom theme (personal fork for development)
-;; (package! emacs)
-;; (package! doom-themes :disable t)
-;; (unpin! doom-themes)
-;; (package! doom-themes :recipe (:host github :repo "alenalexninan/emacs-doom-themes"))
-
 ;; Miscellaneous theme
-(package! try)
 (package! olivetti
   :recipe (:host github :repo "rnkn/olivetti"))
-
-(package! poet-theme)

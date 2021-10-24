@@ -211,15 +211,15 @@
 ;; change `org-directory'. It must be set before org loads!
 (when IS-MAC
   (setq org-roam-directory (file-truename "~/roam/")
-        org-directory "~/Dropbox/Org")
+        org-directory "~/Org")
   )
 (when IS-LINUX
   (setq org-roam-directory (file-truename "~/roam/")
-        org-directory "~/Dropbox/Org")
+        org-directory "~/Org")
   )
 (when IS-WINDOWS
   (setq org-roam-directory (file-truename "~/roam/")
-        org-directory "~/Dropbox/Org")
+        org-directory "~/Org")
   )
 ;; Org ellipsis
 ;; (setq org-ellipsis " ▼")
@@ -408,14 +408,6 @@ Is relative to `org-directory', unless it is absolute")
           ))
   ;; Tags for org mode
   (setq org-tag-alist '((:startgrouptag)
-                        (:grouptags)
-                        ("@HOME" . ?h)
-                        ("@OFFICE" . ?f)
-                        ("@PHONE" . ?p)
-                        ("@OUTSIDE" . ?t)
-                        ("@COMPUTER" . ?c)
-                        (:endgrouptag)
-                        (:startgrouptag)
                         (:grouptags)
                         ("enLO" . ?l)
                         ("enMD" . ?m)
@@ -700,29 +692,27 @@ you're done. This can be called from an external shell script."
 
 ;;; Python programming
 ;;; -----------------------------------------------------------------------------
-(when IS-WINDOWS
-  (after! conda
-    ;; (setq conda-anaconda-home "C:/Users/alenalexninan/Home/miniconda3")
-    (setq conda-anaconda-home (expand-file-name "~/miniconda3"))
-    (setq conda-env-home-directory (expand-file-name "~/miniconda3"))
-    (conda-env-initialize-interactive-shells)
-    ;; if you want eshell support, include:
-    (conda-env-initialize-eshell)
-    ;; if you want auto-activation (see below for details), include:
-    (conda-env-autoactivate-mode t)
-    ;; To activate conda on start
-    (conda-env-activate "python-3.8.8")
-    ;; (conda-env-activate "base")
-    )
+(after! conda
+  ;; (setq conda-anaconda-home "C:/Users/alenalexninan/Home/miniconda3")
+  (setq conda-anaconda-home (expand-file-name "~/miniconda3"))
+  (setq conda-env-home-directory (expand-file-name "~/miniconda3"))
+  (conda-env-initialize-interactive-shells)
+  ;; if you want eshell support, include:
+  (conda-env-initialize-eshell)
+  ;; if you want auto-activation (see below for details), include:
+  (conda-env-autoactivate-mode t)
+  ;; To activate conda on start
+  (conda-env-activate "myenv")
+  ;; (conda-env-activate "base")
   )
 
 ;; Company completion
-(after! company-box
-  (setq company-show-numbers t)
-  )
+;; (after! company-box
+;;   (setq company-show-numbers t)
+;;   )
 
-;; (use-package! company-posframe
-;;   :hook (company-mode . company-posframe-mode))
+(use-package! company-posframe
+  :hook (company-mode . company-posframe-mode))
 
 ;;; Markdown
 ;;; -----------------------------------------------------------------------------
@@ -768,29 +758,56 @@ you're done. This can be called from an external shell script."
 
 ;; Bibtex and Org-ref config
 ;; -------------------------------------------------------------------------------
+(after! org
+  (when IS-WINDOWS
+    (defvar my/bibs (file-truename (concat org-directory "/MyLibrary-windows.bib"))))
+  (when IS-MAC
+    (defvar my/bibs (file-truename (concat org-directory "/MyLibrary-mac.bib"))))
+  (when IS-LINUX
+    (defvar my/bibs (file-truename (concat org-directory "/MyLibrary-linux.bib"))))
+
+  ;; Bibtex completion configuration
+  ;;-----------------------------------------------------------------------------
+  (use-package! bibtex-completion
+    :defer t
+    :config
+    (setq bibtex-completion-bibliography my/bibs
+	  bibtex-completion-notes-path (file-truename (concat org-roam-directory "/notes"))
+	  bibtex-completion-notes-template-multiple-files "#+TITLE: Notes on: ${author-or-editor} (${year}): ${title}\n\nSee [cite/t:@${=key=}]\n"
+	  bibtex-completion-library-path (file-truename (concat org-roam-directory "/notes"))
+	  bibtex-completion-additional-search-fields '(keywords)
+          bibtex-completion-pdf-field "file"
+	  bibtex-completion-display-formats
+	  '((article       . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${journal:40}")
+	    (inbook        . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} Chapter ${chapter:32}")
+	    (incollection  . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
+	    (inproceedings . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
+	    (t             . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*}"))
+          )
+	  ;; This is specific for a Mac I think
+    (when IS-MAC
+      (setq bibtex-completion-pdf-open-function (lambda (fpath)
+                                                  (call-process "open" nil 0 nil fpath))
+            )
+      )
+    )
+  )
+
+  (use-package! ivy-bibtex
+    :when (featurep! :completion ivy)
+    :defer t
+    :config
+    ;; (ivy-mode +1)
+    (add-to-list 'ivy-re-builders-alist '(ivy-bibtex . ivy--regex-plus))
+    :init
+    )
+  (use-package! citeproc)
+
 (use-package! org-ref
   :config
-   (when IS-WINDOWS
-     (setq org-ref-default-bibliography (list (concat org-directory "/MyLibrary-windows.bib")))
-     )
-   (when IS-MAC
-     (setq org-ref-default-bibliography (list (concat org-directory "/MyLibrary-mac.bib")))
-     )
-   (when IS-LINUX
-     (setq org-ref-default-bibliography (list (concat org-directory "/MyLibrary-linux.bib")))
-     )
-  (setq
-   org-ref-completion-library 'org-ref-ivy-cite
-   org-ref-get-pdf-filename-function 'org-ref-get-pdf-filename-helm-bibtex
-   org-ref-bibliography-notes (concat org-directory "/notes/Notes.org")
-   org-ref-notes-directory (concat org-directory "/notes/")
-   org-ref-notes-function 'orb-edit-notes
-   )
-  )
-(after! org-ref
   (setq
    bibtex-completion-notes-path (concat org-roam-directory "/notes/")
-    bibtex-completion-pdf-field "file"
+   bibtex-completion-pdf-field "file"
    bibtex-completion-notes-template-multiple-files
    (concat
     "${title}\n"
@@ -823,35 +840,47 @@ you're done. This can be called from an external shell script."
     )
    )
   (when IS-WINDOWS
-     (setq bibtex-completion-bibliography (concat org-directory "/MyLibrary-windows.bib")))
-   (when IS-MAC
-     (setq bibtex-completion-bibliography (concat org-directory "/MyLibrary-mac.bib")))
-   (when IS-LINUX
-     (setq bibtex-completion-bibliography (concat org-directory "/MyLibrary-linux.bib")))
-  (defun my/org-ref-open-pdf-at-point ()
-    "Open the pdf for bibtex key under point if it exists."
-    (interactive)
-    (let* ((results (org-ref-get-bibtex-key-and-file))
-           (key (car results))
-           (pdf-file (car (bibtex-completion-find-pdf key))))
-      (if (file-exists-p pdf-file)
-          (funcall bibtex-completion-pdf-open-function pdf-file)
-        (message "No PDF found for %s" key))))
-  (setq org-ref-open-pdf-function 'my/org-ref-open-pdf-at-point)
-  (map! :localleader
-        :map org-mode-map
-        :prefix ("l")
-        :desc "helm-bibtex" "r" #'helm-bibtex
-        )
+    (setq bibtex-completion-bibliography (concat org-directory "/MyLibrary-windows.bib")))
+  (when IS-MAC
+    (setq bibtex-completion-bibliography (concat org-directory "/MyLibrary-mac.bib")))
+  (when IS-LINUX
+    (setq bibtex-completion-bibliography (concat org-directory "/MyLibrary-linux.bib")))
+  (map! :map org-mode-map :localleader :desc "Insert citation" :n "]" #'org-ref-insert-link)
+  )
+(after! org-ref
   (use-package! ivy-bibtex
     :config
     (map! :leader
-          :prefix ("ox" . "Bibtex")
-          :desc "ivy-bibtex" "i" #'ivy-bibtex
-          :desc "helm-bibtex" "h" #'helm-bibtex
+          :prefix ("o")
+          :desc "Bibtex" "x" #'ivy-bibtex
           )
     )
   )
+
+  ;; (setq org-cite-csl-styles-dir "~/Zotero/styles")
+
+  ;; Set bibliography paths so they are the same.
+  ;; (use-package! oc
+  ;;   :config
+  ;;   (require 'oc-csl))
+  ;; (use-package! org-ref-cite
+  ;;   :config
+  ;;   ;; I like green links
+  ;;   (set-face-attribute 'org-cite nil :foreground "DarkSeaGreen4")
+  ;;   (set-face-attribute 'org-cite-key nil :foreground "forest green")
+  ;;   (setq
+  ;;    org-cite-global-bibliography bibtex-completion-bibliography
+  ;;    ;; https://github.com/citation-style-language/styles
+  ;;    ;; or https://www.zotero.org/styles
+  ;;    org-cite-csl-styles-dir "~/Zotero/styles"
+  ;;    org-cite-insert-processor 'org-ref-cite
+  ;;    org-cite-follow-processor 'org-ref-cite
+  ;;    org-cite-activate-processor 'org-ref-cite
+  ;;    ;; Need to install the style belwo in Zotero
+  ;;    org-cite-export-processors '((html csl "elsevier-with-titles-alphabetical.csl")
+  ;;       		          (latex org-ref-cite)
+  ;;       		          (t basic))))
+  ;; )
 ;; Org-roam
 ;; ------------------------------------------------------------------------------
 (use-package! org-roam
@@ -1249,33 +1278,35 @@ sections seems to ignore the detachment."
         )
   )
 
-(after! helm
-  (define-key helm-map (kbd "<backtab") #'helm-previous-line)
-  )
-(use-package! helm-ag
-  :config
-  (map! :leader
-        :prefix ("sA" . "Silver searcher")
-        :desc "AG" "a" #'helm-ag
-        :desc "AG do" "d" #'helm-do-ag
-        :desc "AG current file" "f" #'helm-ag-this-file
-        :desc "AG project" "r" #'helm-ag-project-root
-        :desc "AG buffers" "b" #'helm-ag-buffers
-        )
-  (map! :leader
-        :prefix ("s")
-        :desc "Silver search directory" "a" #'helm-ag
-        )
-  :init
-  )
-(after! counsel
-  (map! :leader
-        :prefix ("s")
-        :desc "AG directory" "a" #'counsel-ag
-        )
-  )
+;; (after! helm
+;;   (define-key helm-map (kbd "<backtab") #'helm-previous-line)
+;;   )
+;; (use-package! helm-ag
+;;   :config
+;;   (map! :leader
+;;         :prefix ("sA" . "Silver searcher")
+;;         :desc "AG" "a" #'helm-ag
+;;         :desc "AG do" "d" #'helm-do-ag
+;;         :desc "AG current file" "f" #'helm-ag-this-file
+;;         :desc "AG project" "r" #'helm-ag-project-root
+;;         :desc "AG buffers" "b" #'helm-ag-buffers
+;;         )
+;;   (map! :leader
+;;         :prefix ("s")
+;;         :desc "Silver search directory" "a" #'helm-ag
+;;         )
+;;   :init
+;;   )
+;; (after! counsel
+;;   (map! :leader
+;;         :prefix ("s")
+;;         :desc "AG directory" "a" #'counsel-ag
+;;         )
+;;   )
 
+;;------------------------------------------------------------------------------
 ;; Olivetti mode
+;;------------------------------------------------------------------------------
 (use-package! olivetti
   :config
   (setq olivetti-body-width 0.80)
@@ -1366,3 +1397,15 @@ sections seems to ignore the detachment."
          ("xelatex -interaction nonstopmode -output-directory %o %f")
          :image-converter
          ("convert -density %D -trim -antialias %f -quality 100 %O")))
+
+;; Fortran
+;; -----------------------------------------------------------------------------
+(add-hook 'f90-mode-hook 'eglot-ensure)
+
+;; Scimax
+;; -----------------------------------------------------------------------------
+;; (after! (org org-roam hydra)
+;;   (use-package! org-db
+;;     :config
+;;     :init)
+;;   )
