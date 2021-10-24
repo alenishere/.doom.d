@@ -30,7 +30,7 @@
        (ivy               ; a search engine for love and life
        +fuzzy
        +icons
-       +prescient)
+       )
        ;; (vertico          ; the search engine of the future
        ;;  +icons)
 
