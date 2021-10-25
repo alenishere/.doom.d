@@ -379,7 +379,7 @@ Is relative to `org-directory', unless it is absolute")
   (add-to-list 'org-structure-template-alist '("i" . "src emacs-lisp"))
   (add-to-list 'org-structure-template-alist '("d" . "src dot :file ?.png :async no :cmdline -Kdot -Tpng"))
   (add-to-list 'org-structure-template-alist '("r" . "src rust :tangle ?.rs"))
-
+  (add-to-list 'org-structure-template-alist '("f" . "src fortran :tangle ./Fortran/?.f95\n"))
   ;; Todo Keywords to use
   (setq org-todo-keywords
         '((sequence
