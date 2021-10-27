@@ -692,6 +692,22 @@ you're done. This can be called from an external shell script."
 
 ;;; Python programming
 ;;; -----------------------------------------------------------------------------
+(when IS-MAC
+(after! conda
+  ;; (setq conda-anaconda-home "C:/Users/alenalexninan/Home/miniconda3")
+  (setq conda-anaconda-home (expand-file-name "~/opt/miniconda3"))
+  (setq conda-env-home-directory (expand-file-name "~/opt/miniconda3"))
+  (conda-env-initialize-interactive-shells)
+  ;; if you want eshell support, include:
+  (conda-env-initialize-eshell)
+  ;; if you want auto-activation (see below for details), include:
+  (conda-env-autoactivate-mode t)
+  ;; To activate conda on start
+  (conda-env-activate "myenv")
+  ;; (conda-env-activate "base")
+  )
+)
+(unless IS-MAC
 (after! conda
   ;; (setq conda-anaconda-home "C:/Users/alenalexninan/Home/miniconda3")
   (setq conda-anaconda-home (expand-file-name "~/miniconda3"))
@@ -705,7 +721,7 @@ you're done. This can be called from an external shell script."
   (conda-env-activate "myenv")
   ;; (conda-env-activate "base")
   )
-
+  )
 ;; Company completion
 ;; (after! company-box
 ;;   (setq company-show-numbers t)
@@ -771,8 +787,7 @@ you're done. This can be called from an external shell script."
   (use-package! bibtex-completion
     :defer t
     :config
-    (setq bibtex-completion-bibliography my/bibs
-	  bibtex-completion-notes-path (file-truename (concat org-roam-directory "/notes"))
+    (setq bibtex-completion-notes-path (file-truename (concat org-roam-directory "/notes"))
 	  bibtex-completion-notes-template-multiple-files "#+TITLE: Notes on: ${author-or-editor} (${year}): ${title}\n\nSee [cite/t:@${=key=}]\n"
 	  bibtex-completion-library-path (file-truename (concat org-roam-directory "/notes"))
 	  bibtex-completion-additional-search-fields '(keywords)

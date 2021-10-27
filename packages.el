@@ -58,9 +58,9 @@
 (package! ox-ipynb
   :recipe (:host github
            :repo "jkitchin/ox-ipynb"))
-(package! scimax
-  :recipe (:host github
-           :repo "jkitchin/scimax"))
+;; (package! scimax
+;;  :recipe (:host github
+;;           :repo "jkitchin/scimax"))
 ;; (package! org-db)
 
 ;; Org-roam
