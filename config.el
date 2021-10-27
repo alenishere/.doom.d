@@ -787,8 +787,39 @@ you're done. This can be called from an external shell script."
   (use-package! bibtex-completion
     :defer t
     :config
+    (map! :map org-mode-map :localleader :desc "Insert citation" :n "]" #'org-ref-insert-link)
     (setq bibtex-completion-notes-path (file-truename (concat org-roam-directory "/notes"))
-	  bibtex-completion-notes-template-multiple-files "#+TITLE: Notes on: ${author-or-editor} (${year}): ${title}\n\nSee [cite/t:@${=key=}]\n"
+          bibtex-completion-bibliography my/bibs
+	  bibtex-completion-notes-template-multiple-files
+          (concat
+           "${title}\n"
+           "#+Time-stamp: <>\n"
+           "#+AUTHOR: Alen Alex Ninan\n"
+           "#+PROPERTY: ANKI_DECK Default\n"
+           "#+STARTUP: content\n"
+           "#+STARTUP: indent\n"
+           "#+STARTUP: align\n"
+           "#+STARTUP: inlineimages\n"
+           "#+OPTIONS: num:0 toc:nil\n"
+           "#+STARTUP: hidebloacks\n"
+           "#+STARTUP: hidestars\n"
+           "#+STARTUP: latexpreview\n"
+           "#+EXPORT_FILE_NAME: Notes\n\n"
+           "- keywords :: ${keywords}\n\n"
+           "* ${title} :LITERATURE:REVIEWING:${=type=}:\n"
+           ":PROPERTIES:\n"
+           ":ID: %<%Y%m%dT%H%M%S>\n"
+           ":ROAM_ALIASES: cite:${=key=}\n"
+           ":NOTER_DOCUMENT: %(orb-process-file-field \"${=key=}\")\n"
+           ":AUTHOR: ${author-or-editor}\n"
+           ":TYPE: ${=type=}\n"
+           ":JOURNAL: ${journaltitle}\n"
+           ":DATE: ${date}\n"
+           ":YEAR: ${year}\n"
+           ":DOI: ${doi}\n"
+           ":URL: ${url}\n"
+           ":END:\n\n"
+           )
 	  bibtex-completion-library-path (file-truename (concat org-roam-directory "/notes"))
 	  bibtex-completion-additional-search-fields '(keywords)
           bibtex-completion-pdf-field "file"
@@ -799,7 +830,7 @@ you're done. This can be called from an external shell script."
 	    (inproceedings . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
 	    (t             . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*}"))
           )
-	  ;; This is specific for a Mac I think
+    ;; This is specific for a Mac I think
     (when IS-MAC
       (setq bibtex-completion-pdf-open-function (lambda (fpath)
                                                   (call-process "open" nil 0 nil fpath))
@@ -808,69 +839,19 @@ you're done. This can be called from an external shell script."
     )
   )
 
-  (use-package! ivy-bibtex
-    :when (featurep! :completion ivy)
-    :defer t
-    :config
-    ;; (ivy-mode +1)
-    (add-to-list 'ivy-re-builders-alist '(ivy-bibtex . ivy--regex-plus))
-    :init
-    )
-  (use-package! citeproc)
+(use-package! ivy-bibtex
+  :when (featurep! :completion ivy)
+  :defer t
+  :config
+  ;; (ivy-mode +1)
+  (add-to-list 'ivy-re-builders-alist '(ivy-bibtex . ivy--regex-plus))
+  :init
+  )
+(use-package! citeproc)
 
 (use-package! org-ref
-  :config
-  (setq
-   bibtex-completion-notes-path (concat org-roam-directory "/notes/")
-   bibtex-completion-pdf-field "file"
-   bibtex-completion-notes-template-multiple-files
-   (concat
-    "${title}\n"
-    "#+Time-stamp: <>\n"
-    "#+AUTHOR: Alen Alex Ninan\n"
-    "#+PROPERTY: ANKI_DECK Default\n"
-    "#+STARTUP: content\n"
-    "#+STARTUP: indent\n"
-    "#+STARTUP: align\n"
-    "#+STARTUP: inlineimages\n"
-    "#+OPTIONS: num:0 toc:nil\n"
-    "#+STARTUP: hidebloacks\n"
-    "#+STARTUP: hidestars\n"
-    "#+STARTUP: latexpreview\n"
-    "#+EXPORT_FILE_NAME: Notes\n\n"
-    "- keywords :: ${keywords}\n\n"
-    "* ${title} :LITERATURE:REVIEWING:${=type=}:\n"
-    ":PROPERTIES:\n"
-    ":ID: %<%Y%m%dT%H%M%S>\n"
-    ":ROAM_ALIASES: cite:${=key=}\n"
-    ":NOTER_DOCUMENT: %(orb-process-file-field \"${=key=}\")\n"
-    ":AUTHOR: ${author-or-editor}\n"
-    ":TYPE: ${=type=}\n"
-    ":JOURNAL: ${journaltitle}\n"
-    ":DATE: ${date}\n"
-    ":YEAR: ${year}\n"
-    ":DOI: ${doi}\n"
-    ":URL: ${url}\n"
-    ":END:\n\n"
-    )
-   )
-  (when IS-WINDOWS
-    (setq bibtex-completion-bibliography (concat org-directory "/MyLibrary-windows.bib")))
-  (when IS-MAC
-    (setq bibtex-completion-bibliography (concat org-directory "/MyLibrary-mac.bib")))
-  (when IS-LINUX
-    (setq bibtex-completion-bibliography (concat org-directory "/MyLibrary-linux.bib")))
-  (map! :map org-mode-map :localleader :desc "Insert citation" :n "]" #'org-ref-insert-link)
   )
-(after! org-ref
-  (use-package! ivy-bibtex
-    :config
-    (map! :leader
-          :prefix ("o")
-          :desc "Bibtex" "x" #'ivy-bibtex
-          )
-    )
-  )
+
 
   ;; (setq org-cite-csl-styles-dir "~/Zotero/styles")
 
