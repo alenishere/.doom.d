@@ -977,7 +977,77 @@ you're done. This can be called from an external shell script."
        :side right :width .33 :height .5 :ttl nil :modeline nil :quit nil :slot 2)))
 
   (add-hook 'org-roam-mode-hook #'turn-on-visual-line-mode)
-
+  :config
+  (setq org-roam-capture-templates
+        ;; Default capture template
+        '(("d" "default" plain
+           (file "~/.doom.d/org_capture_templates/roam_default-template.org")
+           :target (file+head "${slug}.org"
+                              "#+title: ${title}\n")
+           :immediate-finish t
+           :unnarrowed t)
+          ("x" "bibliography reference" plain
+           (file "~/.doom.d/org_capture_templates/biblio-template.org") ; <-- template store in a separate file
+           :target (file+head "notes/${citekey}.org" "#+title: ${title}\n")
+           :unnarrowed t
+           :jump-to-captured t)
+          ("e" "Engineering" plain
+           (file "~/.doom.d/org_capture_templates/roam_default-template.org")
+           :target (file+head "engineering/${slug}.org"
+                              "#+title: ${title}\n")
+           :immediate-finish t
+           :unnarrowed t)
+          ("c" "Computer" plain
+           (file "~/.doom.d/org_capture_templates/roam_default-template.org")
+           :target (file+head "computer/${slug}.org"
+                              "#+title: ${title}\n")
+           :immediate-finish t
+           :unnarrowed t)
+          ("m" "maths" plain
+           (file "~/.doom.d/org_capture_templates/roam_default-template.org")
+           :target (file+head "maths/${slug}.org"
+                              "#+title: ${title}\n")
+           :immediate-finish t
+           :unnarrowed t)
+          ("h" "health" plain
+           (file "~/.doom.d/org_capture_templates/roam_default-template.org")
+           :target (file+head "medical/${slug}.org"
+                              "#+title: ${title}\n")
+           :immediate-finish t
+           :unnarrowed t)
+          ("p" "Personal Development" plain
+           (file "~/.doom.d/org_capture_templates/roam_default-template.org")
+           :target (file+head "PD/${slug}.org"
+                              "#+title: ${title}\n")
+           :immediate-finish t
+           :unnarrowed t)
+          ("l" "Language" plain
+           (file "~/.doom.d/org_capture_templates/roam_default-template.org")
+           :target (file+head "language/${slug}.org"
+                              "#+title: ${title}\n")
+           :immediate-finish t
+           :unnarrowed t)
+          ("b" "Business" plain
+           (file "~/.doom.d/org_capture_templates/roam_default-template.org")
+           :target (file+head "business/${slug}.org"
+                              "#+title: ${title}\n")
+           :immediate-finish t
+           :unnarrowed t)
+          )
+        )
+  (setq org-roam-capture-ref-templates
+        '(("r" "ref" plain
+           (file "~/.doom.d/org_capture_templates/roam_ref_template.org")
+           :target (file+head "capture/${slug}.org"
+                              "#+title: ${title}\n")
+           :immediate-finish t
+           :unnarrowed t)))
+  (setq org-roam-dailies-capture-templates
+        '(("d" "default" entry
+           "* TODO Gratitude\n %?\n* TODO Daily Review"
+           :target (file+head "%<%Y-%m-%d>.org"
+                              "#+title: %<%Y-%m-%d>\n"))))
+  )
 ;;; Custom node accessors
 ;;;###autoload
   (cl-defmethod org-roam-node-doom-filetitle ((node org-roam-node))
@@ -1073,7 +1143,6 @@ the tags of, return an empty string."
                (lambda ()
                  (when (equal org-state "DONE")
                    (my/org-roam-copy-todo-to-today))))
-  )
 
 ;; Org-roam-ui
 ;; ------------------------------------------------------------------------------
@@ -1102,83 +1171,14 @@ the tags of, return an empty string."
 ;; ------------------------------------------------------------------------------
 ;; Need to migrate to :target once org-roam-bibtex support it
 (use-package! org-roam-bibtex
-  :after org-roam
+  :after (:all org-roam org-ref)
   :config
   (setq orb-preformat-keywords '("citekey" "title" "url" "author-or-editor" "keywords" "file" "year" "doi" "entry-type" "date"))
   (setq orb-process-file-keyword t
         orb-file-field-extensions '("pdf")
-        orb-note-actions-interface 'helm
-        orb-insert-interface 'helm-bibtex)
+        orb-note-actions-interface 'ivy
+        orb-insert-interface 'ivy-bibtex)
   (org-roam-bibtex-mode)
-  (setq org-roam-capture-templates
-        ;; Default capture template
-        '(("d" "default" plain
-           (file "~/.doom.d/org_capture_templates/roam_default-template.org")
-           :target (file+head "${slug}.org"
-                              "#+title: ${title}\n")
-           :immediate-finish t
-           :unnarrowed t)
-          ("x" "bibliography reference" plain
-           (file "~/.doom.d/org_capture_templates/biblio-template.org") ; <-- template store in a separate file
-           :target (file+head "notes/${citekey}.org" "#+title: ${title}\n")
-           :unnarrowed t
-           :jump-to-captured t)
-          ("e" "Engineering" plain
-           (file "~/.doom.d/org_capture_templates/roam_default-template.org")
-           :target (file+head "engineering/${slug}.org"
-                              "#+title: ${title}\n")
-           :immediate-finish t
-           :unnarrowed t)
-          ("c" "Computer" plain
-           (file "~/.doom.d/org_capture_templates/roam_default-template.org")
-           :target (file+head "computer/${slug}.org"
-                              "#+title: ${title}\n")
-           :immediate-finish t
-           :unnarrowed t)
-          ("m" "maths" plain
-           (file "~/.doom.d/org_capture_templates/roam_default-template.org")
-           :target (file+head "maths/${slug}.org"
-                              "#+title: ${title}\n")
-           :immediate-finish t
-           :unnarrowed t)
-          ("h" "health" plain
-           (file "~/.doom.d/org_capture_templates/roam_default-template.org")
-           :target (file+head "medical/${slug}.org"
-                              "#+title: ${title}\n")
-           :immediate-finish t
-           :unnarrowed t)
-          ("p" "Personal Development" plain
-           (file "~/.doom.d/org_capture_templates/roam_default-template.org")
-           :target (file+head "PD/${slug}.org"
-                              "#+title: ${title}\n")
-           :immediate-finish t
-           :unnarrowed t)
-          ("l" "Language" plain
-           (file "~/.doom.d/org_capture_templates/roam_default-template.org")
-           :target (file+head "language/${slug}.org"
-                              "#+title: ${title}\n")
-           :immediate-finish t
-           :unnarrowed t)
-          ("b" "Business" plain
-           (file "~/.doom.d/org_capture_templates/roam_default-template.org")
-           :target (file+head "business/${slug}.org"
-                              "#+title: ${title}\n")
-           :immediate-finish t
-           :unnarrowed t)
-          )
-        )
-  (setq org-roam-capture-ref-templates
-        '(("r" "ref" plain
-           (file "~/.doom.d/org_capture_templates/roam_ref_template.org")
-           :target (file+head "capture/${slug}.org"
-                              "#+title: ${title}\n")
-           :immediate-finish t
-           :unnarrowed t)))
-  (setq org-roam-dailies-capture-templates
-        '(("d" "default" entry
-           "* TODO Gratitude\n %?\n* TODO Daily Review"
-           :target (file+head "%<%Y-%m-%d>.org"
-                              "#+title: %<%Y-%m-%d>\n"))))
   )
 
 ;;; Org-transclusion

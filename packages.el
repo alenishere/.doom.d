@@ -64,6 +64,9 @@
 ;; (package! org-db)
 
 ;; Org-roam
+(unpin! org-roam)
+;; (unpin! org-roam-bibtex-mode)
+
 (package! org-roam)
 (package! websocket)
 (package! org-roam-ui :recipe (:host github :repo "org-roam/org-roam-ui" :files ("*.el" "out")))
