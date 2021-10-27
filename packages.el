@@ -61,7 +61,9 @@
 ;; (package! scimax
 ;;  :recipe (:host github
 ;;           :repo "jkitchin/scimax"))
-;; (package! org-db)
+(package! org-db
+  :recipe (:host github :repo "jkitchin/scimax"
+           :files ("org-db.el" "org-db-images.el" "org-db-fulltext.el")))
 
 ;; Org-roam
 (unpin! org-roam)

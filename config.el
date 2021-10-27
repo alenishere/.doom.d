@@ -1304,8 +1304,8 @@ the tags of, return an empty string."
 ;; -----------------------------------------------------------------------
 ;; Disable the system cursor caused by screen reader etc.
 (when IS-WINDOWS 
-(setq w32-use-visible-system-caret nil)
-)
+  (setq w32-use-visible-system-caret nil)
+  )
 
 (setq evil-normal-state-cursor '(box "light blue")
       evil-insert-state-cursor '(bar "medium sea green")
@@ -1345,7 +1345,6 @@ the tags of, return an empty string."
          ("xelatex -no-pdf -interaction nonstopmode -output-directory %o %f")
          :image-converter
          ("dvisvgm %f -n -b min -c %S -o %O")))
-
 (add-to-list 'org-preview-latex-process-alist '(imagexetex :programs
          ("xelatex" "convert")
          :description "pdf > png" :message "you need to install the programs: xelatex and imagemagick." :image-input-type "pdf" :image-output-type "png" :image-size-adjust
@@ -1354,6 +1353,7 @@ the tags of, return an empty string."
          ("xelatex -interaction nonstopmode -output-directory %o %f")
          :image-converter
          ("convert -density %D -trim -antialias %f -quality 100 %O")))
+(setq reftex-default-bibliography my/bibs)
 
 ;; Fortran
 ;; -----------------------------------------------------------------------------
@@ -1361,3 +1361,6 @@ the tags of, return an empty string."
 
 ;; Scimax
 ;; -----------------------------------------------------------------------------
+;; (use-package! org-db
+;;   :after (:all org hydra org-roam emacsql)
+;;   :config)

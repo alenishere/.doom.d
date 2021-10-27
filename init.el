@@ -28,9 +28,10 @@
        ;;  +fuzzy)
        ;;ido               ; the other *other* search engine...
        (ivy               ; a search engine for love and life
-       +fuzzy
-       +icons
-       )
+        +fuzzy
+        +icons
+        +prescient
+        )
        ;; (vertico          ; the search engine of the future
        ;;  +icons)
 
@@ -66,10 +67,10 @@
        fold              ; (nigh) universal code folding
        (format +onsave)  ; automated prettiness
        ;;god               ; run Emacs commands without modifier keys
-       ;;lispy             ; vim for lisp, for people who don't like vim
+       lispy             ; vim for lisp, for people who don't like vim
        multiple-cursors  ; editing in many places at once
        ;;objed             ; text object editing for the innocent
-       ;;parinfer          ; turn lisp into python, sort of
+       parinfer          ; turn lisp into python, sort of
        rotate-text       ; cycle region at point between text candidates
        snippets          ; my elves. They type so I don't have to
        word-wrap         ; soft wrapping with language-aware indent
@@ -169,6 +170,8 @@
        (latex                       ; writing papers in Emacs has never been so fun
         +latexmk                    ; what else would you use?
         +cdlatex                    ; quick maths symbols
+        +fold
+        +lsp
         +fold)                      ; fold the clutter away nicities
        ;;lean              ; for folks with too much to prove
        ;;ledger            ; be audit you can be
