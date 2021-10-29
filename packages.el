@@ -89,7 +89,7 @@
 (package! ag)
 
 ;; Company
-(package! company-posframe)
+;; (package! company-posframe)
 
 ;; Page Break
 (package! page-break-lines :recipe (:host github :repo "purcell/page-break-lines"))

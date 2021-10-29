@@ -723,12 +723,12 @@ you're done. This can be called from an external shell script."
   )
   )
 ;; Company completion
-;; (after! company-box
-;;   (setq company-show-numbers t)
-;;   )
+(after! company-box
+  (setq company-show-numbers t)
+  )
 
-(use-package! company-posframe
-  :hook (company-mode . company-posframe-mode))
+;; (use-package! company-posframe
+;;   :hook (company-mode . company-posframe-mode))
 
 ;;; Markdown
 ;;; -----------------------------------------------------------------------------
